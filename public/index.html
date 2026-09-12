@@ -22,7 +22,7 @@
         .logo { font-size: 1.8rem; font-weight: 700; }
         .logo i { color: #e9c46a; margin-right: 0.5rem; }
         .logo span { color: #2a9d8f; }
-        nav button { color: white; margin-left: 1.5rem; font-weight: 500; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        nav button { color: white; margin-left: 1.5rem; font-weight: 500; background: none; border: none; cursor: pointer; font-size: 1rem; font-family: inherit; }
         nav button:hover { color: #e9c46a; }
         .btn { padding: 0.6rem 1.5rem; border-radius: 60px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; font-family: inherit; font-size: 1rem; }
         .btn-primary { background: #2a9d8f; color: white; }
@@ -111,9 +111,9 @@
     <div class="container">
         <h2>What Our Clients Say</h2>
         <div class="testimonial-grid">
-            <div class="testimonial-card"><p>"ThinkTech Therapy gave me the tools to manage my anxiety. The platform is easy to use and my therapist is wonderful."</p><div class="author">– Sarah M.</div></div>
-            <div class="testimonial-card"><p>"I've tried other services, but the quality of care here is unmatched. Highly recommend to anyone seeking support."</p><div class="author">– James K.</div></div>
-            <div class="testimonial-card"><p>"Secure, convenient, and professional. The video sessions feel just like in-person visits."</p><div class="author">– Emily R.</div></div>
+            <div class="testimonial-card"><p>"ThinkTech Therapy gave me the tools to manage my anxiety. The platform is easy to use and my therapist is wonderful."</p><div class="author">– Sunshine C.</div></div>
+            <div class="testimonial-card"><p>"I've tried other services, but the quality of care here is unmatched. Highly recommend to anyone seeking support."</p><div class="author">– Nathan M.</div></div>
+            <div class="testimonial-card"><p>"Secure, convenient, and professional. The video sessions feel just like in-person visits."</p><div class="author">– Kondwani Z.</div></div>
         </div>
     </div>
 </section>
@@ -132,7 +132,7 @@
 
 <div class="modal-overlay" id="modalOverlay"></div>
 
-<!-- Login Modal -->
+<!-- Login Modal (Admin option IS here – admins need to log in) -->
 <div class="modal" id="loginModal">
     <button class="close-modal" onclick="closeAllModals()">&times;</button>
     <h3>Welcome Back</h3>
@@ -152,7 +152,7 @@
     </form>
 </div>
 
-<!-- Register Modal -->
+<!-- Register Modal (Admin option REMOVED – no self-registration) -->
 <div class="modal" id="registerModal">
     <button class="close-modal" onclick="closeAllModals()">&times;</button>
     <h3>Create Account</h3>
@@ -160,7 +160,6 @@
         <div style="display:flex; gap:1.5rem; justify-content:center; margin-bottom:1rem; flex-wrap:wrap;">
             <label><input type="radio" name="role" value="client" checked> Client</label>
             <label><input type="radio" name="role" value="therapist"> Therapist</label>
-            <label><input type="radio" name="role" value="admin"> Admin</label>
         </div>
         <div style="display:flex; gap:1rem;">
             <div style="flex:1;"><label for="regFirstName">First name</label><input type="text" name="first_name" id="regFirstName" required autocomplete="given-name"></div>
@@ -186,7 +185,6 @@
                 <option value="Relationships">Relationships</option>
                 <option value="Stress Management">Stress Management</option>
                 <option value="Addiction">Addiction</option>
-                <option value="LGBTQ+">LGBTQ+</option>
                 <option value="PTSD">PTSD</option>
                 <option value="ADHD">ADHD</option>
             </select>

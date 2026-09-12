@@ -41,6 +41,8 @@
         .btn-danger:hover { background: #c0392b; }
         .btn-success { background: #2ecc71; color: white; }
         .btn-success:hover { background: #27ae60; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-warning:hover { background: #d68910; }
         .btn-sm { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
         .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
         .main-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 2rem; }
@@ -227,7 +229,12 @@
         </div>
         <div class="appointment-section">
             <div class="section-header"><h2><i class="fas fa-chart-bar"></i> System Reports</h2></div>
-            <div style="padding:1rem;">Total clients: <span id="totalClients">0</span> | Total therapists: <span id="totalTherapists">0</span> | Total appointments: <span id="totalAppointments">0</span></div>
+            <div style="padding:1rem; font-size:0.95rem;">
+                Total clients: <strong id="totalClients">0</strong> |
+                Total therapists: <strong id="totalTherapists">0</strong> |
+                Total admins: <strong id="totalAdmins">0</strong> |
+                Total appointments: <strong id="totalAppointments">0</strong>
+            </div>
         </div>
     </div>
 
@@ -275,7 +282,6 @@
                 <option value="Relationships">Relationships</option>
                 <option value="Stress Management">Stress Management</option>
                 <option value="Addiction">Addiction</option>
-                <option value="LGBTQ+">LGBTQ+</option>
                 <option value="PTSD">PTSD</option>
                 <option value="ADHD">ADHD</option>
             </select>
@@ -642,33 +648,77 @@
         list.innerHTML = '';
         if (res.success && res.users) {
             res.users.forEach(u => {
+                let actionButtons = '';
+
+                // Verify button (therapists only)
+                if (u.role === 'therapist' && !u.is_verified) {
+                    actionButtons += `<button class="btn btn-success btn-sm" onclick="verifyTherapist(${u.id})">Verify</button>`;
+                }
+
+                // Promote button (non-admins, not self)
+                if (u.role !== 'admin' && u.id !== currentUserId) {
+                    actionButtons += `<button class="btn btn-warning btn-sm" onclick="promoteUser(${u.id})" title="Promote to Admin"><i class="fas fa-user-shield"></i> Promote</button>`;
+                }
+
+                // Demote button (other admins)
+                if (u.role === 'admin' && u.id !== currentUserId) {
+                    actionButtons += `<button class="btn btn-secondary btn-sm" onclick="demoteUser(${u.id})" title="Demote to Client"><i class="fas fa-user"></i> Demote</button>`;
+                }
+
+                // Toggle active (not self)
+                if (u.id !== currentUserId) {
+                    actionButtons += `<button class="btn btn-${u.is_active ? 'secondary' : 'success'} btn-sm" onclick="toggleUser(${u.id}, '${u.is_active ? 'disable' : 'enable'}')">${u.is_active ? 'Disable' : 'Enable'}</button>`;
+                }
+
+                // Delete (not self)
+                if (u.id !== currentUserId) {
+                    actionButtons += `<button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">Delete</button>`;
+                }
+
                 list.innerHTML += `<div class="appointment-item">
                     <div class="appointment-info">
                         <div class="avatar-sm">${(u.first_name[0]+u.last_name[0]).toUpperCase()}</div>
                         <div class="details"><div class="title">${u.first_name} ${u.last_name}</div>
-                        <div class="meta">${u.email} | ${u.role} ${u.is_verified ? '✅' : '❌'}</div></div>
+                        <div class="meta">${u.email} | <strong>${u.role}</strong> ${u.is_verified ? '✅' : '❌'} ${u.is_active ? '' : '(disabled)'}</div></div>
                     </div>
-                    <div class="appointment-actions">
-                        ${u.role === 'therapist' && !u.is_verified ? `<button class="btn btn-success btn-sm" onclick="verifyTherapist(${u.id})">Verify</button>` : ''}
-                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">Delete</button>
-                    </div></div>`;
+                    <div class="appointment-actions">${actionButtons}</div></div>`;
             });
         }
         const rep = await apiCall('admin_get_reports', {}, 'GET');
         if (rep.success) {
             document.getElementById('totalClients').textContent = rep.total_clients;
             document.getElementById('totalTherapists').textContent = rep.total_therapists;
+            document.getElementById('totalAdmins').textContent = rep.total_admins || 0;
             document.getElementById('totalAppointments').textContent = rep.total_appointments;
         }
     }
+
     window.verifyTherapist = async (id) => {
         const r = await apiCall('admin_verify_therapist', { id });
         showToast(r.message, r.success ? 'success' : 'error');
         loadAdminData();
     };
     window.deleteUser = async (id) => {
-        if (!confirm('Delete?')) return;
+        if (!confirm('Delete this user? This cannot be undone.')) return;
         const r = await apiCall('admin_delete_user', { id });
+        showToast(r.message, r.success ? 'success' : 'error');
+        loadAdminData();
+    };
+    window.toggleUser = async (id, action) => {
+        if (!confirm(`${action === 'disable' ? 'Disable' : 'Enable'} this user?`)) return;
+        const r = await apiCall('admin_toggle_user', { user_id: id, action });
+        showToast(r.message, r.success ? 'success' : 'error');
+        loadAdminData();
+    };
+    window.promoteUser = async (id) => {
+        if (!confirm('Promote this user to Admin? They will get full system access.')) return;
+        const r = await apiCall('admin_promote_user', { user_id: id });
+        showToast(r.message, r.success ? 'success' : 'error');
+        loadAdminData();
+    };
+    window.demoteUser = async (id) => {
+        if (!confirm('Demote this admin to a regular client?')) return;
+        const r = await apiCall('admin_demote_user', { user_id: id });
         showToast(r.message, r.success ? 'success' : 'error');
         loadAdminData();
     };
@@ -758,7 +808,6 @@
         showToast(res.message, res.success ? 'success' : 'error');
     };
 
-    // Booking
     document.getElementById('bookAppointmentBtn').addEventListener('click', async () => {
         if (currentRole !== 'client') return showToast('Only clients can book', 'error');
         const sel = document.getElementById('therapistSelect');
@@ -788,7 +837,6 @@
         setButtonLoading(btn, false);
     });
 
-    // Profile picture
     document.getElementById('profilePicture').addEventListener('change', async function() {
         const file = this.files[0];
         if (!file) return;

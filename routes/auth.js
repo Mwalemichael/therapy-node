@@ -20,7 +20,7 @@ router.post('/login', (req, res) => {
     return res.json({ success: false, message: 'Account role mismatch' });
   }
   if (user.is_active === 0) {
-    return res.json({ success: false, message: 'Account disabled' });
+    return res.json({ success: false, message: 'Account has been disabled' });
   }
   req.session.user_id = Number(user.id);
   req.session.role = user.role;
@@ -40,21 +40,27 @@ router.post('/login', (req, res) => {
 
 router.post('/register', (req, res) => {
   const { first_name, last_name, email, password, phone, role, therapist_code, specializations } = req.body;
+
   if (!first_name || !last_name || !email || !password) {
     return res.json({ success: false, message: 'All required fields must be filled' });
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.json({ success: false, message: 'Invalid email' });
   }
-  if (!['client', 'therapist', 'admin'].includes(role)) {
-    return res.json({ success: false, message: 'Invalid role' });
+
+  // ⚠️ SECURITY: Only client and therapist can self-register.
+  // Admin accounts can ONLY be created by an existing admin via the dashboard.
+  if (!['client', 'therapist'].includes(role)) {
+    return res.json({ success: false, message: 'Invalid role. Admin accounts cannot be self-registered.' });
   }
+
   if (role === 'therapist' && therapist_code !== THERAPIST_REG_CODE) {
     return res.json({ success: false, message: 'Invalid therapist code' });
   }
   if (password.length < 6) {
     return res.json({ success: false, message: 'Password must be at least 6 characters' });
   }
+
   const exists = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
   if (exists) return res.json({ success: false, message: 'Email already registered' });
 
