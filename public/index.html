@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThinkTech Therapy – Professional Online Counselling</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </noscript>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8f9fa; color: #1a2a3a; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        header { background: #1a2a3a; color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo { font-size: 1.8rem; font-weight: 700; }
+        .logo i { color: #e9c46a; margin-right: 0.5rem; }
+        .logo span { color: #2a9d8f; }
+        nav button { color: white; margin-left: 1.5rem; font-weight: 500; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        nav button:hover { color: #e9c46a; }
+        .btn { padding: 0.6rem 1.5rem; border-radius: 60px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; font-family: inherit; font-size: 1rem; }
+        .btn-primary { background: #2a9d8f; color: white; }
+        .btn-primary:hover { background: #21867a; transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 2px solid #e9c46a; color: #e9c46a; }
+        .btn-outline:hover { background: #e9c46a; color: #1a2a3a; }
+        .hero { background: linear-gradient(135deg, #1a2a3a 0%, #2a9d8f 100%); color: white; padding: 4rem 0; text-align: center; }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; opacity: 0.9; }
+        .services { padding: 4rem 0; background: white; }
+        .services h2 { text-align: center; font-size: 2.5rem; margin-bottom: 2rem; }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .service-card { background: #f8f9fa; padding: 2rem 1.5rem; border-radius: 1.5rem; text-align: center; transition: 0.3s; border: 1px solid #e9ecef; }
+        .service-card:hover { transform: translateY(-8px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); border-color: #2a9d8f; }
+        .service-card i { font-size: 3rem; color: #2a9d8f; margin-bottom: 1rem; }
+        .service-card h3 { margin-bottom: 0.5rem; }
+        .service-card p { color: #4a5568; }
+        .testimonials { padding: 4rem 0; background: #eef2f7; }
+        .testimonials h2 { text-align: center; font-size: 2.5rem; margin-bottom: 2rem; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .testimonial-card { background: white; padding: 2rem; border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border-left: 4px solid #e9c46a; }
+        .testimonial-card p { font-style: italic; }
+        .testimonial-card .author { margin-top: 1rem; font-weight: 600; }
+        .cta { padding: 4rem 0; background: #1a2a3a; color: white; text-align: center; }
+        .cta h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .cta p { max-width: 600px; margin: 0 auto 2rem; opacity: 0.9; }
+        footer { background: #0d1b2a; color: #a0b0c0; padding: 2rem 0; text-align: center; }
+
+        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 999; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 2rem; z-index: 1000; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
+        .modal .close-modal { position: absolute; top: 12px; right: 18px; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #a0aec0; }
+        .modal h3 { font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center; }
+        .modal label { display: block; font-weight: 500; margin: 0.8rem 0 0.3rem; }
+        .modal input, .modal select { width: 100%; padding: 0.7rem 1rem; border: 1px solid #e2e8f0; border-radius: 1rem; font-size: 0.95rem; background: #f7fafc; font-family: inherit; }
+        .modal input:focus, .modal select:focus { outline: none; border-color: #2a9d8f; }
+        .modal .btn { width: 100%; margin-top: 1.2rem; }
+        .modal .btn-link { background: none; border: none; color: #2a9d8f; font-weight: 500; cursor: pointer; margin-top: 1rem; width: 100%; text-align: center; font-family: inherit; }
+
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1001; display: flex; flex-direction: column; gap: 0.6rem; }
+        .toast { background: white; border-left: 5px solid #2a9d8f; padding: 0.8rem 1.2rem; border-radius: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; animation: slideIn 0.3s ease; }
+        .toast.success { border-left-color: #2ecc71; }
+        .toast.error { border-left-color: #e74c3c; }
+        .toast i { font-size: 1.2rem; color: #2a9d8f; }
+        .toast.success i { color: #2ecc71; }
+        .toast.error i { color: #e74c3c; }
+        .toast .message { flex: 1; font-size: 0.9rem; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 0.5rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="logo"><i class="fas fa-hand-holding-heart"></i>ThinkTech<span>Therapy</span></div>
+        <nav>
+            <button onclick="showLogin()" class="btn-outline" style="padding:0.4rem 1.2rem;">Login</button>
+            <button onclick="showRegister()" class="btn-primary" style="padding:0.4rem 1.2rem;">Get Started</button>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <h1>Professional Therapy, Anywhere</h1>
+        <p>Connect with verified therapists in a secure, confidential environment. Start your journey to mental wellness today.</p>
+        <button onclick="showRegister()" class="btn btn-primary" style="font-size:1.2rem; padding:0.8rem 2.5rem;">Get Started Now</button>
+    </div>
+</section>
+
+<section class="services">
+    <div class="container">
+        <h2>Our Services</h2>
+        <div class="service-grid">
+            <div class="service-card"><i class="fas fa-user-md"></i><h3>Individual Therapy</h3><p>One-on-one sessions with licensed therapists tailored to your needs.</p></div>
+            <div class="service-card"><i class="fas fa-users"></i><h3>Couples Counselling</h3><p>Strengthen relationships with guided communication and support.</p></div>
+            <div class="service-card"><i class="fas fa-video"></i><h3>Video Sessions</h3><p>Secure high-quality video calls from the comfort of your home.</p></div>
+            <div class="service-card"><i class="fas fa-comment-dots"></i><h3>Messaging Support</h3><p>Stay connected with your therapist between sessions via secure chat.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <h2>What Our Clients Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card"><p>"ThinkTech Therapy gave me the tools to manage my anxiety. The platform is easy to use and my therapist is wonderful."</p><div class="author">– Sarah M.</div></div>
+            <div class="testimonial-card"><p>"I've tried other services, but the quality of care here is unmatched. Highly recommend to anyone seeking support."</p><div class="author">– James K.</div></div>
+            <div class="testimonial-card"><p>"Secure, convenient, and professional. The video sessions feel just like in-person visits."</p><div class="author">– Emily R.</div></div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>Ready to Take the First Step?</h2>
+        <p>Join thousands who have found healing and growth with ThinkTech Therapy.</p>
+        <button onclick="showRegister()" class="btn btn-primary" style="font-size:1.2rem; padding:0.8rem 2.5rem;">Create Your Account</button>
+    </div>
+</section>
+
+<footer>
+    <div class="container"><p>&copy; 2025 ThinkTech Therapy. All rights reserved. | <i class="fas fa-lock"></i> End-to-end encrypted</p></div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay"></div>
+
+<!-- Login Modal -->
+<div class="modal" id="loginModal">
+    <button class="close-modal" onclick="closeAllModals()">&times;</button>
+    <h3>Welcome Back</h3>
+    <form id="loginForm">
+        <div style="display:flex; gap:1.5rem; justify-content:center; margin-bottom:1rem; flex-wrap:wrap;">
+            <label><input type="radio" name="role" value="client" checked> Client</label>
+            <label><input type="radio" name="role" value="therapist"> Therapist</label>
+            <label><input type="radio" name="role" value="admin"> Admin</label>
+        </div>
+        <label for="loginEmail">Email</label>
+        <input type="email" name="email" id="loginEmail" placeholder="Email" required autocomplete="email">
+        <label for="loginPassword">Password</label>
+        <input type="password" name="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
+        <button type="submit" class="btn btn-primary" id="loginSubmitBtn">Login</button>
+        <button type="button" class="btn-link" onclick="showForgotPassword()">Forgot Password?</button>
+        <button type="button" class="btn-link" onclick="showRegister()">Don't have an account? Register</button>
+    </form>
+</div>
+
+<!-- Register Modal -->
+<div class="modal" id="registerModal">
+    <button class="close-modal" onclick="closeAllModals()">&times;</button>
+    <h3>Create Account</h3>
+    <form id="registerForm">
+        <div style="display:flex; gap:1.5rem; justify-content:center; margin-bottom:1rem; flex-wrap:wrap;">
+            <label><input type="radio" name="role" value="client" checked> Client</label>
+            <label><input type="radio" name="role" value="therapist"> Therapist</label>
+            <label><input type="radio" name="role" value="admin"> Admin</label>
+        </div>
+        <div style="display:flex; gap:1rem;">
+            <div style="flex:1;"><label for="regFirstName">First name</label><input type="text" name="first_name" id="regFirstName" required autocomplete="given-name"></div>
+            <div style="flex:1;"><label for="regLastName">Last name</label><input type="text" name="last_name" id="regLastName" required autocomplete="family-name"></div>
+        </div>
+        <label for="regEmail">Email</label>
+        <input type="email" name="email" id="regEmail" required autocomplete="email">
+        <label for="regPassword">Password</label>
+        <input type="password" name="password" id="regPassword" required autocomplete="new-password">
+        <label for="regPhone">Phone (optional)</label>
+        <input type="text" name="phone" id="regPhone" autocomplete="tel">
+        <div id="therapistCodeGroup" style="display:none;">
+            <label for="regTherapistCode">Therapist Verification Code</label>
+            <input type="text" name="therapist_code" id="regTherapistCode" placeholder="Enter your therapist code">
+        </div>
+        <div id="regSpecializationsGroup" style="display:none;">
+            <label for="regSpecializations">Specializations (hold Ctrl for multiple)</label>
+            <select name="specializations" id="regSpecializations" multiple style="height:80px;">
+                <option value="Anxiety">Anxiety</option>
+                <option value="Depression">Depression</option>
+                <option value="Trauma">Trauma</option>
+                <option value="Grief">Grief</option>
+                <option value="Relationships">Relationships</option>
+                <option value="Stress Management">Stress Management</option>
+                <option value="Addiction">Addiction</option>
+                <option value="LGBTQ+">LGBTQ+</option>
+                <option value="PTSD">PTSD</option>
+                <option value="ADHD">ADHD</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" id="registerSubmitBtn">Register</button>
+        <button type="button" class="btn-link" onclick="showLogin()">Already have an account? Login</button>
+    </form>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal" id="forgotPasswordModal">
+    <button class="close-modal" onclick="closeAllModals()">&times;</button>
+    <h3>Reset Password</h3>
+    <p style="text-align:center; color:#4a5568; margin-bottom:1rem;">Enter your email address and we'll send you a reset link.</p>
+    <form id="forgotPasswordForm">
+        <label for="resetEmail">Email</label>
+        <input type="email" name="email" id="resetEmail" required autocomplete="email">
+        <button type="submit" class="btn btn-primary" id="resetRequestBtn">Send Reset Link</button>
+        <button type="button" class="btn-link" onclick="showLogin()">Back to Login</button>
+    </form>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function() {
+    "use strict";
+
+    // Redirect if already logged in
+    fetch('/api/get_user_data', { credentials: 'same-origin' })
+        .then(r => r.json())
+        .then(data => { if (data.success) window.location.href = '/dashboard'; })
+        .catch(() => {});
+
+    function showToast(message, type = 'success') {
+        const iconMap = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fas ${iconMap[type] || 'fa-info-circle'}"></i><span class="message">${message}</span>`;
+        document.getElementById('toastContainer').appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3500);
+    }
+
+    function setButtonLoading(btn, loading, text = 'Processing...') {
+        if (loading) {
+            btn.dataset.original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span>${text}`;
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = btn.dataset.original;
+        }
+    }
+
+    async function apiCall(endpoint, data = {}, method = 'POST') {
+        const options = {
+            method,
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' }
+        };
+        if (method !== 'GET') options.body = JSON.stringify(data);
+        try {
+            const res = await fetch('/api/' + endpoint, options);
+            return await res.json();
+        } catch (err) {
+            return { success: false, message: 'Network error' };
+        }
+    }
+
+    document.querySelectorAll('#registerForm input[name="role"]').forEach(r => {
+        r.addEventListener('change', function() {
+            const isTherapist = this.value === 'therapist';
+            document.getElementById('therapistCodeGroup').style.display = isTherapist ? 'block' : 'none';
+            document.getElementById('regSpecializationsGroup').style.display = isTherapist ? 'block' : 'none';
+        });
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('loginSubmitBtn');
+        setButtonLoading(btn, true, 'Logging in...');
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        const res = await apiCall('login', data);
+        if (res.success) {
+            showToast(res.message, 'success');
+            setTimeout(() => window.location.href = '/dashboard', 500);
+        } else {
+            showToast(res.message || 'Login failed', 'error');
+            setButtonLoading(btn, false);
+        }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('registerSubmitBtn');
+        setButtonLoading(btn, true, 'Registering...');
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        const specs = document.getElementById('regSpecializations');
+        data.specializations = specs ? Array.from(specs.selectedOptions).map(o => o.value) : [];
+        const res = await apiCall('register', data);
+        if (res.success) {
+            showToast(res.message, 'success');
+            setTimeout(() => window.location.href = '/dashboard', 500);
+        } else {
+            showToast(res.message || 'Registration failed', 'error');
+            setButtonLoading(btn, false);
+        }
+    });
+
+    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('resetRequestBtn');
+        setButtonLoading(btn, true, 'Sending...');
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        const res = await apiCall('request_password_reset', data);
+        showToast(res.message, res.success ? 'success' : 'error');
+        if (res.success) closeAllModals();
+        setButtonLoading(btn, false);
+    });
+
+    window.showLogin = () => {
+        document.getElementById('modalOverlay').style.display = 'block';
+        document.getElementById('loginModal').style.display = 'block';
+        document.getElementById('registerModal').style.display = 'none';
+        document.getElementById('forgotPasswordModal').style.display = 'none';
+    };
+    window.showRegister = () => {
+        document.getElementById('modalOverlay').style.display = 'block';
+        document.getElementById('registerModal').style.display = 'block';
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('forgotPasswordModal').style.display = 'none';
+    };
+    window.showForgotPassword = () => {
+        document.getElementById('modalOverlay').style.display = 'block';
+        document.getElementById('forgotPasswordModal').style.display = 'block';
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('registerModal').style.display = 'none';
+    };
+    window.closeAllModals = () => {
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    };
+
+    document.getElementById('modalOverlay').addEventListener('click', closeAllModals);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllModals(); });
+})();
+</script>
+</body>
+</html>
