@@ -1,0 +1,6 @@
+node_modules/
+therapy.db
+uploads/
+.env
+*.log
+.DS_Store
