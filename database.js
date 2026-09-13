@@ -4,11 +4,8 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 
 const db = new DatabaseSync(path.join(__dirname, 'therapy.db'));
-
-// Enable foreign keys
 db.exec('PRAGMA foreign_keys = ON;');
 
-// Create tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -55,6 +52,11 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     appointment_id INTEGER UNIQUE NOT NULL,
     notes TEXT,
+    subjective TEXT DEFAULT '',
+    objective TEXT DEFAULT '',
+    assessment TEXT DEFAULT '',
+    plan TEXT DEFAULT '',
+    recording_url TEXT DEFAULT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE CASCADE
   );
@@ -83,15 +85,120 @@ db.exec(`
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
   );
 
+  CREATE TABLE IF NOT EXISTS treatment_plans (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    therapist_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT DEFAULT '',
+    status TEXT DEFAULT 'active' CHECK(status IN ('active','paused','completed','cancelled')),
+    start_date TEXT NOT NULL,
+    target_date TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (therapist_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS treatment_goals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    plan_id INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    target_date TEXT,
+    status TEXT DEFAULT 'pending' CHECK(status IN ('pending','in_progress','achieved','abandoned')),
+    notes TEXT DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (plan_id) REFERENCES treatment_plans(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS symptom_assessments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    type TEXT NOT NULL CHECK(type IN ('PHQ9','GAD7')),
+    total_score INTEGER NOT NULL,
+    severity TEXT NOT NULL,
+    answers TEXT NOT NULL,
+    notes TEXT DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS crisis_resources (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT DEFAULT '',
+    phone TEXT DEFAULT '',
+    url TEXT DEFAULT '',
+    display_order INTEGER DEFAULT 0,
+    is_active INTEGER DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS group_sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    therapist_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT DEFAULT '',
+    scheduled_date TEXT NOT NULL,
+    scheduled_time TEXT NOT NULL,
+    duration_minutes INTEGER DEFAULT 60,
+    max_participants INTEGER DEFAULT 8,
+    room_name TEXT NOT NULL UNIQUE,
+    status TEXT DEFAULT 'scheduled' CHECK(status IN ('scheduled','in_progress','completed','cancelled')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (therapist_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS group_participants (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER NOT NULL,
+    client_id INTEGER NOT NULL,
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (group_id) REFERENCES group_sessions(id) ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(group_id, client_id)
+  );
+
   CREATE INDEX IF NOT EXISTS idx_appt_client ON appointments(client_id);
   CREATE INDEX IF NOT EXISTS idx_appt_therapist ON appointments(therapist_id);
   CREATE INDEX IF NOT EXISTS idx_appt_status ON appointments(status);
   CREATE INDEX IF NOT EXISTS idx_msg_appt ON messages(appointment_id);
   CREATE INDEX IF NOT EXISTS idx_user_email ON users(email);
   CREATE INDEX IF NOT EXISTS idx_user_role ON users(role);
+  CREATE INDEX IF NOT EXISTS idx_plans_client ON treatment_plans(client_id);
+  CREATE INDEX IF NOT EXISTS idx_plans_therapist ON treatment_plans(therapist_id);
+  CREATE INDEX IF NOT EXISTS idx_goals_plan ON treatment_goals(plan_id);
+  CREATE INDEX IF NOT EXISTS idx_assess_client ON symptom_assessments(client_id);
+  CREATE INDEX IF NOT EXISTS idx_assess_type ON symptom_assessments(type);
+  CREATE INDEX IF NOT EXISTS idx_group_therapist ON group_sessions(therapist_id);
+  CREATE INDEX IF NOT EXISTS idx_group_part ON group_participants(group_id);
 `);
 
-// Create default admin if missing
+// Migration: add SOAP columns to existing session_notes
+try {
+  const cols = db.prepare("PRAGMA table_info(session_notes)").all();
+  const colNames = cols.map(c => c.name);
+  if (!colNames.includes('subjective')) db.exec("ALTER TABLE session_notes ADD COLUMN subjective TEXT DEFAULT ''");
+  if (!colNames.includes('objective')) db.exec("ALTER TABLE session_notes ADD COLUMN objective TEXT DEFAULT ''");
+  if (!colNames.includes('assessment')) db.exec("ALTER TABLE session_notes ADD COLUMN assessment TEXT DEFAULT ''");
+  if (!colNames.includes('plan')) db.exec("ALTER TABLE session_notes ADD COLUMN plan TEXT DEFAULT ''");
+  if (!colNames.includes('recording_url')) db.exec("ALTER TABLE session_notes ADD COLUMN recording_url TEXT DEFAULT NULL");
+} catch (e) { /* ignore */ }
+
+
+const crisisCount = db.prepare('SELECT COUNT(*) AS c FROM crisis_resources').get().c;
+if (crisisCount === 0) {
+  const insert = db.prepare(
+    'INSERT INTO crisis_resources (title, description, phone, url, display_order) VALUES (?, ?, ?, ?, ?)'
+  );
+  insert.run('Emergency Services', 'Call for immediate danger to life', '911', '', 1);
+  insert.run('National Suicide Prevention Lifeline', '24/7 free and confidential support', '988', 'https://988lifeline.org', 2);
+  insert.run('Crisis Text Line', 'Text HOME to 741741 to connect with a Crisis Counselor', '741741', 'https://www.crisistextline.org', 3);
+  insert.run('SAMHSA National Helpline', 'Treatment referral and information (24/7)', '1-800-662-4357', 'https://www.samhsa.gov/find-help/national-helpline', 4);
+  insert.run('Domestic Violence Hotline', '24/7 support for domestic abuse', '1-800-799-7233', 'https://www.thehotline.org', 5);
+  console.log('✅ Default crisis resources seeded');
+}
+
+// Create default admin
 try {
   const adminExists = db.prepare('SELECT id FROM users WHERE email = ?').get('admin@thinktech.com');
   if (!adminExists) {

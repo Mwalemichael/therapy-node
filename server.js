@@ -35,6 +35,7 @@ app.use('/api', require('./routes/user'));
 app.use('/api', require('./routes/appointments'));
 app.use('/api', require('./routes/chat'));
 app.use('/api', require('./routes/admin'));
+app.use('/api', require('./routes/clinical'));
 
 // Protected dashboard route
 app.get('/dashboard', (req, res) => {
