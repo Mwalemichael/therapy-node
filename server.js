@@ -32,7 +32,7 @@ app.use(session({
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production'  // HTTPS-only cookies in prod
+    secure: process.env.NODE_ENV === 'production'
   }
 }));
 
@@ -101,13 +101,10 @@ function startReminderScheduler() {
 
       for (const appt of rows) {
         const link = `${process.env.APP_URL || 'http://localhost:3000'}/dashboard`;
-
         createNotification(appt.client_id, 'appointment_reminder', 'Session reminder',
           `Reminder: session with ${appt.therapist_name} on ${appt.date} at ${appt.time}.`, '/dashboard');
-
         sendEmail({ to: appt.client_email, ...templates.appointmentReminder(appt.client_name, appt.therapist_name, appt.date, appt.time, link) }).catch(() => {});
         sendEmail({ to: appt.therapist_email, ...templates.appointmentReminder(appt.therapist_name, appt.client_name, appt.date, appt.time, link) }).catch(() => {});
-
         db.prepare('UPDATE appointments SET reminder_sent = 1 WHERE id = ?').run(appt.id);
       }
     } catch (err) {
