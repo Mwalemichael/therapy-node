@@ -2,6 +2,8 @@
 const express = require('express');
 const db = require('../database');
 const { requireLogin } = require('../middleware/auth');
+const { sendEmail, templates } = require('../email');
+const { createNotification } = require('../notifications');
 const router = express.Router();
 
 function isAuthorized(userId, role, appointment) {
@@ -9,6 +11,9 @@ function isAuthorized(userId, role, appointment) {
          (role === 'therapist' && appointment.therapist_id === userId);
 }
 
+// ─────────────────────────────────────────────
+// GET CHAT MESSAGES
+// ─────────────────────────────────────────────
 router.get('/chat_get', requireLogin, (req, res) => {
   const { appointment_id, last_id = 0 } = req.query;
   if (!appointment_id) return res.json({ success: false, message: 'Appointment ID required' });
@@ -32,21 +37,61 @@ router.get('/chat_get', requireLogin, (req, res) => {
   res.json({ success: true, messages });
 });
 
+// ─────────────────────────────────────────────
+// SEND CHAT MESSAGE
+// ─────────────────────────────────────────────
 router.post('/chat_send', requireLogin, (req, res) => {
   const { appointment_id, message } = req.body;
   if (!appointment_id || !message) {
     return res.json({ success: false, message: 'Required fields missing' });
   }
+
   const appt = db.prepare('SELECT * FROM appointments WHERE id = ?').get(appointment_id);
   if (!appt) return res.json({ success: false, message: 'Appointment not found' });
   if (!isAuthorized(req.session.user_id, req.session.role, appt)) {
     return res.json({ success: false, message: 'Forbidden' });
   }
+
+  const trimmed = message.trim();
   db.prepare('INSERT INTO messages (appointment_id, sender_id, message) VALUES (?, ?, ?)')
-    .run(appointment_id, req.session.user_id, message.trim());
+    .run(appointment_id, req.session.user_id, trimmed);
+
+  // Notify the other party
+  const otherId = req.session.user_id === appt.client_id ? appt.therapist_id : appt.client_id;
+  const sender = db.prepare('SELECT first_name, last_name FROM users WHERE id = ?')
+    .get(req.session.user_id);
+  const senderName = `${sender.first_name} ${sender.last_name}`;
+  const recipient = db.prepare('SELECT email, first_name FROM users WHERE id = ?').get(otherId);
+
+  const preview = trimmed.length > 60 ? trimmed.substring(0, 60) + '…' : trimmed;
+
+  createNotification(
+    otherId,
+    'new_message',
+    'New message',
+    `${senderName}: ${preview}`,
+    '/dashboard'
+  );
+
+  // Rate-limit emails — 1 per appointment per recipient per 10 minutes
+  const key = `chatmail_${otherId}_${appointment_id}`;
+  const now = Date.now();
+  if (!global[key] || now - global[key] > 10 * 60 * 1000) {
+    global[key] = now;
+    if (recipient) {
+      sendEmail({
+        to: recipient.email,
+        ...templates.newMessage(recipient.first_name, senderName, trimmed.substring(0, 200))
+      }).catch(() => {});
+    }
+  }
+
   res.json({ success: true, message: 'Message sent' });
 });
 
+// ─────────────────────────────────────────────
+// GET SESSION NOTES
+// ─────────────────────────────────────────────
 router.get('/notes_get', requireLogin, (req, res) => {
   const { appointment_id } = req.query;
   if (!appointment_id) return res.json({ success: false, message: 'Appointment ID required' });
@@ -61,6 +106,9 @@ router.get('/notes_get', requireLogin, (req, res) => {
   res.json({ success: true, notes: row ? row.notes : '' });
 });
 
+// ─────────────────────────────────────────────
+// SAVE SESSION NOTES
+// ─────────────────────────────────────────────
 router.post('/notes_save', requireLogin, (req, res) => {
   const { appointment_id, notes } = req.body;
   if (!appointment_id) return res.json({ success: false, message: 'Appointment ID required' });

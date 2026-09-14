@@ -157,6 +157,30 @@ db.exec(`
     FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE(group_id, client_id)
   );
+  CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    link TEXT DEFAULT NULL,
+    is_read INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS push_subscriptions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    endpoint TEXT NOT NULL,
+    p256dh TEXT NOT NULL,
+    auth TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(user_id, endpoint)
+  );
+
+
 
   CREATE INDEX IF NOT EXISTS idx_appt_client ON appointments(client_id);
   CREATE INDEX IF NOT EXISTS idx_appt_therapist ON appointments(therapist_id);
@@ -171,6 +195,10 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_assess_type ON symptom_assessments(type);
   CREATE INDEX IF NOT EXISTS idx_group_therapist ON group_sessions(therapist_id);
   CREATE INDEX IF NOT EXISTS idx_group_part ON group_participants(group_id);
+  CREATE INDEX IF NOT EXISTS idx_notif_user ON notifications(user_id);
+  CREATE INDEX IF NOT EXISTS idx_notif_unread ON notifications(user_id, is_read);
+  CREATE INDEX IF NOT EXISTS idx_push_user ON push_subscriptions(user_id);
+
 `);
 
 // Migration: add SOAP columns to existing session_notes
@@ -183,7 +211,13 @@ try {
   if (!colNames.includes('plan')) db.exec("ALTER TABLE session_notes ADD COLUMN plan TEXT DEFAULT ''");
   if (!colNames.includes('recording_url')) db.exec("ALTER TABLE session_notes ADD COLUMN recording_url TEXT DEFAULT NULL");
 } catch (e) { /* ignore */ }
-
+// Add reminder_sent column to appointments if missing
+try {
+  const apptCols = db.prepare("PRAGMA table_info(appointments)").all().map(c => c.name);
+  if (!apptCols.includes('reminder_sent')) {
+    db.exec("ALTER TABLE appointments ADD COLUMN reminder_sent INTEGER DEFAULT 0");
+  }
+} catch (e) { /* ignore */ }
 
 const crisisCount = db.prepare('SELECT COUNT(*) AS c FROM crisis_resources').get().c;
 if (crisisCount === 0) {

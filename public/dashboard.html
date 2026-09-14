@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard – ThinkTech Therapy</title>
+    <meta name="theme-color" content="#2a9d8f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ThinkTech">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMWEyYTNhIi8+PHBhdGggZD0iTTk2IDQ4Yy0xNiAwLTMwIDE0LTMwIDMwdjE2YzAgMTYgMTQgMzAgMzAgMzBzMzAtMTQgMzAtMzBWNzhjMC0xNi0xNC0zMC0zMC0zMHoiIGZpbGw9IiMyYTlkOGYiLz48cGF0aCBkPSJNOTYgMTI4Yy0yNCAwLTQ0IDE2LTQ4IDQwaDk2Yy00LTI0LTI0LTQwLTQ4LTQweiIgZmlsbD0iI2U5YzQ2YSIvPjwvc3ZnPg==">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -131,7 +137,6 @@
         .soap-field label { font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; display: block; color: #1a2a3a; }
         .soap-field textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 0.8rem; padding: 0.5rem; resize: vertical; min-height: 60px; font-family: inherit; font-size: 0.85rem; }
         .soap-field textarea:focus { outline: none; border-color: #2a9d8f; }
-        /* Plan cards */
         .plan-card { background: #f8f9fa; border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 1rem; border-left: 4px solid #2a9d8f; }
         .plan-card.completed { border-left-color: #2ecc71; }
         .plan-card.paused { border-left-color: #f39c12; }
@@ -152,15 +157,14 @@
         .goal-status.in_progress { background: #fefcbf; color: #744210; }
         .goal-status.achieved { background: #c6f6d5; color: #22543d; }
         .goal-status.abandoned { background: #fed7d7; color: #9b2c2c; }
-        /* Symptom tracker */
         .question-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f0f2f5; gap: 1rem; flex-wrap: wrap; }
         .question-row:last-child { border-bottom: none; }
         .question-text { flex: 1; font-size: 0.9rem; min-width: 200px; }
         .answer-scale { display: flex; gap: 0.3rem; }
-        .answer-scale label { cursor: pointer; padding: 0.3rem 0.7rem; border: 1px solid #e2e8f0; border-radius: 60px; font-size: 0.8rem; background: white; }
+        .answer-scale label { cursor: pointer; }
         .answer-scale input { display: none; }
         .answer-scale input:checked + span { background: #2a9d8f; color: white; border-color: #2a9d8f; }
-        .answer-scale span { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 60px; transition: 0.15s; }
+        .answer-scale span { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 60px; transition: 0.15s; border: 1px solid #e2e8f0; background: white; font-size: 0.8rem; }
         .score-display { text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 1rem; margin-top: 1rem; }
         .score-display .score { font-size: 2rem; font-weight: 700; color: #2a9d8f; }
         .score-display .severity { font-size: 1rem; font-weight: 600; }
@@ -169,7 +173,10 @@
         .severity.Moderate { color: #e67e22; }
         .severity.Moderately { color: #e74c3c; }
         .severity.Severe { color: #c0392b; }
-        /* Crisis button */
+        .chart-bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 160px; padding: 1rem; background: #f8f9fa; border-radius: 1rem; overflow-x: auto; }
+        .chart-bar { flex: 0 0 30px; background: #2a9d8f; border-radius: 4px 4px 0 0; min-height: 3px; position: relative; }
+        .chart-bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: #4a5568; white-space: nowrap; }
+        .chart-bar-value { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 600; color: #1a2a3a; }
         .crisis-btn { position: fixed; bottom: 20px; right: 20px; background: #e74c3c; color: white; border: none; border-radius: 60px; padding: 0.9rem 1.5rem; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(231,76,60,0.4); z-index: 998; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; font-size: 0.95rem; }
         .crisis-btn:hover { background: #c0392b; transform: scale(1.05); }
         .crisis-item { background: #f8f9fa; padding: 1rem; border-radius: 1rem; margin-bottom: 0.7rem; border-left: 4px solid #e74c3c; }
@@ -177,13 +184,123 @@
         .crisis-item p { font-size: 0.85rem; color: #4a5568; }
         .crisis-item .crisis-phone { font-size: 1.1rem; font-weight: 700; color: #e74c3c; margin: 0.3rem 0; }
         .crisis-item a { color: #2a9d8f; font-size: 0.85rem; }
-        /* Simple bar chart */
-        .chart-bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 160px; padding: 1rem; background: #f8f9fa; border-radius: 1rem; overflow-x: auto; }
-        .chart-bar { flex: 0 0 30px; background: #2a9d8f; border-radius: 4px 4px 0 0; min-height: 3px; position: relative; }
-        .chart-bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: #4a5568; white-space: nowrap; }
-        .chart-bar-value { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 600; color: #1a2a3a; }
-        @media (max-width: 820px) { .sidebar { width: 200px; padding: 1rem; } .main-content { padding: 1rem; } }
-        @media (max-width: 600px) { .sidebar { display: none; } .stats-grid { grid-template-columns: 1fr; } }
+
+        /* Notification bell */
+        .notif-bell {
+            position: relative;
+            background: rgba(255,255,255,0.08);
+            border-radius: 1.2rem;
+            padding: 0.7rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #e9c46a;
+            font-size: 1.2rem;
+        }
+        .notif-bell:hover { background: rgba(255,255,255,0.15); }
+        .notif-badge {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            background: #e74c3c;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 20px;
+            min-width: 18px;
+            text-align: center;
+            animation: pulseBadge 2s infinite;
+        }
+        @keyframes pulseBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Notification panel */
+        .notif-panel {
+            position: fixed;
+            top: 1.5rem;
+            left: 270px;
+            width: 380px;
+            max-height: 550px;
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            z-index: 1002;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .notif-panel.show { display: flex; }
+        .notif-header {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+        }
+        .notif-header h3 { font-size: 1rem; color: #1a2a3a; }
+        .notif-header button {
+            background: none;
+            border: none;
+            color: #2a9d8f;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+        }
+        .notif-list { overflow-y: auto; flex: 1; }
+        .notif-item {
+            padding: 0.8rem 1.2rem;
+            border-bottom: 1px solid #f0f2f5;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            gap: 0.7rem;
+            align-items: flex-start;
+        }
+        .notif-item:hover { background: #f8f9fa; }
+        .notif-item.unread { background: #eef2ff; border-left: 3px solid #2a9d8f; }
+        .notif-item .notif-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #eef2f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a9d8f;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .notif-item .notif-body { flex: 1; min-width: 0; }
+        .notif-item .notif-title { font-weight: 600; font-size: 0.9rem; color: #1a2a3a; }
+        .notif-item .notif-message { font-size: 0.8rem; color: #4a5568; margin-top: 0.15rem; }
+        .notif-item .notif-time { font-size: 0.7rem; color: #a0aec0; margin-top: 0.3rem; }
+        .notif-empty { padding: 2rem; text-align: center; color: #a0aec0; font-size: 0.9rem; }
+        .notif-item .notif-delete {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0.2rem;
+        }
+        .notif-item .notif-delete:hover { color: #e74c3c; }
+
+        @media (max-width: 820px) {
+            .sidebar { width: 200px; padding: 1rem; }
+            .main-content { padding: 1rem; }
+            .notif-panel { left: 1rem; right: 1rem; width: auto; }
+        }
+        @media (max-width: 600px) {
+            .sidebar { display: none; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -195,6 +312,10 @@
         <div class="name" id="userName">User</div>
         <div class="email" id="userEmail">user@example.com</div>
         <div class="role-badge" id="userRole">Client</div>
+    </div>
+    <div class="notif-bell" id="notifBell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
     </div>
     <ul class="nav-list">
         <li class="active" data-tab="dashboard"><i class="fas fa-home"></i> Dashboard</li>
@@ -231,7 +352,6 @@
         <div class="stat-card"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="info"><span class="number" id="statCompleted">0</span><div class="label">Completed</div></div></div>
     </div>
 
-    <!-- CLIENT DASHBOARD -->
     <div id="clientDashboard">
         <div class="appointment-section">
             <div class="section-header">
@@ -254,7 +374,6 @@
         </div>
     </div>
 
-    <!-- TREATMENT PLANS -->
     <div id="plansSection" style="display:none;">
         <div class="appointment-section">
             <div class="section-header">
@@ -265,7 +384,6 @@
         </div>
     </div>
 
-    <!-- SYMPTOM TRACKER -->
     <div id="symptomsSection" style="display:none;">
         <div class="appointment-section">
             <div class="section-header">
@@ -284,7 +402,6 @@
         </div>
     </div>
 
-    <!-- GROUP SESSIONS -->
     <div id="groupsSection" style="display:none;">
         <div class="appointment-section">
             <div class="section-header">
@@ -295,7 +412,6 @@
         </div>
     </div>
 
-    <!-- CRISIS RESOURCES ADMIN -->
     <div id="crisisAdminSection" style="display:none;">
         <div class="appointment-section">
             <div class="section-header">
@@ -306,7 +422,6 @@
         </div>
     </div>
 
-    <!-- RESOURCES -->
     <div id="resourcesSection" style="display:none;">
         <div class="appointment-section">
             <div class="section-header">
@@ -317,7 +432,6 @@
         </div>
     </div>
 
-    <!-- THERAPIST DASHBOARD -->
     <div id="therapistDashboard" style="display:none;">
         <div class="therapist-tabs">
             <span class="tab active" data-tab="pending">Pending</span>
@@ -338,7 +452,6 @@
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD -->
     <div id="adminDashboard" style="display:none;">
         <div class="appointment-section">
             <div class="section-header"><h2><i class="fas fa-users"></i> User Management</h2></div>
@@ -362,16 +475,11 @@
     </div>
 </main>
 
-<!-- Floating Crisis Button -->
 <button class="crisis-btn" id="crisisBtn" onclick="openCrisisModal()">
     <i class="fas fa-phone-alt"></i> Crisis Help
 </button>
 
 <div class="modal-overlay" id="modalOverlay"></div>
-
-<!-- ═══════════════════════════════════════════════ -->
-<!-- EXISTING MODALS (keep all from previous version) -->
-<!-- ═══════════════════════════════════════════════ -->
 
 <div class="modal" id="bookingModal">
     <button class="close-modal" onclick="closeModal('bookingModal')">&times;</button>
@@ -400,16 +508,21 @@
         <label>Phone</label><input type="text" name="phone">
         <div id="specializationsGroup" style="display:none;">
             <label>Specializations</label>
-            <select name="specializations" id="editSpecializations" multiple style="height:80px;">
+            <select name="specializations" id="editSpecializations" multiple style="height:120px;">
                 <option value="Anxiety">Anxiety</option>
                 <option value="Depression">Depression</option>
                 <option value="Trauma">Trauma</option>
                 <option value="Grief">Grief</option>
                 <option value="Relationships">Relationships</option>
                 <option value="Stress Management">Stress Management</option>
+                <option value="Anger Management">Anger Management</option>
+                <option value="Self-Esteem">Self-Esteem</option>
                 <option value="Addiction">Addiction</option>
+                <option value="Eating Disorders">Eating Disorders</option>
                 <option value="PTSD">PTSD</option>
+                <option value="OCD">OCD</option>
                 <option value="ADHD">ADHD</option>
+                <option value="Sleep Disorders">Sleep Disorders</option>
             </select>
         </div>
         <div id="availabilityGroup" style="display:none;">
@@ -473,9 +586,6 @@
     </form>
 </div>
 
-<!-- NEW MODALS ═══════════════════════════════════════ -->
-
-<!-- Treatment Plan Modal -->
 <div class="modal" id="planModal">
     <button class="close-modal" onclick="closeModal('planModal')">&times;</button>
     <h3 id="planModalTitle">New Treatment Plan</h3>
@@ -495,7 +605,6 @@
     </form>
 </div>
 
-<!-- Add Goal Modal -->
 <div class="modal" id="goalModal">
     <button class="close-modal" onclick="closeModal('goalModal')">&times;</button>
     <h3>Add Goal</h3>
@@ -509,7 +618,6 @@
     </form>
 </div>
 
-<!-- Symptom Assessment Modal -->
 <div class="modal" id="assessmentModal" style="max-width: 700px;">
     <button class="close-modal" onclick="closeModal('assessmentModal')">&times;</button>
     <h3 id="assessmentTitle">PHQ-9 Assessment</h3>
@@ -529,7 +637,6 @@
     </form>
 </div>
 
-<!-- Group Session Modal -->
 <div class="modal" id="groupModal">
     <button class="close-modal" onclick="closeModal('groupModal')">&times;</button>
     <h3>New Group Session</h3>
@@ -550,7 +657,6 @@
     </form>
 </div>
 
-<!-- Crisis Resources Modal -->
 <div class="modal" id="crisisModal" style="max-width: 600px;">
     <button class="close-modal" onclick="closeModal('crisisModal')">&times;</button>
     <h3 style="color:#e74c3c;"><i class="fas fa-phone-alt"></i> Crisis Resources</h3>
@@ -560,7 +666,6 @@
     <div id="crisisList"><div class="appointment-item">Loading...</div></div>
 </div>
 
-<!-- Add/Edit Crisis Resource Modal (admin) -->
 <div class="modal" id="crisisEditModal">
     <button class="close-modal" onclick="closeModal('crisisEditModal')">&times;</button>
     <h3 id="crisisEditTitle">Add Crisis Resource</h3>
@@ -580,7 +685,6 @@
     </form>
 </div>
 
-<!-- Video Session Modal (updated with SOAP tab) -->
 <div class="modal" id="videoSessionModal">
     <button class="close-modal" onclick="closeVideoSession()">&times;</button>
     <h3>Live Session</h3>
@@ -591,8 +695,6 @@
                 <div class="ptab active" data-ptab="chat">Chat</div>
                 <div class="ptab" data-ptab="soap">SOAP Notes</div>
             </div>
-
-            <!-- Chat Panel -->
             <div class="panel-content active" id="panelChat">
                 <div class="chat-messages" id="chatMessages"></div>
                 <div class="chat-input">
@@ -600,25 +702,23 @@
                     <button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
-
-            <!-- SOAP Panel -->
             <div class="panel-content" id="panelSoap">
                 <div style="font-size:0.85rem; color:#4a5568; padding:0.3rem 0;">SOAP notes are visible only to the therapist.</div>
                 <div class="soap-field">
                     <label>S — Subjective</label>
-                    <textarea id="soapSubjective" placeholder="What the client reports (symptoms, feelings, concerns)"></textarea>
+                    <textarea id="soapSubjective" placeholder="What the client reports"></textarea>
                 </div>
                 <div class="soap-field">
                     <label>O — Objective</label>
-                    <textarea id="soapObjective" placeholder="Observable facts (appearance, behavior, mental status)"></textarea>
+                    <textarea id="soapObjective" placeholder="Observable facts"></textarea>
                 </div>
                 <div class="soap-field">
                     <label>A — Assessment</label>
-                    <textarea id="soapAssessment" placeholder="Clinical interpretation, diagnosis, progress"></textarea>
+                    <textarea id="soapAssessment" placeholder="Clinical interpretation"></textarea>
                 </div>
                 <div class="soap-field">
                     <label>P — Plan</label>
-                    <textarea id="soapPlan" placeholder="Next steps, homework, referrals, follow-up"></textarea>
+                    <textarea id="soapPlan" placeholder="Next steps"></textarea>
                 </div>
                 <div class="soap-field" id="recordingField" style="display:none;">
                     <label>Recording URL</label>
@@ -632,6 +732,16 @@
     </div>
 </div>
 
+<div class="notif-panel" id="notifPanel">
+    <div class="notif-header">
+        <h3><i class="fas fa-bell"></i> Notifications</h3>
+        <button onclick="markAllNotificationsRead()">Mark all read</button>
+    </div>
+    <div class="notif-list" id="notifList">
+        <div class="notif-empty">Loading…</div>
+    </div>
+</div>
+
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -642,6 +752,8 @@
     let currentSymptomType = 'PHQ9';
     let symptomQuestions = { PHQ9: [], GAD7: [] };
     let allPlans = [];
+    let notifPollInterval = null;
+    let notifPanelOpen = false;
 
     function showToast(msg, type = 'success') {
         const iconMap = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
@@ -669,9 +781,6 @@
     }
     function esc(str) { return String(str || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
 
-    // ═══════════════════════════════════════════════
-    // USER DATA
-    // ═══════════════════════════════════════════════
     async function loadUserData() {
         const res = await apiCall('get_user_data?all=1', {}, 'GET');
         if (!res.success) { window.location.href = '/'; return; }
@@ -696,7 +805,6 @@
             initials.textContent = res.user.initials || '??';
         }
 
-        // Show/hide nav items based on role
         document.getElementById('symptomsNavItem').style.display = (res.role === 'client' || res.role === 'therapist') ? 'flex' : 'none';
         document.getElementById('crisisAdminNav').style.display = (res.role === 'admin') ? 'flex' : 'none';
         document.getElementById('newPlanBtn').style.display = (res.role === 'therapist') ? 'inline-flex' : 'none';
@@ -723,9 +831,6 @@
         }
     }
 
-    // ═══════════════════════════════════════════════
-    // APPOINTMENTS (existing)
-    // ═══════════════════════════════════════════════
     function renderAppointments(appointments) {
         const list = document.getElementById('appointmentList');
         list.innerHTML = '';
@@ -804,9 +909,6 @@
         if (currentRole === 'therapist') loadTherapistData();
     };
 
-    // ═══════════════════════════════════════════════
-    // TREATMENT PLANS
-    // ═══════════════════════════════════════════════
     async function loadPlans() {
         const res = await apiCall('plans_list', {}, 'GET');
         const list = document.getElementById('plansList');
@@ -869,51 +971,25 @@
             `;
         });
     }
-    window.updatePlanStatus = async (plan_id, status) => {
-        const r = await apiCall('plans_update_status', { plan_id, status });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadPlans();
-    };
-    window.deletePlan = async (plan_id) => {
-        if (!confirm('Delete this plan and all its goals?')) return;
-        const r = await apiCall('plans_delete', { plan_id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadPlans();
-    };
-    window.updateGoalStatus = async (goal_id, status) => {
-        const r = await apiCall('goals_update', { goal_id, status });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadPlans();
-    };
-    window.deleteGoal = async (goal_id) => {
-        if (!confirm('Delete this goal?')) return;
-        const r = await apiCall('goals_delete', { goal_id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadPlans();
-    };
-    window.openGoalModal = (planId) => {
-        document.getElementById('goalPlanId').value = planId;
-        document.getElementById('goalDescription').value = '';
-        document.getElementById('goalTargetDate').value = '';
-        document.getElementById('goalModal').style.display = 'block';
-        document.getElementById('modalOverlay').style.display = 'block';
-    };
+    window.updatePlanStatus = async (plan_id, status) => { const r = await apiCall('plans_update_status', { plan_id, status }); showToast(r.message, r.success?'success':'error'); loadPlans(); };
+    window.deletePlan = async (plan_id) => { if (!confirm('Delete this plan and all its goals?')) return; const r = await apiCall('plans_delete', { plan_id }); showToast(r.message, r.success?'success':'error'); loadPlans(); };
+    window.updateGoalStatus = async (goal_id, status) => { const r = await apiCall('goals_update', { goal_id, status }); showToast(r.message, r.success?'success':'error'); loadPlans(); };
+    window.deleteGoal = async (goal_id) => { if (!confirm('Delete this goal?')) return; const r = await apiCall('goals_delete', { goal_id }); showToast(r.message, r.success?'success':'error'); loadPlans(); };
+    window.openGoalModal = (planId) => { document.getElementById('goalPlanId').value = planId; document.getElementById('goalDescription').value = ''; document.getElementById('goalTargetDate').value = ''; document.getElementById('goalModal').style.display = 'block'; document.getElementById('modalOverlay').style.display = 'block'; };
     document.getElementById('goalForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const plan_id = document.getElementById('goalPlanId').value;
         const description = document.getElementById('goalDescription').value.trim();
         const target_date = document.getElementById('goalTargetDate').value || null;
         const r = await apiCall('goals_add', { plan_id, description, target_date });
-        showToast(r.message, r.success ? 'success' : 'error');
+        showToast(r.message, r.success?'success':'error');
         if (r.success) { closeModal('goalModal'); loadPlans(); }
     });
     document.getElementById('newPlanBtn')?.addEventListener('click', async () => {
         const res = await apiCall('my_clients', {}, 'GET');
         const sel = document.getElementById('planClient');
         sel.innerHTML = '<option value="">Select client...</option>';
-        if (res.success) {
-            res.clients.forEach(c => { sel.innerHTML += `<option value="${c.id}">${esc(c.name)}</option>`; });
-        }
+        if (res.success) res.clients.forEach(c => { sel.innerHTML += `<option value="${c.id}">${esc(c.name)}</option>`; });
         document.getElementById('planId').value = '';
         document.getElementById('planTitle').value = '';
         document.getElementById('planDescription').value = '';
@@ -940,12 +1016,9 @@
         setButtonLoading(btn, false);
     });
 
-    // ═══════════════════════════════════════════════
-    // SYMPTOM TRACKER
-    // ═══════════════════════════════════════════════
     async function loadSymptomQuestions() {
         const res = await apiCall('symptoms_questions', {}, 'GET');
-        if (res.success) { symptomQuestions = { PHQ9: res.PHQ9, GAD7: res.GAD7 }; }
+        if (res.success) symptomQuestions = { PHQ9: res.PHQ9, GAD7: res.GAD7 };
     }
     async function loadSymptoms() {
         const res = await apiCall(`symptoms_chart?type=${currentSymptomType}`, {}, 'GET');
@@ -955,10 +1028,7 @@
             chart.innerHTML = res.data.map(d => {
                 const height = (d.total_score / maxScore) * 120;
                 const date = new Date(d.created_at).toLocaleDateString('en', { month: 'short', day: 'numeric' });
-                return `<div class="chart-bar" style="height:${Math.max(height,3)}px;">
-                    <div class="chart-bar-value">${d.total_score}</div>
-                    <div class="chart-bar-label">${date}</div>
-                </div>`;
+                return `<div class="chart-bar" style="height:${Math.max(height,3)}px;"><div class="chart-bar-value">${d.total_score}</div><div class="chart-bar-label">${date}</div></div>`;
             }).join('');
         } else {
             chart.innerHTML = '<div style="color:#a0aec0; padding:1rem; text-align:center;">No data yet. Take your first assessment.</div>';
@@ -968,22 +1038,12 @@
         hist.innerHTML = '';
         if (h.success && h.assessments.length) {
             const filtered = h.assessments.filter(a => a.type === currentSymptomType);
-            if (!filtered.length) {
-                hist.innerHTML = '<div class="appointment-item">No assessments for this type yet.</div>';
-            } else {
-                filtered.forEach(a => {
-                    const date = new Date(a.created_at).toLocaleString();
-                    hist.innerHTML += `<div class="appointment-item">
-                        <div>
-                            <strong>${a.type}</strong> · Score: <strong>${a.total_score}</strong> · <span class="severity ${a.severity.split(' ')[0]}">${a.severity}</span>
-                            <div style="font-size:0.8rem; color:#4a5568;">${date}</div>
-                        </div>
-                    </div>`;
-                });
-            }
-        } else {
-            hist.innerHTML = '<div class="appointment-item">No assessments yet.</div>';
-        }
+            if (!filtered.length) hist.innerHTML = '<div class="appointment-item">No assessments for this type yet.</div>';
+            else filtered.forEach(a => {
+                const date = new Date(a.created_at).toLocaleString();
+                hist.innerHTML += `<div class="appointment-item"><div><strong>${a.type}</strong> · Score: <strong>${a.total_score}</strong> · <span class="severity ${a.severity.split(' ')[0]}">${a.severity}</span><div style="font-size:0.8rem; color:#4a5568;">${date}</div></div></div>`;
+            });
+        } else hist.innerHTML = '<div class="appointment-item">No assessments yet.</div>';
     }
     window.openAssessment = async (type) => {
         document.getElementById('assessmentType').value = type;
@@ -994,15 +1054,9 @@
             <div class="question-row">
                 <div class="question-text">${i + 1}. ${esc(q)}</div>
                 <div class="answer-scale">
-                    ${[0,1,2,3].map(v => `
-                        <label>
-                            <input type="radio" name="q${i}" value="${v}" onchange="updateLiveScore()">
-                            <span>${v}</span>
-                        </label>
-                    `).join('')}
+                    ${[0,1,2,3].map(v => `<label><input type="radio" name="q${i}" value="${v}" onchange="updateLiveScore()"><span>${v}</span></label>`).join('')}
                 </div>
-            </div>
-        `).join('');
+            </div>`).join('');
         document.getElementById('assessmentNotes').value = '';
         document.getElementById('liveScore').style.display = 'none';
         document.getElementById('assessmentModal').style.display = 'block';
@@ -1059,9 +1113,6 @@
     });
     document.getElementById('newAssessmentBtn')?.addEventListener('click', () => openAssessment(currentSymptomType));
 
-    // ═══════════════════════════════════════════════
-    // GROUP SESSIONS
-    // ═══════════════════════════════════════════════
     async function loadGroups() {
         const res = await apiCall('groups_list', {}, 'GET');
         const list = document.getElementById('groupsList');
@@ -1092,11 +1143,7 @@
                     <div class="avatar-sm"><i class="fas fa-users"></i></div>
                     <div class="details">
                         <div class="title">${esc(g.title)}</div>
-                        <div class="meta">
-                            <i class="far fa-calendar-alt"></i> ${esc(g.scheduled_date)} at ${esc(g.scheduled_time)} ·
-                            ${g.participant_count}/${g.max_participants} joined
-                            ${currentRole !== 'therapist' ? ` · ${esc(g.therapist_name)}` : ''}
-                        </div>
+                        <div class="meta"><i class="far fa-calendar-alt"></i> ${esc(g.scheduled_date)} at ${esc(g.scheduled_time)} · ${g.participant_count}/${g.max_participants} joined${currentRole !== 'therapist' ? ` · ${esc(g.therapist_name)}` : ''}</div>
                         ${g.description ? `<div class="meta" style="margin-top:0.3rem;">${esc(g.description)}</div>` : ''}
                     </div>
                 </div>
@@ -1104,26 +1151,10 @@
             </div>`;
         });
     }
-    window.joinGroup = async (group_id) => {
-        const r = await apiCall('groups_join', { group_id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadGroups();
-    };
-    window.leaveGroup = async (group_id) => {
-        if (!confirm('Leave this group?')) return;
-        const r = await apiCall('groups_leave', { group_id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadGroups();
-    };
-    window.cancelGroup = async (group_id) => {
-        if (!confirm('Cancel this group session?')) return;
-        const r = await apiCall('groups_cancel', { group_id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadGroups();
-    };
-    window.openGroupSession = (room, title) => {
-        openVideoSession(room, title);
-    };
+    window.joinGroup = async (group_id) => { const r = await apiCall('groups_join', { group_id }); showToast(r.message, r.success?'success':'error'); loadGroups(); };
+    window.leaveGroup = async (group_id) => { if (!confirm('Leave this group?')) return; const r = await apiCall('groups_leave', { group_id }); showToast(r.message, r.success?'success':'error'); loadGroups(); };
+    window.cancelGroup = async (group_id) => { if (!confirm('Cancel this group session?')) return; const r = await apiCall('groups_cancel', { group_id }); showToast(r.message, r.success?'success':'error'); loadGroups(); };
+    window.openGroupSession = (room, title) => { openVideoSession(room, title); };
     document.getElementById('newGroupBtn')?.addEventListener('click', () => {
         document.getElementById('groupForm').reset();
         document.getElementById('groupDate').value = new Date().toISOString().split('T')[0];
@@ -1147,9 +1178,6 @@
         if (r.success) { closeModal('groupModal'); loadGroups(); }
     });
 
-    // ═══════════════════════════════════════════════
-    // CRISIS RESOURCES
-    // ═══════════════════════════════════════════════
     window.openCrisisModal = async () => {
         const res = await apiCall('crisis_list', {}, 'GET');
         const list = document.getElementById('crisisList');
@@ -1234,9 +1262,6 @@
         if (r.success) { closeModal('crisisEditModal'); loadCrisisAdmin(); }
     });
 
-    // ═══════════════════════════════════════════════
-    // SOAP NOTES (in video session)
-    // ═══════════════════════════════════════════════
     async function loadSoapNotes(apptId) {
         const res = await apiCall(`soap_get?appointment_id=${apptId}`, {}, 'GET');
         if (res.success) {
@@ -1246,11 +1271,8 @@
             document.getElementById('soapPlan').value = res.notes.plan || '';
             document.getElementById('soapRecordingUrl').value = res.notes.recording_url || '';
         }
-        // Show recording field only for therapist
         document.getElementById('recordingField').style.display = currentRole === 'therapist' ? 'block' : 'none';
-        // Make SOAP read-only for clients
-        const fields = ['soapSubjective','soapObjective','soapAssessment','soapPlan'];
-        fields.forEach(f => {
+        ['soapSubjective','soapObjective','soapAssessment','soapPlan'].forEach(f => {
             const el = document.getElementById(f);
             el.readOnly = currentRole !== 'therapist';
             el.style.background = currentRole !== 'therapist' ? '#f0f2f5' : 'white';
@@ -1268,17 +1290,10 @@
         };
         const r = await apiCall('soap_save', data);
         showToast(r.message, r.success ? 'success' : 'error');
-
-        // Save recording if changed
         const recUrl = document.getElementById('soapRecordingUrl').value.trim();
-        if (recUrl) {
-            await apiCall('soap_recording', { appointment_id: currentAppointmentId, recording_url: recUrl });
-        }
+        if (recUrl) await apiCall('soap_recording', { appointment_id: currentAppointmentId, recording_url: recUrl });
     };
 
-    // ═══════════════════════════════════════════════
-    // VIDEO SESSION (with SOAP tab)
-    // ═══════════════════════════════════════════════
     function loadJitsiScript(cb) {
         if (window.JitsiMeetExternalAPI) return cb();
         const s = document.createElement('script');
@@ -1345,7 +1360,6 @@
         document.getElementById('chatInput').value = '';
         loadChat(currentAppointmentId, lastChatId);
     };
-    // Panel tabs (Chat / SOAP)
     document.querySelectorAll('.panel-tabs .ptab').forEach(tab => {
         tab.addEventListener('click', () => {
             document.querySelectorAll('.panel-tabs .ptab').forEach(t => t.classList.remove('active'));
@@ -1355,9 +1369,6 @@
         });
     });
 
-    // ═══════════════════════════════════════════════
-    // THERAPIST DATA
-    // ═══════════════════════════════════════════════
     async function loadTherapistData() {
         const pend = await apiCall('get_pending_appointments', {}, 'GET');
         const list = document.getElementById('pendingRequestsList');
@@ -1411,28 +1422,10 @@
             });
         } else plist.innerHTML = '<div class="appointment-item">No past sessions.</div>';
     }
-    window.confirmAppointment = async (id) => {
-        if (!confirm('Confirm?')) return;
-        const r = await apiCall('confirm_appointment', { id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadTherapistData();
-    };
-    window.denyAppointment = async (id) => {
-        if (!confirm('Deny?')) return;
-        const r = await apiCall('deny_appointment', { id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadTherapistData();
-    };
-    window.completeAppointment = async (id) => {
-        if (!confirm('Complete?')) return;
-        const r = await apiCall('complete_appointment', { id });
-        showToast(r.message, r.success ? 'success' : 'error');
-        loadTherapistData();
-    };
+    window.confirmAppointment = async (id) => { if (!confirm('Confirm?')) return; const r = await apiCall('confirm_appointment', { id }); showToast(r.message, r.success?'success':'error'); loadTherapistData(); };
+    window.denyAppointment = async (id) => { if (!confirm('Deny?')) return; const r = await apiCall('deny_appointment', { id }); showToast(r.message, r.success?'success':'error'); loadTherapistData(); };
+    window.completeAppointment = async (id) => { if (!confirm('Complete?')) return; const r = await apiCall('complete_appointment', { id }); showToast(r.message, r.success?'success':'error'); loadTherapistData(); };
 
-    // ═══════════════════════════════════════════════
-    // ADMIN DATA
-    // ═══════════════════════════════════════════════
     async function loadAdminData() {
         const res = await apiCall('admin_get_users', {}, 'GET');
         const list = document.getElementById('adminUserList');
@@ -1466,9 +1459,6 @@
     window.promoteUser = async (id) => { if (!confirm('Promote to Admin?')) return; const r = await apiCall('admin_promote_user', { user_id: id }); showToast(r.message, r.success?'success':'error'); loadAdminData(); };
     window.demoteUser = async (id) => { if (!confirm('Demote to Client?')) return; const r = await apiCall('admin_demote_user', { user_id: id }); showToast(r.message, r.success?'success':'error'); loadAdminData(); };
 
-    // ═══════════════════════════════════════════════
-    // RESOURCES (existing)
-    // ═══════════════════════════════════════════════
     async function loadResources() {
         const res = await apiCall('get_resources', {}, 'GET');
         const grid = document.getElementById('resourceGrid');
@@ -1494,9 +1484,6 @@
         if (r.success) { closeModal('addResourceModal'); e.target.reset(); loadResources(); }
     });
 
-    // ═══════════════════════════════════════════════
-    // PROFILE / PASSWORD / LOGOUT
-    // ═══════════════════════════════════════════════
     document.getElementById('profilePicture').addEventListener('change', async function() {
         const file = this.files[0];
         if (!file) return;
@@ -1571,7 +1558,6 @@
         window.location.href = '/';
     });
 
-    // Booking
     document.getElementById('bookAppointmentBtn').addEventListener('click', async () => {
         if (currentRole !== 'client') return showToast('Only clients can book', 'error');
         const sel = document.getElementById('therapistSelect');
@@ -1604,7 +1590,6 @@
         if (room) openVideoSession(room);
     });
 
-    // Sidebar navigation
     document.querySelectorAll('.nav-list li').forEach(li => {
         li.addEventListener('click', () => {
             document.querySelectorAll('.nav-list li').forEach(l => l.classList.remove('active'));
@@ -1632,7 +1617,6 @@
         });
     });
 
-    // Symptom type tabs
     document.querySelectorAll('#symptomsSection .therapist-tabs .tab').forEach(tab => {
         tab.addEventListener('click', () => {
             document.querySelectorAll('#symptomsSection .therapist-tabs .tab').forEach(t => t.classList.remove('active'));
@@ -1642,7 +1626,6 @@
         });
     });
 
-    // Therapist appointment tabs
     document.querySelectorAll('.therapist-tabs .tab').forEach(tab => {
         if (!tab.dataset.tab) return;
         tab.addEventListener('click', () => {
@@ -1673,10 +1656,187 @@
         }
     });
 
+    // ═══════════════════════════════════════════════
+    // Notifications Center
+    // ═══════════════════════════════════════════════
+    async function loadNotificationCount() {
+        const res = await apiCall('notifications_count', {}, 'GET');
+        const badge = document.getElementById('notifBadge');
+        if (res.success && res.count > 0) {
+            badge.textContent = res.count > 99 ? '99+' : res.count;
+            badge.style.display = 'inline-block';
+        } else badge.style.display = 'none';
+    }
+
+    async function loadNotifications() {
+        const res = await apiCall('notifications_list', {}, 'GET');
+        const list = document.getElementById('notifList');
+        list.innerHTML = '';
+        if (!res.success || !res.notifications.length) {
+            list.innerHTML = '<div class="notif-empty"><i class="fas fa-bell-slash"></i><br>No notifications yet</div>';
+            return;
+        }
+        const icons = {
+            appointment_booked: 'fa-calendar-plus',
+            appointment_confirmed: 'fa-calendar-check',
+            appointment_denied: 'fa-calendar-times',
+            appointment_cancelled: 'fa-calendar-times',
+            appointment_completed: 'fa-flag-checkered',
+            appointment_reminder: 'fa-clock',
+            new_message: 'fa-comment',
+            rating_received: 'fa-star',
+            therapist_registered: 'fa-user-md'
+        };
+        res.notifications.forEach(n => {
+            const icon = icons[n.type] || 'fa-bell';
+            list.innerHTML += `
+                <div class="notif-item ${n.is_read ? '' : 'unread'}" onclick="openNotification(${n.id}, '${esc(n.link || '')}')">
+                    <div class="notif-icon"><i class="fas ${icon}"></i></div>
+                    <div class="notif-body">
+                        <div class="notif-title">${esc(n.title)}</div>
+                        <div class="notif-message">${esc(n.message)}</div>
+                        <div class="notif-time">${relativeTime(n.created_at)}</div>
+                    </div>
+                    <button class="notif-delete" onclick="event.stopPropagation(); deleteNotification(${n.id})"><i class="fas fa-times"></i></button>
+                </div>`;
+        });
+    }
+
+    function relativeTime(iso) {
+        const diff = Math.floor((Date.now() - new Date(iso + 'Z').getTime()) / 1000);
+        if (diff < 60) return 'just now';
+        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+        if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+        return new Date(iso).toLocaleDateString();
+    }
+
+    window.toggleNotifications = function() {
+        notifPanelOpen = !notifPanelOpen;
+        const panel = document.getElementById('notifPanel');
+        if (notifPanelOpen) {
+            panel.classList.add('show');
+            loadNotifications();
+        } else {
+            panel.classList.remove('show');
+        }
+    };
+
+    window.openNotification = async function(id, link) {
+        await apiCall('notifications_read', { id });
+        loadNotificationCount();
+        document.getElementById('notifPanel').classList.remove('show');
+        notifPanelOpen = false;
+        if (link) window.location.href = link;
+    };
+
+    window.markAllNotificationsRead = async function() {
+        await apiCall('notifications_read_all', {});
+        loadNotifications();
+        loadNotificationCount();
+        showToast('All marked as read', 'success');
+    };
+
+    window.deleteNotification = async function(id) {
+        await apiCall('notifications_delete', { id });
+        loadNotifications();
+        loadNotificationCount();
+    };
+
+    document.addEventListener('click', (e) => {
+        const panel = document.getElementById('notifPanel');
+        const bell = document.getElementById('notifBell');
+        if (!panel || !bell) return;
+        if (notifPanelOpen && !panel.contains(e.target) && !bell.contains(e.target)) {
+            panel.classList.remove('show');
+            notifPanelOpen = false;
+        }
+    });
+
+    function startNotificationsPolling() {
+        loadNotificationCount();
+        if (notifPollInterval) clearInterval(notifPollInterval);
+        notifPollInterval = setInterval(() => {
+            loadNotificationCount();
+            if (notifPanelOpen) loadNotifications();
+        }, 30000);
+    }
+
+    // ═══════════════════════════════════════════════
+    // PWA + Push Notifications
+    // ═══════════════════════════════════════════════
+    async function registerServiceWorker() {
+        if (!('serviceWorker' in navigator)) return null;
+        try {
+            const reg = await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+            console.log('✅ Service worker registered');
+            return reg;
+        } catch (err) {
+            console.warn('SW registration failed:', err);
+            return null;
+        }
+    }
+
+    async function subscribeToPush() {
+        if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+            console.log('Push not supported');
+            return false;
+        }
+        try {
+            const reg = await navigator.serviceWorker.ready;
+            const perm = await Notification.requestPermission();
+            if (perm !== 'granted') {
+                console.log('Notification permission denied');
+                return false;
+            }
+
+            const res = await apiCall('push_public_key', {}, 'GET');
+            if (!res.success || !res.publicKey) {
+                console.warn('No VAPID public key available');
+                return false;
+            }
+
+            const urlBase64ToUint8Array = (base64String) => {
+                const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+                const rawData = atob(base64);
+                return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+            };
+
+            const subscription = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(res.publicKey)
+            });
+
+            const sub = subscription.toJSON();
+            const result = await apiCall('push_subscribe', {
+                endpoint: sub.endpoint,
+                keys: sub.keys
+            });
+            return result.success;
+        } catch (err) {
+            console.error('Push subscribe error:', err);
+            return false;
+        }
+    }
+
+    // ─────────────
     // Init
+    // ─────────────
     (async () => {
         await loadSymptomQuestions();
         loadUserData();
+
+        await registerServiceWorker();
+        startNotificationsPolling();
+
+        if (Notification.permission === 'granted') {
+            subscribeToPush().then(ok => { if (ok) console.log('✅ Push subscribed'); });
+        } else if (Notification.permission === 'default') {
+            document.getElementById('notifBell').addEventListener('click', async () => {
+                await subscribeToPush();
+            }, { once: true });
+        }
     })();
 })();
 </script>
