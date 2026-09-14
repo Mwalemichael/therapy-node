@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThinkTech Therapy – Professional Online Counselling</title>
+    <meta name="theme-color" content="#2a9d8f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ThinkTech">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMWEyYTNhIi8+PHBhdGggZD0iTTk2IDQ4Yy0xNiAwLTMwIDE0LTMwIDMwdjE2YzAgMTYgMTQgMzAgMzAgMzBzMzAtMTQgMzAtMzBWNzhjMC0xNi0xNC0zMC0zMC0zMHoiIGZpbGw9IiMyYTlkOGYiLz48cGF0aCBkPSJNOTYgMTI4Yy0yNCAwLTQ0IDE2LTQ4IDQwaDk2Yy00LTI0LTI0LTQwLTQ4LTQweiIgZmlsbD0iI2U5YzQ2YSIvPjwvc3ZnPg==">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -111,9 +117,9 @@
     <div class="container">
         <h2>What Our Clients Say</h2>
         <div class="testimonial-grid">
-            <div class="testimonial-card"><p>"ThinkTech Therapy gave me the tools to manage my anxiety. The platform is easy to use and my therapist is wonderful."</p><div class="author">– Sunshine C.</div></div>
-            <div class="testimonial-card"><p>"I've tried other services, but the quality of care here is unmatched. Highly recommend to anyone seeking support."</p><div class="author">– Nathan M.</div></div>
-            <div class="testimonial-card"><p>"Secure, convenient, and professional. The video sessions feel just like in-person visits."</p><div class="author">– Kondwani Z.</div></div>
+            <div class="testimonial-card"><p>"ThinkTech Therapy gave me the tools to manage my anxiety. The platform is easy to use and my therapist is wonderful."</p><div class="author">– Sarah M.</div></div>
+            <div class="testimonial-card"><p>"I've tried other services, but the quality of care here is unmatched. Highly recommend to anyone seeking support."</p><div class="author">– James K.</div></div>
+            <div class="testimonial-card"><p>"Secure, convenient, and professional. The video sessions feel just like in-person visits."</p><div class="author">– Emily R.</div></div>
         </div>
     </div>
 </section>
@@ -132,7 +138,7 @@
 
 <div class="modal-overlay" id="modalOverlay"></div>
 
-<!-- Login Modal (Admin option IS here – admins need to log in) -->
+<!-- Login Modal -->
 <div class="modal" id="loginModal">
     <button class="close-modal" onclick="closeAllModals()">&times;</button>
     <h3>Welcome Back</h3>
@@ -152,7 +158,7 @@
     </form>
 </div>
 
-<!-- Register Modal (Admin option REMOVED – no self-registration) -->
+<!-- Register Modal -->
 <div class="modal" id="registerModal">
     <button class="close-modal" onclick="closeAllModals()">&times;</button>
     <h3>Create Account</h3>
@@ -218,6 +224,15 @@
         .then(r => r.json())
         .then(data => { if (data.success) window.location.href = '/dashboard'; })
         .catch(() => {});
+
+    // PWA — register service worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log('✅ Service worker registered:', reg.scope))
+                .catch(err => console.warn('Service worker registration failed:', err));
+        });
+    }
 
     function showToast(message, type = 'success') {
         const iconMap = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
