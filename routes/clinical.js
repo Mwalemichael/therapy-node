@@ -2,6 +2,7 @@
 const express = require('express');
 const db = require('../database');
 const { requireLogin, requireRole } = require('../middleware/auth');
+const { createNotification } = require('../notifications');
 const router = express.Router();
 
 // ═══════════════════════════════════════════════════════
@@ -257,7 +258,6 @@ router.get('/symptoms_chart', requireLogin, (req, res) => {
   res.json({ success: true, data });
 });
 
-// Therapist's client list with latest scores
 router.get('/symptoms_my_clients', requireRole('therapist'), (req, res) => {
   const therapistId = req.session.user_id;
   const clients = db.prepare(`
@@ -372,6 +372,218 @@ router.post('/groups_cancel', requireRole('therapist'), (req, res) => {
   if (!group) return res.json({ success: false, message: 'Not found' });
   db.prepare("UPDATE group_sessions SET status = 'cancelled' WHERE id = ?").run(group_id);
   res.json({ success: true, message: 'Group session cancelled' });
+});
+
+// ═══════════════════════════════════════════════════════
+// MOOD CHECK-IN
+// ═══════════════════════════════════════════════════════
+
+// Get today's check-in (client)
+router.get('/mood_today', requireRole('client'), (req, res) => {
+  const today = new Date().toISOString().split('T')[0];
+  const row = db.prepare(`
+    SELECT id, mood_score, note, date, created_at
+    FROM mood_checkins WHERE client_id = ? AND date = ?
+  `).get(req.session.user_id, today);
+  res.json({ success: true, checkin: row || null });
+});
+
+// Submit today's check-in (client)
+router.post('/mood_checkin', requireRole('client'), (req, res) => {
+  const { mood_score, note } = req.body;
+  const score = parseInt(mood_score, 10);
+  if (!score || score < 1 || score > 5) {
+    return res.json({ success: false, message: 'Mood score must be between 1 and 5' });
+  }
+  const today = new Date().toISOString().split('T')[0];
+  try {
+    db.prepare(`
+      INSERT INTO mood_checkins (client_id, mood_score, note, date)
+      VALUES (?, ?, ?, ?)
+      ON CONFLICT(client_id, date) DO UPDATE SET
+        mood_score = excluded.mood_score,
+        note = excluded.note,
+        created_at = CURRENT_TIMESTAMP
+    `).run(req.session.user_id, score, note || '', today);
+    res.json({ success: true, message: 'Mood check-in saved!' });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
+  }
+});
+
+// Get mood history (last 30 days) — client or therapist for own client
+router.get('/mood_history', requireLogin, (req, res) => {
+  let clientId = req.session.user_id;
+  if (req.session.role === 'therapist' && req.query.client_id) {
+    const treat = db.prepare('SELECT 1 FROM appointments WHERE client_id = ? AND therapist_id = ? LIMIT 1')
+      .get(req.query.client_id, req.session.user_id);
+    if (!treat) return res.json({ success: false, message: 'Not authorized for this client' });
+    clientId = req.query.client_id;
+  } else if (req.session.role === 'admin' && req.query.client_id) {
+    clientId = req.query.client_id;
+  }
+  const rows = db.prepare(`
+    SELECT mood_score, note, date, created_at
+    FROM mood_checkins WHERE client_id = ?
+    ORDER BY date DESC LIMIT 30
+  `).all(clientId);
+  res.json({ success: true, history: rows });
+});
+
+// Get mood streak (consecutive days with check-ins, ending today or yesterday)
+router.get('/mood_streak', requireLogin, (req, res) => {
+  let clientId = req.session.user_id;
+  if (req.session.role === 'therapist' && req.query.client_id) {
+    const treat = db.prepare('SELECT 1 FROM appointments WHERE client_id = ? AND therapist_id = ? LIMIT 1')
+      .get(req.query.client_id, req.session.user_id);
+    if (!treat) return res.json({ success: false, message: 'Not authorized' });
+    clientId = req.query.client_id;
+  }
+  const rows = db.prepare(`SELECT date FROM mood_checkins WHERE client_id = ? ORDER BY date DESC`).all(clientId);
+  if (!rows.length) return res.json({ success: true, streak: 0 });
+
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  let streak = 0;
+  let expected = rows[0].date === today ? today : (rows[0].date === yesterday ? yesterday : null);
+  if (!expected) return res.json({ success: true, streak: 0 });
+
+  for (const row of rows) {
+    if (row.date === expected) {
+      streak++;
+      const d = new Date(expected + 'T00:00:00Z');
+      d.setUTCDate(d.getUTCDate() - 1);
+      expected = d.toISOString().split('T')[0];
+    } else break;
+  }
+  res.json({ success: true, streak });
+});
+
+// Therapist: mood info per client (for the symptom tracker list)
+router.get('/mood_my_clients', requireRole('therapist'), (req, res) => {
+  const therapistId = req.session.user_id;
+  const clients = db.prepare(`
+    SELECT DISTINCT u.id FROM appointments a JOIN users u ON a.client_id = u.id
+    WHERE a.therapist_id = ?
+  `).all(therapistId);
+
+  const result = {};
+  clients.forEach(c => {
+    const last = db.prepare(`
+      SELECT mood_score, date FROM mood_checkins
+      WHERE client_id = ? ORDER BY date DESC LIMIT 1
+    `).get(c.id);
+    const avg = db.prepare(`
+      SELECT AVG(mood_score) AS avg_score FROM mood_checkins
+      WHERE client_id = ? AND date >= date('now', '-7 days')
+    `).get(c.id);
+    result[c.id] = {
+      last: last || null,
+      avg_7d: avg && avg.avg_score ? Math.round(avg.avg_score * 10) / 10 : null
+    };
+  });
+  res.json({ success: true, moods: result });
+});
+
+// ═══════════════════════════════════════════════════════
+// HOMEWORK
+// ═══════════════════════════════════════════════════════
+
+// List homework
+router.get('/homework_list', requireLogin, (req, res) => {
+  const userId = req.session.user_id;
+  const role = req.session.role;
+  let rows;
+  if (role === 'client') {
+    rows = db.prepare(`
+      SELECT h.*, (t.first_name || ' ' || t.last_name) AS therapist_name
+      FROM homework h JOIN users t ON h.therapist_id = t.id
+      WHERE h.client_id = ?
+      ORDER BY
+        CASE h.status WHEN 'pending' THEN 1 WHEN 'in_progress' THEN 2 ELSE 3 END,
+        h.due_date ASC, h.created_at DESC
+    `).all(userId);
+  } else if (role === 'therapist') {
+    rows = db.prepare(`
+      SELECT h.*, (c.first_name || ' ' || c.last_name) AS client_name
+      FROM homework h JOIN users c ON h.client_id = c.id
+      WHERE h.therapist_id = ?
+      ORDER BY h.created_at DESC
+    `).all(userId);
+  } else {
+    rows = db.prepare(`
+      SELECT h.*, (c.first_name || ' ' || c.last_name) AS client_name,
+             (t.first_name || ' ' || t.last_name) AS therapist_name
+      FROM homework h
+      JOIN users c ON h.client_id = c.id
+      JOIN users t ON h.therapist_id = t.id
+      ORDER BY h.created_at DESC
+    `).all();
+  }
+  res.json({ success: true, homework: rows });
+});
+
+// Create (therapist only)
+router.post('/homework_create', requireRole('therapist'), (req, res) => {
+  const { client_id, title, description, due_date } = req.body;
+  if (!client_id || !title) return res.json({ success: false, message: 'Client and title required' });
+  // Verify therapist treats this client
+  const treat = db.prepare('SELECT 1 FROM appointments WHERE client_id = ? AND therapist_id = ? LIMIT 1')
+    .get(client_id, req.session.user_id);
+  if (!treat) return res.json({ success: false, message: 'Not authorized for this client' });
+
+  const info = db.prepare(`
+    INSERT INTO homework (therapist_id, client_id, title, description, due_date)
+    VALUES (?, ?, ?, ?, ?)
+  `).run(req.session.user_id, client_id, title, description || '', due_date || null);
+
+  // Notify client
+  createNotification(
+    client_id,
+    'homework_assigned',
+    'New homework assigned',
+    `Your therapist assigned: "${title}"`,
+    '/dashboard'
+  );
+
+  res.json({ success: true, message: 'Homework assigned', id: Number(info.lastInsertRowid) });
+});
+
+// Update status (client only)
+router.post('/homework_update_status', requireRole('client'), (req, res) => {
+  const { id, status, client_notes } = req.body;
+  if (!id || !['pending', 'in_progress', 'completed'].includes(status)) {
+    return res.json({ success: false, message: 'Valid ID and status required' });
+  }
+  const hw = db.prepare('SELECT * FROM homework WHERE id = ? AND client_id = ?').get(id, req.session.user_id);
+  if (!hw) return res.json({ success: false, message: 'Homework not found' });
+
+  const completedAt = status === 'completed' ? new Date().toISOString() : null;
+  db.prepare(`
+    UPDATE homework SET status = ?, client_notes = COALESCE(?, client_notes), completed_at = ?
+    WHERE id = ?
+  `).run(status, client_notes !== undefined ? client_notes : null, completedAt, id);
+
+  if (status === 'completed') {
+    createNotification(
+      hw.therapist_id,
+      'homework_completed',
+      'Homework completed',
+      `Your client completed: "${hw.title}"`,
+      '/dashboard'
+    );
+  }
+  res.json({ success: true, message: 'Homework updated' });
+});
+
+// Delete (therapist only)
+router.post('/homework_delete', requireRole('therapist'), (req, res) => {
+  const { id } = req.body;
+  if (!id) return res.json({ success: false, message: 'ID required' });
+  const hw = db.prepare('SELECT * FROM homework WHERE id = ? AND therapist_id = ?').get(id, req.session.user_id);
+  if (!hw) return res.json({ success: false, message: 'Not found' });
+  db.prepare('DELETE FROM homework WHERE id = ?').run(id);
+  res.json({ success: true, message: 'Homework deleted' });
 });
 
 module.exports = router;

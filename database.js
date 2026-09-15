@@ -194,6 +194,36 @@ db.exec(`
     UNIQUE(group_id, client_id)
   );
 
+  -- ═══════════════════════════════════════════════
+  -- NEW FEATURE TABLES
+  -- ═══════════════════════════════════════════════
+
+  CREATE TABLE IF NOT EXISTS mood_checkins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    mood_score INTEGER NOT NULL CHECK(mood_score BETWEEN 1 AND 5),
+    note TEXT DEFAULT '',
+    date TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(client_id, date)
+  );
+
+  CREATE TABLE IF NOT EXISTS homework (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    therapist_id INTEGER NOT NULL,
+    client_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT DEFAULT '',
+    due_date TEXT,
+    status TEXT DEFAULT 'pending' CHECK(status IN ('pending','in_progress','completed')),
+    client_notes TEXT DEFAULT '',
+    completed_at TIMESTAMP DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (therapist_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
   CREATE INDEX IF NOT EXISTS idx_appt_client ON appointments(client_id);
   CREATE INDEX IF NOT EXISTS idx_appt_therapist ON appointments(therapist_id);
   CREATE INDEX IF NOT EXISTS idx_appt_status ON appointments(status);
@@ -213,6 +243,11 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_push_user ON push_subscriptions(user_id);
   CREATE INDEX IF NOT EXISTS idx_group_therapist ON group_sessions(therapist_id);
   CREATE INDEX IF NOT EXISTS idx_group_part ON group_participants(group_id);
+  CREATE INDEX IF NOT EXISTS idx_mood_client ON mood_checkins(client_id);
+  CREATE INDEX IF NOT EXISTS idx_mood_date ON mood_checkins(client_id, date);
+  CREATE INDEX IF NOT EXISTS idx_hw_client ON homework(client_id);
+  CREATE INDEX IF NOT EXISTS idx_hw_therapist ON homework(therapist_id);
+  CREATE INDEX IF NOT EXISTS idx_hw_status ON homework(status);
 `);
 
 // Migrations for existing DBs
@@ -230,7 +265,7 @@ try {
   if (!apptCols.includes('reminder_sent')) db.exec("ALTER TABLE appointments ADD COLUMN reminder_sent INTEGER DEFAULT 0");
 } catch (e) {}
 
-// Seed default crisis resources (Trevor Project removed)
+// Seed crisis resources (Trevor Project removed)
 const crisisCount = db.prepare('SELECT COUNT(*) AS c FROM crisis_resources').get().c;
 if (crisisCount === 0) {
   const insert = db.prepare(

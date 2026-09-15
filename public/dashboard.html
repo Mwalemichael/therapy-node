@@ -22,28 +22,57 @@
     </noscript>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f2f5; color: #1a2a3a; display: flex; min-height: 100vh; }
-        .sidebar { width: 260px; background: #1a2a3a; color: white; padding: 2rem 1.2rem; display: flex; flex-direction: column; gap: 1.5rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --bg-card-alt: #f8f9fa;
+            --bg-input: #f7fafc;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5568;
+            --text-muted: #a0aec0;
+            --border: #edf2f7;
+            --border-strong: #e2e8f0;
+            --sidebar-bg: #1a2a3a;
+            --sidebar-text: #cbd5e1;
+            --accent: #2a9d8f;
+            --accent-hover: #21867a;
+            --accent-gold: #e9c46a;
+        }
+        html[data-theme="dark"] {
+            --bg-body: #0f1620;
+            --bg-card: #1a2332;
+            --bg-card-alt: #212b3d;
+            --bg-input: #212b3d;
+            --text-primary: #e8eef5;
+            --text-secondary: #a8b8cc;
+            --text-muted: #6b7c93;
+            --border: #2a3749;
+            --border-strong: #374761;
+            --sidebar-bg: #0a1119;
+            --sidebar-text: #8fa2b8;
+        }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-body); color: var(--text-primary); display: flex; min-height: 100vh; transition: background 0.2s, color 0.2s; }
+        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; padding: 2rem 1.2rem; display: flex; flex-direction: column; gap: 1.5rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; transition: background 0.2s; }
         .sidebar .logo { font-size: 1.6rem; font-weight: 700; }
-        .sidebar .logo i { color: #e9c46a; margin-right: 0.5rem; }
-        .sidebar .logo span { color: #2a9d8f; }
+        .sidebar .logo i { color: var(--accent-gold); margin-right: 0.5rem; }
+        .sidebar .logo span { color: var(--accent); }
         .sidebar .user-card { background: rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 1.2rem; text-align: center; }
-        .user-card .avatar { width: 64px; height: 64px; border-radius: 50%; background: #2a9d8f; margin: 0 auto 0.6rem; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 600; overflow: hidden; }
+        .user-card .avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--accent); margin: 0 auto 0.6rem; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 600; overflow: hidden; }
         .user-card .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .user-card .name { font-weight: 600; }
         .user-card .email { font-size: 0.8rem; opacity: 0.7; word-break: break-all; }
-        .user-card .role-badge { display: inline-block; background: #e9c46a; color: #1a2a3a; padding: 0.2rem 1rem; border-radius: 60px; font-size: 0.7rem; font-weight: 600; margin-top: 0.4rem; }
+        .user-card .role-badge { display: inline-block; background: var(--accent-gold); color: #1a2a3a; padding: 0.2rem 1rem; border-radius: 60px; font-size: 0.7rem; font-weight: 600; margin-top: 0.4rem; }
         .nav-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
-        .nav-list li { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1rem; border-radius: 1.2rem; cursor: pointer; transition: 0.15s; color: #cbd5e1; font-weight: 500; font-size: 0.9rem; }
+        .nav-list li { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1rem; border-radius: 1.2rem; cursor: pointer; transition: 0.15s; color: var(--sidebar-text); font-weight: 500; font-size: 0.9rem; }
         .nav-list li:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-list li.active { background: #2a9d8f; color: white; }
+        .nav-list li.active { background: var(--accent); color: white; }
         .nav-list li i { width: 1.6rem; }
         .nav-badge { margin-left: auto; background: #e74c3c; color: white; font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 60px; min-width: 18px; text-align: center; }
         .auth-buttons { margin-top: auto; display: flex; flex-direction: column; gap: 0.5rem; }
         .btn { padding: 0.6rem 1.2rem; border-radius: 60px; border: none; font-weight: 600; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit; font-size: 0.9rem; }
-        .btn-primary { background: #2a9d8f; color: white; }
-        .btn-primary:hover { background: #21867a; transform: translateY(-2px); }
-        .btn-secondary { background: #e9c46a; color: #1a2a3a; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+        .btn-secondary { background: var(--accent-gold); color: #1a2a3a; }
         .btn-secondary:hover { background: #d4a94a; }
         .btn-danger { background: #e74c3c; color: white; }
         .btn-danger:hover { background: #c0392b; }
@@ -54,23 +83,23 @@
         .btn-sm { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
         .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
         .main-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 2rem; }
-        .main-header h1 { font-size: 1.8rem; }
-        .main-header .subtitle { color: #4a5568; }
+        .main-header h1 { font-size: 1.8rem; color: var(--text-primary); }
+        .main-header .subtitle { color: var(--text-secondary); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 1.2rem 1.5rem; border-radius: 1.2rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .stat-card .icon { background: #eef2f7; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #2a9d8f; font-size: 1.4rem; }
-        .stat-card .info .number { font-weight: 700; font-size: 1.5rem; }
-        .stat-card .info .label { font-size: 0.8rem; color: #4a5568; }
-        .appointment-section { background: white; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .stat-card { background: var(--bg-card); padding: 1.2rem 1.5rem; border-radius: 1.2rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: background 0.2s; }
+        .stat-card .icon { background: var(--bg-card-alt); width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.4rem; }
+        .stat-card .info .number { font-weight: 700; font-size: 1.5rem; color: var(--text-primary); }
+        .stat-card .info .label { font-size: 0.8rem; color: var(--text-secondary); }
+        .appointment-section { background: var(--bg-card); border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: background 0.2s; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
-        .section-header h2 { font-size: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
-        .section-header h2 i { color: #2a9d8f; }
+        .section-header h2 { font-size: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: var(--text-primary); }
+        .section-header h2 i { color: var(--accent); }
         .appointment-list { display: flex; flex-direction: column; gap: 0.8rem; }
-        .appointment-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; background: #f8f9fa; border-radius: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+        .appointment-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; background: var(--bg-card-alt); border-radius: 1rem; flex-wrap: wrap; gap: 0.5rem; color: var(--text-primary); }
         .appointment-info { display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 200px; }
-        .appointment-info .avatar-sm { width: 36px; height: 36px; border-radius: 50%; background: #2a9d8f; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
-        .appointment-info .details .title { font-weight: 600; }
-        .appointment-info .details .meta { font-size: 0.8rem; color: #4a5568; }
+        .appointment-info .avatar-sm { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+        .appointment-info .details .title { font-weight: 600; color: var(--text-primary); }
+        .appointment-info .details .meta { font-size: 0.8rem; color: var(--text-secondary); }
         .appointment-status { font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.8rem; border-radius: 60px; background: #edf2f7; color: #2d3748; text-transform: capitalize; }
         .appointment-status.confirmed { background: #c6f6d5; color: #22543d; }
         .appointment-status.pending { background: #fefcbf; color: #744210; }
@@ -78,43 +107,44 @@
         .appointment-status.completed { background: #bee3f8; color: #2a4365; }
         .appointment-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
         .virtual-card { background: linear-gradient(135deg, #eef2ff, #e0e7ff); border-radius: 1.5rem; padding: 1.2rem 1.8rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border: 1px solid rgba(255,255,255,0.6); }
+        html[data-theme="dark"] .virtual-card { background: linear-gradient(135deg, #1e2a42, #253449); border-color: var(--border); }
         .virtual-card .left { display: flex; align-items: center; gap: 1rem; }
-        .virtual-card .left i { font-size: 2rem; color: #2a9d8f; }
-        .virtual-card .left .info strong { display: block; color: #1a2a3a; }
-        .virtual-card .left .info small { color: #4a5568; }
+        .virtual-card .left i { font-size: 2rem; color: var(--accent); }
+        .virtual-card .left .info strong { display: block; color: var(--text-primary); }
+        .virtual-card .left .info small { color: var(--text-secondary); }
         .therapist-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .therapist-tabs .tab { padding: 0.5rem 1.2rem; border-radius: 60px; background: #edf2f7; cursor: pointer; font-weight: 500; transition: 0.15s; font-size: 0.9rem; }
-        .therapist-tabs .tab.active { background: #2a9d8f; color: white; }
+        .therapist-tabs .tab { padding: 0.5rem 1.2rem; border-radius: 60px; background: var(--bg-card-alt); cursor: pointer; font-weight: 500; transition: 0.15s; font-size: 0.9rem; color: var(--text-secondary); }
+        .therapist-tabs .tab.active { background: var(--accent); color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
-        .resource-card { background: white; border-radius: 1.2rem; padding: 1.2rem; border: 1px solid #edf2f7; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: 0.2s; }
+        .resource-card { background: var(--bg-card); border-radius: 1.2rem; padding: 1.2rem; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: 0.2s; }
         .resource-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-        .resource-card .type-badge { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 60px; font-size: 0.7rem; font-weight: 600; background: #eef2f7; color: #4a5568; }
+        .resource-card .type-badge { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 60px; font-size: 0.7rem; font-weight: 600; background: var(--bg-card-alt); color: var(--text-secondary); }
         .resource-card .type-badge.video { background: #fefcbf; color: #744210; }
         .resource-card .type-badge.audio { background: #c6f6d5; color: #22543d; }
         .resource-card .type-badge.article { background: #bee3f8; color: #2a4365; }
         .resource-card .type-badge.exercise { background: #fed7d7; color: #9b2c2c; }
-        .resource-card h4 { margin: 0.5rem 0; color: #1a2a3a; }
-        .resource-card p { font-size: 0.9rem; color: #4a5568; }
-        .resource-card .resource-link { display: inline-block; margin-top: 0.5rem; color: #2a9d8f; text-decoration: none; font-weight: 500; }
+        .resource-card h4 { margin: 0.5rem 0; color: var(--text-primary); }
+        .resource-card p { font-size: 0.9rem; color: var(--text-secondary); }
+        .resource-card .resource-link { display: inline-block; margin-top: 0.5rem; color: var(--accent); text-decoration: none; font-weight: 500; }
         .star-rating { display: inline-flex; flex-direction: row-reverse; gap: 0.2rem; }
         .star-rating input { display: none; }
         .star-rating label { font-size: 1.8rem; color: #d1d5db; cursor: pointer; transition: 0.15s; }
         .star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: #f6b83e; }
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 999; }
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 2rem; z-index: 1000; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
-        .modal .close-modal { position: absolute; top: 12px; right: 18px; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #a0aec0; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-card); padding: 2rem; border-radius: 2rem; z-index: 1000; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); color: var(--text-primary); }
+        .modal .close-modal { position: absolute; top: 12px; right: 18px; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
         .modal h3 { font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center; }
-        .modal label { display: block; font-weight: 500; margin: 0.8rem 0 0.3rem; }
-        .modal input, .modal select, .modal textarea { width: 100%; padding: 0.7rem 1rem; border: 1px solid #e2e8f0; border-radius: 1rem; font-size: 0.95rem; background: #f7fafc; font-family: inherit; }
-        .modal input:focus, .modal select:focus, .modal textarea:focus { outline: none; border-color: #2a9d8f; }
+        .modal label { display: block; font-weight: 500; margin: 0.8rem 0 0.3rem; color: var(--text-primary); }
+        .modal input, .modal select, .modal textarea { width: 100%; padding: 0.7rem 1rem; border: 1px solid var(--border-strong); border-radius: 1rem; font-size: 0.95rem; background: var(--bg-input); font-family: inherit; color: var(--text-primary); }
+        .modal input:focus, .modal select:focus, .modal textarea:focus { outline: none; border-color: var(--accent); }
         .modal .btn { width: 100%; margin-top: 1.2rem; }
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1001; display: flex; flex-direction: column; gap: 0.6rem; }
-        .toast { background: white; border-left: 5px solid #2a9d8f; padding: 0.8rem 1.2rem; border-radius: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; animation: slideIn 0.3s ease; max-width: 350px; }
+        .toast { background: var(--bg-card); border-left: 5px solid var(--accent); padding: 0.8rem 1.2rem; border-radius: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; animation: slideIn 0.3s ease; max-width: 350px; color: var(--text-primary); }
         .toast.success { border-left-color: #2ecc71; }
         .toast.error { border-left-color: #e74c3c; }
-        .toast i { font-size: 1.2rem; color: #2a9d8f; }
+        .toast i { font-size: 1.2rem; color: var(--accent); }
         .toast.success i { color: #2ecc71; }
         .toast.error i { color: #e74c3c; }
         .toast .message { flex: 1; font-size: 0.9rem; }
@@ -124,86 +154,86 @@
         #videoSessionModal { max-width: 1100px; width: 95%; padding: 1.5rem; }
         #videoSessionModal .modal-body { display: flex; flex-wrap: wrap; gap: 1.2rem; height: 75vh; min-height: 450px; }
         #videoSessionModal .video-container { flex: 2; min-width: 300px; background: #1a2a3a; border-radius: 1.5rem; overflow: hidden; }
-        #videoSessionModal .side-panel { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 0.8rem; background: #f7fafc; border-radius: 1.5rem; padding: 1rem; overflow-y: auto; }
-        #videoSessionModal .panel-tabs { display: flex; gap: 0.3rem; background: white; border-radius: 60px; padding: 0.3rem; }
-        #videoSessionModal .panel-tabs .ptab { flex: 1; text-align: center; padding: 0.5rem; border-radius: 60px; cursor: pointer; font-weight: 500; font-size: 0.85rem; }
-        #videoSessionModal .panel-tabs .ptab.active { background: #2a9d8f; color: white; }
+        #videoSessionModal .side-panel { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 0.8rem; background: var(--bg-card-alt); border-radius: 1.5rem; padding: 1rem; overflow-y: auto; }
+        #videoSessionModal .panel-tabs { display: flex; gap: 0.3rem; background: var(--bg-card); border-radius: 60px; padding: 0.3rem; }
+        #videoSessionModal .panel-tabs .ptab { flex: 1; text-align: center; padding: 0.5rem; border-radius: 60px; cursor: pointer; font-weight: 500; font-size: 0.85rem; color: var(--text-secondary); }
+        #videoSessionModal .panel-tabs .ptab.active { background: var(--accent); color: white; }
         .panel-content { display: none; flex: 1; flex-direction: column; gap: 0.5rem; }
         .panel-content.active { display: flex; }
-        .chat-messages { flex: 1; overflow-y: auto; background: white; border-radius: 1.2rem; padding: 0.8rem; border: 1px solid #edf2f7; font-size: 0.9rem; min-height: 100px; }
+        .chat-messages { flex: 1; overflow-y: auto; background: var(--bg-card); border-radius: 1.2rem; padding: 0.8rem; border: 1px solid var(--border); font-size: 0.9rem; min-height: 100px; }
         .chat-input { display: flex; gap: 0.4rem; }
-        .chat-input input { flex: 1; padding: 0.5rem 0.8rem; border: 1px solid #e2e8f0; border-radius: 60px; }
-        .chat-input button { background: #2a9d8f; color: white; border: none; border-radius: 60px; padding: 0.5rem 1rem; cursor: pointer; }
-        .soap-field label { font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; display: block; color: #1a2a3a; }
-        .soap-field textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 0.8rem; padding: 0.5rem; resize: vertical; min-height: 60px; font-family: inherit; font-size: 0.85rem; }
-        .soap-field textarea:focus { outline: none; border-color: #2a9d8f; }
-        .plan-card { background: #f8f9fa; border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 1rem; border-left: 4px solid #2a9d8f; }
+        .chat-input input { flex: 1; padding: 0.5rem 0.8rem; border: 1px solid var(--border-strong); border-radius: 60px; background: var(--bg-input); color: var(--text-primary); }
+        .chat-input button { background: var(--accent); color: white; border: none; border-radius: 60px; padding: 0.5rem 1rem; cursor: pointer; }
+        .soap-field label { font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; display: block; color: var(--text-primary); }
+        .soap-field textarea { width: 100%; border: 1px solid var(--border-strong); border-radius: 0.8rem; padding: 0.5rem; resize: vertical; min-height: 60px; font-family: inherit; font-size: 0.85rem; background: var(--bg-input); color: var(--text-primary); }
+        .soap-field textarea:focus { outline: none; border-color: var(--accent); }
+        .plan-card { background: var(--bg-card-alt); border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); }
         .plan-card.completed { border-left-color: #2ecc71; }
         .plan-card.paused { border-left-color: #f39c12; }
         .plan-card.cancelled { border-left-color: #e74c3c; opacity: 0.7; }
         .plan-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
-        .plan-header h3 { font-size: 1.1rem; color: #1a2a3a; }
-        .plan-meta { font-size: 0.8rem; color: #4a5568; margin-bottom: 0.5rem; }
+        .plan-header h3 { font-size: 1.1rem; color: var(--text-primary); }
+        .plan-meta { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
         .plan-status { font-size: 0.7rem; padding: 0.2rem 0.8rem; border-radius: 60px; font-weight: 600; text-transform: capitalize; }
         .plan-status.active { background: #c6f6d5; color: #22543d; }
         .plan-status.paused { background: #fefcbf; color: #744210; }
         .plan-status.completed { background: #bee3f8; color: #2a4365; }
         .plan-status.cancelled { background: #fed7d7; color: #9b2c2c; }
-        .goal-item { background: white; border-radius: 0.8rem; padding: 0.7rem 0.9rem; margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.85rem; }
-        .goal-item .goal-text { flex: 1; min-width: 150px; }
+        .goal-item { background: var(--bg-card); border-radius: 0.8rem; padding: 0.7rem 0.9rem; margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.85rem; }
+        .goal-item .goal-text { flex: 1; min-width: 150px; color: var(--text-primary); }
         .goal-item.achieved .goal-text { text-decoration: line-through; opacity: 0.6; }
         .goal-status { font-size: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 40px; font-weight: 600; }
         .goal-status.pending { background: #edf2f7; color: #4a5568; }
         .goal-status.in_progress { background: #fefcbf; color: #744210; }
         .goal-status.achieved { background: #c6f6d5; color: #22543d; }
         .goal-status.abandoned { background: #fed7d7; color: #9b2c2c; }
-        .question-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #f0f2f5; gap: 1rem; flex-wrap: wrap; }
+        .question-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid var(--border); gap: 1rem; flex-wrap: wrap; }
         .question-row:last-child { border-bottom: none; }
-        .question-text { flex: 1; font-size: 0.9rem; min-width: 200px; }
+        .question-text { flex: 1; font-size: 0.9rem; min-width: 200px; color: var(--text-primary); }
         .answer-scale { display: flex; gap: 0.3rem; }
         .answer-scale label { cursor: pointer; }
         .answer-scale input { display: none; }
-        .answer-scale input:checked + span { background: #2a9d8f; color: white; border-color: #2a9d8f; }
-        .answer-scale span { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 60px; transition: 0.15s; border: 1px solid #e2e8f0; background: white; font-size: 0.8rem; }
-        .score-display { text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 1rem; margin-top: 1rem; }
-        .score-display .score { font-size: 2rem; font-weight: 700; color: #2a9d8f; }
+        .answer-scale input:checked + span { background: var(--accent); color: white; border-color: var(--accent); }
+        .answer-scale span { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 60px; transition: 0.15s; border: 1px solid var(--border-strong); background: var(--bg-card); font-size: 0.8rem; color: var(--text-primary); }
+        .score-display { text-align: center; padding: 1rem; background: var(--bg-card-alt); border-radius: 1rem; margin-top: 1rem; color: var(--text-primary); }
+        .score-display .score { font-size: 2rem; font-weight: 700; color: var(--accent); }
         .score-display .severity { font-size: 1rem; font-weight: 600; }
         .severity.Minimal { color: #2ecc71; }
         .severity.Mild { color: #f39c12; }
         .severity.Moderate { color: #e67e22; }
         .severity.Moderately { color: #e74c3c; }
         .severity.Severe { color: #c0392b; }
-        .chart-bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 160px; padding: 1rem; background: #f8f9fa; border-radius: 1rem; overflow-x: auto; }
-        .chart-bar { flex: 0 0 30px; background: #2a9d8f; border-radius: 4px 4px 0 0; min-height: 3px; position: relative; }
-        .chart-bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: #4a5568; white-space: nowrap; }
-        .chart-bar-value { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 600; color: #1a2a3a; }
+        .chart-bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 160px; padding: 1rem; background: var(--bg-card-alt); border-radius: 1rem; overflow-x: auto; }
+        .chart-bar { flex: 0 0 30px; background: var(--accent); border-radius: 4px 4px 0 0; min-height: 3px; position: relative; }
+        .chart-bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--text-secondary); white-space: nowrap; }
+        .chart-bar-value { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 600; color: var(--text-primary); }
         .crisis-btn { position: fixed; bottom: 20px; right: 20px; background: #e74c3c; color: white; border: none; border-radius: 60px; padding: 0.9rem 1.5rem; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(231,76,60,0.4); z-index: 998; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; font-size: 0.95rem; }
         .crisis-btn:hover { background: #c0392b; transform: scale(1.05); }
-        .crisis-item { background: #f8f9fa; padding: 1rem; border-radius: 1rem; margin-bottom: 0.7rem; border-left: 4px solid #e74c3c; }
-        .crisis-item h4 { color: #1a2a3a; margin-bottom: 0.3rem; }
-        .crisis-item p { font-size: 0.85rem; color: #4a5568; }
+        .crisis-item { background: var(--bg-card-alt); padding: 1rem; border-radius: 1rem; margin-bottom: 0.7rem; border-left: 4px solid #e74c3c; }
+        .crisis-item h4 { color: var(--text-primary); margin-bottom: 0.3rem; }
+        .crisis-item p { font-size: 0.85rem; color: var(--text-secondary); }
         .crisis-item .crisis-phone { font-size: 1.1rem; font-weight: 700; color: #e74c3c; margin: 0.3rem 0; }
-        .crisis-item a { color: #2a9d8f; font-size: 0.85rem; }
-        .notif-bell { position: relative; background: rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s; color: #e9c46a; font-size: 1.2rem; }
+        .crisis-item a { color: var(--accent); font-size: 0.85rem; }
+        .notif-bell { position: relative; background: rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s; color: var(--accent-gold); font-size: 1.2rem; }
         .notif-bell:hover { background: rgba(255,255,255,0.15); }
         .notif-badge { position: absolute; top: 4px; right: 8px; background: #e74c3c; color: white; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 20px; min-width: 18px; text-align: center; animation: pulseBadge 2s infinite; }
         @keyframes pulseBadge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-        .notif-panel { position: fixed; top: 1.5rem; left: 270px; width: 380px; max-height: 550px; background: white; border-radius: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 1002; display: none; flex-direction: column; overflow: hidden; }
+        .notif-panel { position: fixed; top: 1.5rem; left: 270px; width: 380px; max-height: 550px; background: var(--bg-card); border-radius: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 1002; display: none; flex-direction: column; overflow: hidden; }
         .notif-panel.show { display: flex; }
-        .notif-header { padding: 1rem 1.2rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; }
-        .notif-header h3 { font-size: 1rem; color: #1a2a3a; }
-        .notif-header button { background: none; border: none; color: #2a9d8f; cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: inherit; }
+        .notif-header { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg-card-alt); }
+        .notif-header h3 { font-size: 1rem; color: var(--text-primary); }
+        .notif-header button { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: inherit; }
         .notif-list { overflow-y: auto; flex: 1; }
-        .notif-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f0f2f5; cursor: pointer; transition: 0.15s; display: flex; gap: 0.7rem; align-items: flex-start; }
-        .notif-item:hover { background: #f8f9fa; }
-        .notif-item.unread { background: #eef2ff; border-left: 3px solid #2a9d8f; }
-        .notif-item .notif-icon { width: 32px; height: 32px; border-radius: 50%; background: #eef2f7; display: flex; align-items: center; justify-content: center; color: #2a9d8f; font-size: 0.85rem; flex-shrink: 0; }
+        .notif-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: 0.15s; display: flex; gap: 0.7rem; align-items: flex-start; }
+        .notif-item:hover { background: var(--bg-card-alt); }
+        .notif-item.unread { background: rgba(42,157,143,0.1); border-left: 3px solid var(--accent); }
+        .notif-item .notif-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-card-alt); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.85rem; flex-shrink: 0; }
         .notif-item .notif-body { flex: 1; min-width: 0; }
-        .notif-item .notif-title { font-weight: 600; font-size: 0.9rem; color: #1a2a3a; }
-        .notif-item .notif-message { font-size: 0.8rem; color: #4a5568; margin-top: 0.15rem; }
-        .notif-item .notif-time { font-size: 0.7rem; color: #a0aec0; margin-top: 0.3rem; }
-        .notif-empty { padding: 2rem; text-align: center; color: #a0aec0; font-size: 0.9rem; }
-        .notif-item .notif-delete { background: none; border: none; color: #cbd5e1; cursor: pointer; font-size: 0.9rem; padding: 0.2rem; }
+        .notif-item .notif-title { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+        .notif-item .notif-message { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem; }
+        .notif-item .notif-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.3rem; }
+        .notif-empty { padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+        .notif-item .notif-delete { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; padding: 0.2rem; }
         .notif-item .notif-delete:hover { color: #e74c3c; }
         .score-badge { display: inline-block; padding: 0.25rem 0.7rem; border-radius: 60px; font-size: 0.75rem; font-weight: 600; min-width: 55px; text-align: center; }
         .score-badge.none { background: #edf2f7; color: #a0aec0; }
@@ -212,80 +242,95 @@
         .score-badge.moderate { background: #fed7aa; color: #7b341e; }
         .score-badge.severe { background: #fed7d7; color: #9b2c2c; }
         .score-cell { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
-        .score-label { font-size: 0.65rem; color: #718096; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 0.2rem; }
+        .score-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 0.2rem; }
+
+        /* MOOD CHECK-IN */
+        .mood-card { background: linear-gradient(135deg, #e8f5f3, #d5ede8); border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.6); }
+        html[data-theme="dark"] .mood-card { background: linear-gradient(135deg, #1e2a42, #253449); border-color: var(--border); }
+        .mood-card h3 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
+        .mood-emoji-row { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1rem; }
+        .mood-emoji { background: var(--bg-card); border: 2px solid transparent; border-radius: 1.2rem; padding: 0.8rem 1rem; cursor: pointer; transition: 0.15s; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; font-size: 1.8rem; min-width: 72px; }
+        .mood-emoji:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .mood-emoji.selected { border-color: var(--accent); background: rgba(42,157,143,0.1); transform: scale(1.05); }
+        .mood-emoji .label { font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; }
+        .mood-note { width: 100%; padding: 0.7rem 1rem; border: 1px solid var(--border-strong); border-radius: 1rem; font-family: inherit; font-size: 0.9rem; background: var(--bg-input); color: var(--text-primary); margin-bottom: 0.8rem; resize: none; }
+        .mood-note:focus { outline: none; border-color: var(--accent); }
+        .mood-streak { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--bg-card); padding: 0.4rem 1rem; border-radius: 60px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.5rem; }
+        .mood-streak .fire { font-size: 1.1rem; }
+        .mood-chart-wrap { margin-top: 1.2rem; }
+        .mood-chart-title { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .mood-dots { display: flex; gap: 0.4rem; align-items: flex-end; height: 80px; padding: 0.5rem; background: var(--bg-card); border-radius: 1rem; overflow-x: auto; }
+        .mood-dot { flex: 0 0 22px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+        .mood-dot .bar { width: 18px; border-radius: 60px 60px 4px 4px; background: var(--accent); min-height: 6px; transition: 0.15s; }
+        .mood-dot .day { font-size: 0.55rem; color: var(--text-muted); margin-top: 0.25rem; }
+        .mood-today-label { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+
+        /* HOMEWORK */
+        .homework-item { background: var(--bg-card-alt); border-radius: 1rem; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+        .homework-item.status-pending { border-left-color: #f39c12; }
+        .homework-item.status-in_progress { border-left-color: #3498db; }
+        .homework-item.status-completed { border-left-color: #2ecc71; opacity: 0.85; }
+        .homework-item .hw-main { flex: 1; min-width: 200px; }
+        .homework-item .hw-title { font-weight: 600; color: var(--text-primary); font-size: 1rem; }
+        .homework-item .hw-desc { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem; line-height: 1.5; }
+        .homework-item .hw-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .homework-item .hw-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .hw-status-badge { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 60px; font-size: 0.7rem; font-weight: 600; text-transform: capitalize; }
+        .hw-status-badge.pending { background: #fefcbf; color: #744210; }
+        .hw-status-badge.in_progress { background: #bee3f8; color: #2a4365; }
+        .hw-status-badge.completed { background: #c6f6d5; color: #22543d; }
 
         /* MESSAGES */
         .messages-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1.2rem; height: 70vh; min-height: 500px; max-height: 700px; }
-        .conversation-list-panel { background: white; border-radius: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
-        .conversation-list-panel h3 { padding: 1.2rem 1.4rem; font-size: 1.05rem; color: #1a2a3a; border-bottom: 1px solid #edf2f7; flex-shrink: 0; }
+        .conversation-list-panel { background: var(--bg-card); border-radius: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+        .conversation-list-panel h3 { padding: 1.2rem 1.4rem; font-size: 1.05rem; color: var(--text-primary); border-bottom: 1px solid var(--border); flex-shrink: 0; }
         .conversation-list { flex: 1; overflow-y: auto; min-height: 0; }
-        .conversation-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.9rem 1.4rem; cursor: pointer; border-bottom: 1px solid #f7fafc; transition: 0.15s; }
-        .conversation-item:hover { background: #f8f9fa; }
-        .conversation-item.active { background: #eef2ff; border-left: 3px solid #2a9d8f; }
-        .conversation-item .conv-avatar { width: 42px; height: 42px; border-radius: 50%; background: #2a9d8f; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; overflow: hidden; font-size: 0.9rem; }
+        .conversation-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.9rem 1.4rem; cursor: pointer; border-bottom: 1px solid var(--border); transition: 0.15s; }
+        .conversation-item:hover { background: var(--bg-card-alt); }
+        .conversation-item.active { background: rgba(42,157,143,0.1); border-left: 3px solid var(--accent); }
+        .conversation-item .conv-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; overflow: hidden; font-size: 0.9rem; }
         .conversation-item .conv-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .conversation-item .conv-body { flex: 1; min-width: 0; }
-        .conversation-item .conv-name { font-weight: 600; color: #1a2a3a; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
-        .conversation-item .conv-preview { font-size: 0.8rem; color: #718096; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 0.15rem; }
-        .conversation-item .conv-time { font-size: 0.7rem; color: #a0aec0; font-weight: 400; flex-shrink: 0; }
-        .conversation-item .conv-unread { background: #2a9d8f; color: white; font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 60px; min-width: 20px; text-align: center; flex-shrink: 0; }
-        .conv-empty { padding: 2rem; text-align: center; color: #a0aec0; font-size: 0.9rem; }
-        .chat-window { background: white; border-radius: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
-        .chat-window-header { padding: 1rem 1.4rem; border-bottom: 1px solid #edf2f7; display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
-        .chat-window-header .avatar-sm { width: 40px; height: 40px; border-radius: 50%; background: #2a9d8f; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; overflow: hidden; font-size: 0.9rem; }
+        .conversation-item .conv-name { font-weight: 600; color: var(--text-primary); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+        .conversation-item .conv-preview { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 0.15rem; }
+        .conversation-item .conv-time { font-size: 0.7rem; color: var(--text-muted); font-weight: 400; flex-shrink: 0; }
+        .conversation-item .conv-unread { background: var(--accent); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 60px; min-width: 20px; text-align: center; flex-shrink: 0; }
+        .conv-empty { padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+        .chat-window { background: var(--bg-card); border-radius: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+        .chat-window-header { padding: 1rem 1.4rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
+        .chat-window-header .avatar-sm { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; overflow: hidden; font-size: 0.9rem; }
         .chat-window-header .avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
-        .chat-window-header .info h4 { font-size: 0.95rem; color: #1a2a3a; }
-        .chat-window-header .info small { font-size: 0.75rem; color: #718096; text-transform: capitalize; }
-        .chat-thread { flex: 1; overflow-y: auto; padding: 1.2rem; background: #f7f9fc; display: flex; flex-direction: column; gap: 0.4rem; min-height: 0; }
+        .chat-window-header .info h4 { font-size: 0.95rem; color: var(--text-primary); }
+        .chat-window-header .info small { font-size: 0.75rem; color: var(--text-muted); text-transform: capitalize; }
+        .chat-thread { flex: 1; overflow-y: auto; padding: 1.2rem; background: var(--bg-body); display: flex; flex-direction: column; gap: 0.4rem; min-height: 0; }
         .chat-bubble-row { display: flex; width: 100%; }
         .chat-bubble-row.mine { justify-content: flex-end; }
         .chat-bubble-row.theirs { justify-content: flex-start; }
         .chat-bubble { max-width: 70%; padding: 0.55rem 0.9rem; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; }
-        .chat-bubble.mine { background: #2a9d8f; color: white; border-bottom-right-radius: 4px; }
-        .chat-bubble.theirs { background: white; color: #1a2a3a; border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+        .chat-bubble.mine { background: var(--accent); color: white; border-bottom-right-radius: 4px; }
+        .chat-bubble.theirs { background: var(--bg-card); color: var(--text-primary); border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
         .chat-bubble .bubble-time { font-size: 0.65rem; display: block; margin-top: 0.25rem; opacity: 0.7; text-align: right; }
         .chat-bubble.theirs .bubble-time { text-align: left; }
-        .chat-thread-empty { text-align: center; color: #a0aec0; padding: 2rem; font-size: 0.9rem; }
-        .chat-loading { padding: 1rem; text-align: center; color: #a0aec0; font-size: 0.85rem; }
-        .chat-composer { padding: 0.9rem 1.2rem; border-top: 1px solid #edf2f7; display: flex; gap: 0.5rem; background: white; flex-shrink: 0; }
-        .chat-composer textarea { flex: 1; padding: 0.7rem 1rem; border: 1px solid #e2e8f0; border-radius: 24px; font-family: inherit; font-size: 0.9rem; resize: none; height: 44px; max-height: 120px; background: #f7fafc; line-height: 1.4; }
-        .chat-composer textarea:focus { outline: none; border-color: #2a9d8f; background: white; }
-        .chat-composer button { background: #2a9d8f; color: white; border: none; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: 0.15s; flex-shrink: 0; }
-        .chat-composer button:hover:not(:disabled) { background: #21867a; transform: scale(1.05); }
+        .chat-thread-empty { text-align: center; color: var(--text-muted); padding: 2rem; font-size: 0.9rem; }
+        .chat-loading { padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+        .chat-composer { padding: 0.9rem 1.2rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem; background: var(--bg-card); flex-shrink: 0; }
+        .chat-composer textarea { flex: 1; padding: 0.7rem 1rem; border: 1px solid var(--border-strong); border-radius: 24px; font-family: inherit; font-size: 0.9rem; resize: none; height: 44px; max-height: 120px; background: var(--bg-input); line-height: 1.4; color: var(--text-primary); }
+        .chat-composer textarea:focus { outline: none; border-color: var(--accent); background: var(--bg-card); }
+        .chat-composer button { background: var(--accent); color: white; border: none; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: 0.15s; flex-shrink: 0; }
+        .chat-composer button:hover:not(:disabled) { background: var(--accent-hover); transform: scale(1.05); }
         .chat-composer button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .chat-placeholder { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; height: 100%; color: #a0aec0; text-align: center; padding: 2rem; }
+        .chat-placeholder { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; height: 100%; color: var(--text-muted); text-align: center; padding: 2rem; }
         .chat-placeholder i { font-size: 3rem; opacity: 0.4; }
 
-        /* ═══════════════════════════════════════════════
-           HAMBURGER MENU & MOBILE DRAWER
-           ═══════════════════════════════════════════════ */
-        .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1001;
-            background: #1a2a3a;
-            color: #e9c46a;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            align-items: center;
-            justify-content: center;
-        }
+        /* THEME TOGGLE */
+        .theme-toggle { background: rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.15s; color: var(--accent-gold); font-size: 0.9rem; font-weight: 500; }
+        .theme-toggle:hover { background: rgba(255,255,255,0.15); }
+        .theme-toggle i { font-size: 1.1rem; }
+        .theme-toggle span { margin-left: 0.6rem; margin-right: auto; color: var(--sidebar-text); }
 
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            backdrop-filter: blur(2px);
-        }
+        /* HAMBURGER */
+        .menu-toggle { display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1001; background: var(--sidebar-bg); color: var(--accent-gold); border: none; width: 44px; height: 44px; border-radius: 12px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); align-items: center; justify-content: center; }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(2px); }
 
         @media (max-width: 820px) {
             .sidebar { width: 200px; padding: 1rem; }
@@ -294,32 +339,15 @@
             .messages-layout { grid-template-columns: 1fr; height: auto; }
             .conversation-list-panel { max-height: 300px; }
         }
-
         @media (max-width: 600px) {
-            /* Sidebar becomes a slide-in drawer */
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                z-index: 1002;
-                transform: translateX(-100%);
-                transition: transform 0.25s ease;
-                width: 260px;
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .sidebar-overlay.show {
-                display: block;
-            }
-            .menu-toggle {
-                display: flex;
-            }
-            .main-content {
-                padding-top: 4.5rem;
-            }
+            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; z-index: 1002; transform: translateX(-100%); transition: transform 0.25s ease; width: 260px; }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay.show { display: block; }
+            .menu-toggle { display: flex; }
+            .main-content { padding-top: 4.5rem; }
             .stats-grid { grid-template-columns: 1fr; }
+            .mood-emoji-row { gap: 0.4rem; }
+            .mood-emoji { min-width: 56px; padding: 0.6rem 0.6rem; font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -338,14 +366,20 @@
         <div class="email" id="userEmail">user@example.com</div>
         <div class="role-badge" id="userRole">Client</div>
     </div>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="themeIcon"></i>
+        <span id="themeLabel">Dark mode</span>
+    </div>
     <div class="notif-bell" id="notifBell" onclick="toggleNotifications()">
         <i class="fas fa-bell"></i>
         <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
     </div>
     <ul class="nav-list">
         <li class="active" data-tab="dashboard"><i class="fas fa-home"></i> Dashboard</li>
+        <li data-tab="mood" id="moodNavItem"><i class="fas fa-smile"></i> Mood Check-in</li>
         <li data-tab="appointments"><i class="fas fa-calendar-alt"></i> Appointments</li>
         <li data-tab="messages"><i class="fas fa-comment-dots"></i> Messages <span id="messagesNavBadge" class="nav-badge" style="display:none;">0</span></li>
+        <li data-tab="homework"><i class="fas fa-tasks"></i> Homework <span id="homeworkNavBadge" class="nav-badge" style="display:none;">0</span></li>
         <li data-tab="plans"><i class="fas fa-clipboard-list"></i> Treatment Plans</li>
         <li data-tab="symptoms" id="symptomsNavItem"><i class="fas fa-chart-line"></i> Symptom Tracker</li>
         <li data-tab="groups"><i class="fas fa-users"></i> Group Sessions</li>
@@ -378,14 +412,18 @@
         <div class="stat-card"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="info"><span class="number" id="statCompleted">0</span><div class="label">Completed</div></div></div>
     </div>
 
+    <!-- CLIENT DASHBOARD -->
     <div id="clientDashboard">
+        <!-- Mood Check-in Card (only shows when today's check-in is missing) -->
+        <div id="moodCheckinCard" style="display:none;"></div>
+
         <div class="appointment-section">
             <div class="section-header">
                 <h2><i class="fas fa-calendar-alt"></i> Your Sessions</h2>
-                <span style="font-size:0.85rem; color:#4a5568;" id="appointmentCount">0 appointments</span>
+                <span style="font-size:0.85rem; color:var(--text-secondary);" id="appointmentCount">0 appointments</span>
             </div>
             <div class="appointment-list" id="appointmentList">
-                <div class="appointment-item"><span style="color:#a0aec0;">Loading...</span></div>
+                <div class="appointment-item"><span style="color:var(--text-muted);">Loading...</span></div>
             </div>
         </div>
         <div class="virtual-card">
@@ -397,6 +435,22 @@
                 </div>
             </div>
             <button class="btn btn-primary" id="joinSessionBtn" style="display:none;"><i class="fas fa-arrow-right"></i> Join Session</button>
+        </div>
+    </div>
+
+    <!-- MOOD SECTION -->
+    <div id="moodSection" style="display:none;">
+        <div id="moodFullView"></div>
+    </div>
+
+    <!-- HOMEWORK -->
+    <div id="homeworkSection" style="display:none;">
+        <div class="appointment-section">
+            <div class="section-header">
+                <h2><i class="fas fa-tasks"></i> Homework</h2>
+                <button class="btn btn-primary btn-sm" id="newHomeworkBtn" style="display:none;"><i class="fas fa-plus"></i> Assign Homework</button>
+            </div>
+            <div id="homeworkList"><div class="appointment-item">Loading...</div></div>
         </div>
     </div>
 
@@ -422,9 +476,9 @@
                     <span class="tab" data-stype="GAD7">GAD-7 (Anxiety)</span>
                 </div>
                 <div id="symptomChartContainer" style="margin-bottom:1rem;">
-                    <div class="chart-bars" id="symptomChart"><div style="color:#a0aec0;">No data yet. Take your first assessment to see your progress.</div></div>
+                    <div class="chart-bars" id="symptomChart"><div style="color:var(--text-muted);">No data yet. Take your first assessment to see your progress.</div></div>
                 </div>
-                <h3 style="font-size:1rem; margin-bottom:0.5rem;">History</h3>
+                <h3 style="font-size:1rem; margin-bottom:0.5rem; color:var(--text-primary);">History</h3>
                 <div id="symptomsHistory"><div class="appointment-item">Loading...</div></div>
             </div>
         </div>
@@ -433,7 +487,7 @@
             <div id="therapistClientList" class="appointment-section">
                 <div class="section-header">
                     <h2><i class="fas fa-users"></i> Client Assessments</h2>
-                    <span style="font-size:0.85rem; color:#4a5568;">Latest PHQ-9 & GAD-7 scores</span>
+                    <span style="font-size:0.85rem; color:var(--text-secondary);">Latest PHQ-9 & GAD-7 scores + Mood</span>
                 </div>
                 <div class="appointment-list" id="therapistSymptomsClients">
                     <div class="appointment-item">Loading clients...</div>
@@ -452,9 +506,9 @@
                         <span class="tab" data-dtype="GAD7">GAD-7 (Anxiety)</span>
                     </div>
                     <div class="chart-bars" id="detailChart" style="margin-bottom:1rem;">
-                        <div style="color:#a0aec0; padding:1rem;">No data yet.</div>
+                        <div style="color:var(--text-muted); padding:1rem;">No data yet.</div>
                     </div>
-                    <h3 style="font-size:1rem; margin-bottom:0.5rem;">Assessment History</h3>
+                    <h3 style="font-size:1rem; margin-bottom:0.5rem; color:var(--text-primary);">Assessment History</h3>
                     <div id="detailHistory"><div class="appointment-item">Loading...</div></div>
                 </div>
             </div>
@@ -494,18 +548,16 @@
     <div id="messagesSection" style="display:none;">
         <div class="messages-layout">
             <div class="conversation-list-panel">
-                <h3><i class="fas fa-comments" style="color:#2a9d8f;"></i> Conversations</h3>
+                <h3><i class="fas fa-comments" style="color:var(--accent);"></i> Conversations</h3>
                 <div class="conversation-list" id="conversationList">
                     <div class="conv-empty">Loading conversations...</div>
                 </div>
             </div>
-
             <div class="chat-window" id="chatWindow">
                 <div class="chat-placeholder" id="chatPlaceholder">
                     <i class="fas fa-comments"></i>
                     <div>Select a conversation to start chatting</div>
                 </div>
-
                 <div id="chatActive" style="display:none; flex-direction:column; height:100%; min-height:0;">
                     <div class="chat-window-header">
                         <div class="avatar-sm" id="chatPeerAvatar">?</div>
@@ -563,8 +615,8 @@
         </div>
     </div>
 
-    <div style="margin-top:1.5rem; border-top:1px solid #e2e8f0; padding-top:1rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; font-size:0.8rem; color:#4a5568;">
-        <span><i class="fas fa-lock" style="color:#2a9d8f;"></i> End-to-end encrypted</span>
+    <div style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; font-size:0.8rem; color:var(--text-secondary);">
+        <span><i class="fas fa-lock" style="color:var(--accent);"></i> End-to-end encrypted</span>
         <span><i class="fas fa-shield-alt"></i> HIPAA compliant</span>
         <span><i class="fas fa-headset"></i> 24/7 support</span>
     </div>
@@ -582,7 +634,7 @@
     <form id="bookingForm">
         <label>Therapist</label>
         <select name="therapist_id" id="therapistSelect" required><option value="">Loading...</option></select>
-        <div id="therapistDetails" style="margin:0.5rem 0; font-size:0.9rem; color:#4a5568;"></div>
+        <div id="therapistDetails" style="margin:0.5rem 0; font-size:0.9rem; color:var(--text-secondary);"></div>
         <label>Date</label>
         <input type="date" name="date" id="bookingDate" required>
         <label>Time</label>
@@ -713,10 +765,43 @@
     </form>
 </div>
 
+<div class="modal" id="homeworkModal">
+    <button class="close-modal" onclick="closeModal('homeworkModal')">&times;</button>
+    <h3>Assign Homework</h3>
+    <form id="homeworkForm">
+        <label>Client</label>
+        <select id="hwClient" required><option value="">Select client...</option></select>
+        <label>Title</label>
+        <input type="text" id="hwTitle" required placeholder="e.g., Practice deep breathing">
+        <label>Description</label>
+        <textarea id="hwDescription" rows="3" placeholder="Detailed instructions..."></textarea>
+        <label>Due Date (optional)</label>
+        <input type="date" id="hwDueDate">
+        <button type="submit" class="btn btn-primary">Assign</button>
+    </form>
+</div>
+
+<div class="modal" id="hwUpdateModal">
+    <button class="close-modal" onclick="closeModal('hwUpdateModal')">&times;</button>
+    <h3>Update Homework</h3>
+    <form id="hwUpdateForm">
+        <input type="hidden" id="hwUpdateId">
+        <label>Status</label>
+        <select id="hwUpdateStatus" required>
+            <option value="pending">Not Started</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+        </select>
+        <label>Your notes (optional)</label>
+        <textarea id="hwUpdateNotes" rows="3" placeholder="How did it go?"></textarea>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
 <div class="modal" id="assessmentModal" style="max-width: 700px;">
     <button class="close-modal" onclick="closeModal('assessmentModal')">&times;</button>
     <h3 id="assessmentTitle">PHQ-9 Assessment</h3>
-    <p style="text-align:center; color:#4a5568; margin-bottom:1rem; font-size:0.9rem;">
+    <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
         Over the last 2 weeks, how often have you been bothered by the following?
     </p>
     <form id="assessmentForm">
@@ -755,7 +840,7 @@
 <div class="modal" id="crisisModal" style="max-width: 600px;">
     <button class="close-modal" onclick="closeModal('crisisModal')">&times;</button>
     <h3 style="color:#e74c3c;"><i class="fas fa-phone-alt"></i> Crisis Resources</h3>
-    <p style="text-align:center; color:#4a5568; margin-bottom:1rem; font-size:0.9rem;">
+    <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
         If you are in immediate danger, call <strong>911</strong> or go to your nearest emergency room.
     </p>
     <div id="crisisList"><div class="appointment-item">Loading...</div></div>
@@ -798,7 +883,7 @@
                 </div>
             </div>
             <div class="panel-content" id="panelSoap">
-                <div style="font-size:0.85rem; color:#4a5568; padding:0.3rem 0;">SOAP notes are visible only to the therapist.</div>
+                <div style="font-size:0.85rem; color:var(--text-secondary); padding:0.3rem 0;">SOAP notes are visible only to the therapist.</div>
                 <div class="soap-field"><label>S — Subjective</label><textarea id="soapSubjective" placeholder="What the client reports"></textarea></div>
                 <div class="soap-field"><label>O — Objective</label><textarea id="soapObjective" placeholder="Observable facts"></textarea></div>
                 <div class="soap-field"><label>A — Assessment</label><textarea id="soapAssessment" placeholder="Clinical interpretation"></textarea></div>
@@ -839,12 +924,30 @@
     let notifPanelOpen = false;
     let currentDetailClientId = null;
     let currentDetailType = 'PHQ9';
-    let dmActiveContactId = null;
-    let dmActiveContactName = null;
-    let dmActiveContactRole = null;
-    let dmLastMessageId = 0;
-    let dmPollInterval = null;
-    let dmAllContacts = [];
+    let dmActiveContactId = null, dmActiveContactName = null, dmActiveContactRole = null;
+    let dmLastMessageId = 0, dmPollInterval = null, dmAllContacts = [];
+    let currentMoodSelection = null;
+
+    // ─── THEME ───
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        setTheme(theme);
+    }
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        const icon = document.getElementById('themeIcon');
+        const label = document.getElementById('themeLabel');
+        if (icon) icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        if (label) label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+    window.toggleTheme = function() {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        setTheme(current === 'dark' ? 'light' : 'dark');
+    };
+    initTheme();
 
     function showToast(msg, type = 'success') {
         const iconMap = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
@@ -865,7 +968,7 @@
         catch (err) { return { success: false, message: 'Network error' }; }
     }
     function show(id) {
-        ['clientDashboard','therapistDashboard','adminDashboard','resourcesSection','plansSection','symptomsSection','groupsSection','crisisAdminSection','messagesSection'].forEach(x => {
+        ['clientDashboard','therapistDashboard','adminDashboard','resourcesSection','plansSection','symptomsSection','groupsSection','crisisAdminSection','messagesSection','moodSection','homeworkSection'].forEach(x => {
             const el = document.getElementById(x);
             if (el) el.style.display = (x === id) ? 'block' : 'none';
         });
@@ -895,16 +998,20 @@
             initials.textContent = res.user.initials || '??';
         }
         document.getElementById('symptomsNavItem').style.display = (res.role === 'client' || res.role === 'therapist') ? 'flex' : 'none';
+        document.getElementById('moodNavItem').style.display = (res.role === 'client') ? 'flex' : 'none';
+        document.getElementById('homeworkNav').style.display = (res.role === 'client' || res.role === 'therapist') ? 'flex' : 'none';
         document.getElementById('crisisAdminNav').style.display = (res.role === 'admin') ? 'flex' : 'none';
         document.getElementById('newPlanBtn').style.display = (res.role === 'therapist') ? 'inline-flex' : 'none';
         document.getElementById('newAssessmentBtn').style.display = (res.role === 'client') ? 'inline-flex' : 'none';
         document.getElementById('newGroupBtn').style.display = (res.role === 'therapist') ? 'inline-flex' : 'none';
+        document.getElementById('newHomeworkBtn').style.display = (res.role === 'therapist') ? 'inline-flex' : 'none';
         if (res.role === 'client') {
             renderAppointments(res.appointments || []);
             updateStats(res.appointments || []);
             updateVirtualCard(res.appointments || []);
             document.getElementById('bookAppointmentBtn').style.display = 'inline-flex';
             show('clientDashboard');
+            loadMoodCheckinCard();
         } else if (res.role === 'therapist') {
             document.getElementById('therapistTab').style.display = 'flex';
             document.getElementById('bookAppointmentBtn').style.display = 'none';
@@ -924,7 +1031,7 @@
         list.innerHTML = '';
         document.getElementById('appointmentCount').textContent = appointments.length + ' appointments';
         if (!appointments.length) {
-            list.innerHTML = '<div class="appointment-item"><span style="color:#a0aec0;">No appointments found.</span></div>';
+            list.innerHTML = '<div class="appointment-item"><span style="color:var(--text-muted);">No appointments found.</span></div>';
             return;
         }
         appointments.forEach(a => {
@@ -997,12 +1104,295 @@
         if (currentRole === 'therapist') loadTherapistData();
     };
 
+    // ═══════════════════════════════════════════════
+    // MOOD CHECK-IN
+    // ═══════════════════════════════════════════════
+    const MOOD_EMOJIS = [
+        { score: 5, emoji: '😄', label: 'Great' },
+        { score: 4, emoji: '🙂', label: 'Good' },
+        { score: 3, emoji: '😐', label: 'Okay' },
+        { score: 2, emoji: '😟', label: 'Low' },
+        { score: 1, emoji: '😢', label: 'Bad' }
+    ];
+
+    function moodEmojiForScore(score) {
+        const m = MOOD_EMOJIS.find(x => x.score === score);
+        return m ? m.emoji : '😐';
+    }
+
+    async function loadMoodCheckinCard() {
+        const card = document.getElementById('moodCheckinCard');
+        if (currentRole !== 'client') { card.style.display = 'none'; return; }
+        const res = await apiCall('mood_today', {}, 'GET');
+        if (res.success && res.checkin) {
+            // Already checked in today — show a nice confirmation card
+            const streakRes = await apiCall('mood_streak', {}, 'GET');
+            const streak = streakRes.success ? streakRes.streak : 0;
+            card.innerHTML = `
+                <div class="mood-card">
+                    <h3><i class="fas fa-smile" style="color:var(--accent);"></i> Today's Mood</h3>
+                    <div style="text-align:center;padding:0.5rem 0;">
+                        <div style="font-size:3rem;">${moodEmojiForScore(res.checkin.mood_score)}</div>
+                        <p style="color:var(--text-secondary);margin-top:0.5rem;">You checked in today — nice work! 🎉</p>
+                        ${res.checkin.note ? `<p style="font-style:italic;color:var(--text-secondary);margin-top:0.5rem;">"${esc(res.checkin.note)}"</p>` : ''}
+                        ${streak > 1 ? `<div class="mood-streak"><span class="fire">🔥</span> ${streak}-day streak!</div>` : ''}
+                    </div>
+                    <div style="text-align:center;margin-top:1rem;">
+                        <button class="btn btn-secondary btn-sm" onclick="editTodayMood()">Update today's check-in</button>
+                    </div>
+                </div>`;
+            card.style.display = 'block';
+        } else {
+            renderMoodPicker(card);
+            card.style.display = 'block';
+        }
+    }
+
+    function renderMoodPicker(card) {
+        currentMoodSelection = null;
+        card.innerHTML = `
+            <div class="mood-card">
+                <h3><i class="fas fa-smile" style="color:var(--accent);"></i> How are you feeling today?</h3>
+                <p class="mood-today-label">Take 30 seconds to check in with yourself.</p>
+                <div class="mood-emoji-row" id="moodEmojiRow">
+                    ${MOOD_EMOJIS.map(m => `
+                        <div class="mood-emoji" data-score="${m.score}" onclick="selectMood(${m.score})">
+                            <div>${m.emoji}</div>
+                            <div class="label">${m.label}</div>
+                        </div>`).join('')}
+                </div>
+                <textarea class="mood-note" id="moodNoteInput" placeholder="Add a quick note (optional)..." rows="2"></textarea>
+                <div style="text-align:center;">
+                    <button class="btn btn-primary" id="moodSaveBtn" onclick="saveMoodCheckin()" disabled>
+                        <i class="fas fa-check"></i> Save Today's Mood
+                    </button>
+                </div>
+            </div>`;
+    }
+
+    window.selectMood = function(score) {
+        currentMoodSelection = score;
+        document.querySelectorAll('.mood-emoji').forEach(el => {
+            el.classList.toggle('selected', parseInt(el.dataset.score) === score);
+        });
+        document.getElementById('moodSaveBtn').disabled = false;
+    };
+
+    window.saveMoodCheckin = async function() {
+        if (!currentMoodSelection) return;
+        const note = document.getElementById('moodNoteInput').value.trim();
+        const btn = document.getElementById('moodSaveBtn');
+        setButtonLoading(btn, true, 'Saving...');
+        const res = await apiCall('mood_checkin', { mood_score: currentMoodSelection, note });
+        if (res.success) {
+            showToast('Mood saved! Keep up the streak 🎉', 'success');
+            await loadMoodCheckinCard();
+        } else {
+            showToast(res.message || 'Failed to save', 'error');
+            setButtonLoading(btn, false);
+        }
+    };
+
+    window.editTodayMood = async function() {
+        const card = document.getElementById('moodCheckinCard');
+        renderMoodPicker(card);
+        const res = await apiCall('mood_today', {}, 'GET');
+        if (res.success && res.checkin) {
+            selectMood(res.checkin.mood_score);
+            document.getElementById('moodNoteInput').value = res.checkin.note || '';
+        }
+    };
+
+    async function loadMoodFullView() {
+        const container = document.getElementById('moodFullView');
+        container.innerHTML = '<div class="appointment-section"><div class="appointment-item">Loading mood history...</div></div>';
+
+        const todayRes = await apiCall('mood_today', {}, 'GET');
+        const histRes = await apiCall('mood_history', {}, 'GET');
+        const streakRes = await apiCall('mood_streak', {}, 'GET');
+        const streak = streakRes.success ? streakRes.streak : 0;
+
+        const history = histRes.success ? histRes.history : [];
+
+        // Build the past-14-days chart (fill missing days with 0)
+        const days = [];
+        const today = new Date();
+        for (let i = 13; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            const key = d.toISOString().split('T')[0];
+            const found = history.find(h => h.date === key);
+            days.push({
+                date: key,
+                label: d.toLocaleDateString([], { weekday: 'short' }).substring(0, 2),
+                score: found ? found.mood_score : 0,
+                note: found ? found.note : ''
+            });
+        }
+
+        const avg = history.length
+            ? Math.round((history.slice(0, 7).reduce((s, h) => s + h.mood_score, 0) / Math.min(history.length, 7)) * 10) / 10
+            : 0;
+
+        container.innerHTML = `
+            <div class="appointment-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-smile"></i> Mood History</h2>
+                    ${streak > 0 ? `<div class="mood-streak"><span class="fire">🔥</span> ${streak}-day streak</div>` : ''}
+                </div>
+                ${todayRes.success && todayRes.checkin ? '' : `
+                    <div class="mood-card" style="text-align:center;">
+                        <p style="margin-bottom:1rem; color:var(--text-secondary);">You haven't checked in today yet.</p>
+                        <button class="btn btn-primary" onclick="show('clientDashboard'); loadMoodCheckinCard();">Check in now</button>
+                    </div>
+                `}
+                <div class="mood-chart-wrap">
+                    <div class="mood-chart-title">Last 14 days</div>
+                    <div class="mood-dots">
+                        ${days.map(d => {
+                            const pct = d.score > 0 ? (d.score / 5) * 100 : 0;
+                            const bg = d.score === 0 ? 'var(--border)' :
+                                       d.score >= 4 ? '#2ecc71' :
+                                       d.score === 3 ? '#f39c12' : '#e74c3c';
+                            return `<div class="mood-dot" title="${d.date}${d.note ? ' — ' + d.note : ''}">
+                                <div class="bar" style="height:${pct}%; background:${bg};"></div>
+                                <div class="day">${d.label}</div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>
+                ${avg > 0 ? `<div style="margin-top:1.5rem; text-align:center; color:var(--text-secondary); font-size:0.9rem;">7-day average: <strong style="font-size:1.3rem; color:var(--accent);">${avg.toFixed(1)}</strong> / 5</div>` : ''}
+            </div>
+
+            <div class="appointment-section">
+                <div class="section-header"><h2><i class="fas fa-history"></i> Recent Entries</h2></div>
+                <div class="appointment-list">
+                    ${history.length === 0 ? '<div class="appointment-item">No check-ins yet.</div>' :
+                        history.slice(0, 30).map(h => `
+                            <div class="appointment-item">
+                                <div class="appointment-info">
+                                    <div class="avatar-sm" style="font-size:1.4rem; background:var(--bg-card);">${moodEmojiForScore(h.mood_score)}</div>
+                                    <div class="details">
+                                        <div class="title">${new Date(h.date + 'T00:00:00').toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}</div>
+                                        ${h.note ? `<div class="meta" style="font-style:italic;">"${esc(h.note)}"</div>` : ''}
+                                    </div>
+                                </div>
+                            </div>`).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // ═══════════════════════════════════════════════
+    // HOMEWORK
+    // ═══════════════════════════════════════════════
+    async function loadHomework() {
+        const res = await apiCall('homework_list', {}, 'GET');
+        const list = document.getElementById('homeworkList');
+        list.innerHTML = '';
+        if (!res.success || !res.homework.length) {
+            list.innerHTML = '<div class="appointment-item">No homework yet.</div>';
+            updateHomeworkBadge(0);
+            return;
+        }
+        let pendingCount = 0;
+        res.homework.forEach(h => {
+            if (currentRole === 'client' && h.status !== 'completed') pendingCount++;
+            const other = currentRole === 'client' ? h.therapist_name : h.client_name;
+            let actions = '';
+            if (currentRole === 'client') {
+                actions = `<button class="btn btn-primary btn-sm" onclick="openHwUpdate(${h.id}, '${esc(h.status)}', '${esc(h.client_notes || '')}')">
+                    <i class="fas fa-edit"></i> Update
+                </button>`;
+            } else if (currentRole === 'therapist') {
+                actions = `<button class="btn btn-danger btn-sm" onclick="deleteHomework(${h.id})">Delete</button>`;
+            }
+            const dueText = h.due_date ? `Due ${new Date(h.due_date).toLocaleDateString()}` : 'No due date';
+            list.innerHTML += `
+                <div class="homework-item status-${h.status}">
+                    <div class="hw-main">
+                        <div class="hw-title">${esc(h.title)}</div>
+                        ${h.description ? `<div class="hw-desc">${esc(h.description)}</div>` : ''}
+                        <div class="hw-meta">
+                            <span><i class="far fa-user"></i> ${esc(other || '')}</span>
+                            <span><i class="far fa-calendar"></i> ${dueText}</span>
+                            <span class="hw-status-badge ${h.status}">${h.status.replace('_', ' ')}</span>
+                        </div>
+                        ${h.client_notes ? `<div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.4rem; font-style:italic;">Client: "${esc(h.client_notes)}"</div>` : ''}
+                    </div>
+                    <div class="hw-actions">${actions}</div>
+                </div>`;
+        });
+        updateHomeworkBadge(pendingCount);
+    }
+    function updateHomeworkBadge(count) {
+        const badge = document.getElementById('homeworkNavBadge');
+        if (!badge) return;
+        if (count > 0) { badge.textContent = count; badge.style.display = 'inline-block'; }
+        else badge.style.display = 'none';
+    }
+    window.openHwUpdate = function(id, status, notes) {
+        document.getElementById('hwUpdateId').value = id;
+        document.getElementById('hwUpdateStatus').value = status;
+        document.getElementById('hwUpdateNotes').value = notes || '';
+        document.getElementById('hwUpdateModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    };
+    window.deleteHomework = async function(id) {
+        if (!confirm('Delete this homework?')) return;
+        const r = await apiCall('homework_delete', { id });
+        showToast(r.message, r.success ? 'success' : 'error');
+        loadHomework();
+    };
+    document.getElementById('newHomeworkBtn')?.addEventListener('click', async () => {
+        const res = await apiCall('my_clients', {}, 'GET');
+        const sel = document.getElementById('hwClient');
+        sel.innerHTML = '<option value="">Select client...</option>';
+        if (res.success) res.clients.forEach(c => { sel.innerHTML += `<option value="${c.id}">${esc(c.name)}</option>`; });
+        document.getElementById('hwTitle').value = '';
+        document.getElementById('hwDescription').value = '';
+        document.getElementById('hwDueDate').value = '';
+        document.getElementById('homeworkModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    });
+    document.getElementById('homeworkForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        setButtonLoading(btn, true, 'Assigning...');
+        const data = {
+            client_id: document.getElementById('hwClient').value,
+            title: document.getElementById('hwTitle').value.trim(),
+            description: document.getElementById('hwDescription').value.trim(),
+            due_date: document.getElementById('hwDueDate').value || null
+        };
+        const res = await apiCall('homework_create', data);
+        showToast(res.message, res.success ? 'success' : 'error');
+        if (res.success) { closeModal('homeworkModal'); loadHomework(); }
+        setButtonLoading(btn, false);
+    });
+    document.getElementById('hwUpdateForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        setButtonLoading(btn, true, 'Saving...');
+        const res = await apiCall('homework_update_status', {
+            id: document.getElementById('hwUpdateId').value,
+            status: document.getElementById('hwUpdateStatus').value,
+            client_notes: document.getElementById('hwUpdateNotes').value.trim()
+        });
+        showToast(res.message, res.success ? 'success' : 'error');
+        if (res.success) { closeModal('hwUpdateModal'); loadHomework(); }
+        setButtonLoading(btn, false);
+    });
+
+    // ═══════════════════════════════════════════════
+    // PLANS
+    // ═══════════════════════════════════════════════
     async function loadPlans() {
         const res = await apiCall('plans_list', {}, 'GET');
         const list = document.getElementById('plansList');
         list.innerHTML = '';
         if (!res.success || !res.plans.length) {
-            list.innerHTML = '<div class="appointment-item"><span style="color:#a0aec0;">No treatment plans yet.</span></div>';
+            list.innerHTML = '<div class="appointment-item"><span style="color:var(--text-muted);">No treatment plans yet.</span></div>';
             allPlans = [];
             return;
         }
@@ -1028,7 +1418,7 @@
                     </div>
                 `).join('');
             } else {
-                goalsHtml = '<div style="font-size:0.85rem; color:#a0aec0; padding:0.5rem;">No goals yet.</div>';
+                goalsHtml = '<div style="font-size:0.85rem; color:var(--text-muted); padding:0.5rem;">No goals yet.</div>';
             }
             list.innerHTML += `
                 <div class="plan-card ${p.status}">
@@ -1040,7 +1430,7 @@
                         ${currentRole !== 'admin' ? `<strong>${currentRole === 'client' ? 'Therapist' : 'Client'}:</strong> ${esc(other)} · ` : `<strong>Client:</strong> ${esc(p.client_name)} · <strong>Therapist:</strong> ${esc(p.therapist_name)} · `}
                         <strong>Start:</strong> ${esc(p.start_date)}${p.target_date ? ` · <strong>Target:</strong> ${esc(p.target_date)}` : ''}
                     </div>
-                    ${p.description ? `<p style="font-size:0.9rem; color:#4a5568; margin-bottom:0.8rem;">${esc(p.description)}</p>` : ''}
+                    ${p.description ? `<p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:0.8rem;">${esc(p.description)}</p>` : ''}
                     <div style="margin-bottom:0.5rem;"><strong style="font-size:0.9rem;">Goals:</strong></div>
                     ${goalsHtml}
                     <div style="margin-top:0.8rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
@@ -1055,8 +1445,7 @@
                             <button class="btn btn-danger btn-sm" onclick="deletePlan(${p.id})"><i class="fas fa-trash"></i> Delete</button>
                         ` : ''}
                     </div>
-                </div>
-            `;
+                </div>`;
         });
     }
     window.updatePlanStatus = async (plan_id, status) => { const r = await apiCall('plans_update_status', { plan_id, status }); showToast(r.message, r.success?'success':'error'); loadPlans(); };
@@ -1104,6 +1493,9 @@
         setButtonLoading(btn, false);
     });
 
+    // ═══════════════════════════════════════════════
+    // SYMPTOMS (unchanged from previous)
+    // ═══════════════════════════════════════════════
     async function loadSymptomQuestions() {
         const res = await apiCall('symptoms_questions', {}, 'GET');
         if (res.success) symptomQuestions = { PHQ9: res.PHQ9, GAD7: res.GAD7 };
@@ -1119,7 +1511,7 @@
                 return `<div class="chart-bar" style="height:${Math.max(height,3)}px;"><div class="chart-bar-value">${d.total_score}</div><div class="chart-bar-label">${date}</div></div>`;
             }).join('');
         } else {
-            chart.innerHTML = '<div style="color:#a0aec0; padding:1rem; text-align:center;">No data yet. Take your first assessment.</div>';
+            chart.innerHTML = '<div style="color:var(--text-muted); padding:1rem; text-align:center;">No data yet. Take your first assessment.</div>';
         }
         const h = await apiCall('symptoms_list', {}, 'GET');
         const hist = document.getElementById('symptomsHistory');
@@ -1129,7 +1521,7 @@
             if (!filtered.length) hist.innerHTML = '<div class="appointment-item">No assessments for this type yet.</div>';
             else filtered.forEach(a => {
                 const date = new Date(a.created_at).toLocaleString();
-                hist.innerHTML += `<div class="appointment-item"><div><strong>${a.type}</strong> · Score: <strong>${a.total_score}</strong> · <span class="severity ${a.severity.split(' ')[0]}">${a.severity}</span><div style="font-size:0.8rem; color:#4a5568;">${date}</div></div></div>`;
+                hist.innerHTML += `<div class="appointment-item"><div><strong>${a.type}</strong> · Score: <strong>${a.total_score}</strong> · <span class="severity ${a.severity.split(' ')[0]}">${a.severity}</span><div style="font-size:0.8rem; color:var(--text-secondary);">${date}</div></div></div>`;
             });
         } else hist.innerHTML = '<div class="appointment-item">No assessments yet.</div>';
     }
@@ -1213,10 +1605,12 @@
     }
     async function loadTherapistSymptoms() {
         const res = await apiCall('symptoms_my_clients', {}, 'GET');
+        const moodRes = await apiCall('mood_my_clients', {}, 'GET');
+        const moods = moodRes.success ? moodRes.moods : {};
         const list = document.getElementById('therapistSymptomsClients');
         list.innerHTML = '';
         if (!res.success || !res.clients.length) {
-            list.innerHTML = '<div class="appointment-item"><span style="color:#a0aec0;">No clients yet.</span></div>';
+            list.innerHTML = '<div class="appointment-item"><span style="color:var(--text-muted);">No clients yet.</span></div>';
             return;
         }
         res.clients.forEach(c => {
@@ -1225,6 +1619,10 @@
                 : `<span class="score-badge none">No data</span>`;
             const gad7Badge = c.gad7
                 ? `<span class="score-badge ${scoreClassFromSeverity(c.gad7.severity)}">${c.gad7.total_score} · ${esc(c.gad7.severity)}</span>`
+                : `<span class="score-badge none">No data</span>`;
+            const m = moods[c.id];
+            const moodBadge = m && m.last
+                ? `<span class="score-badge ${m.last.mood_score >= 4 ? 'minimal' : m.last.mood_score === 3 ? 'mild' : 'severe'}">${moodEmojiForScore(m.last.mood_score)} ${m.avg_7d ? m.avg_7d : m.last.mood_score}/5</span>`
                 : `<span class="score-badge none">No data</span>`;
             list.innerHTML += `
                 <div class="appointment-item">
@@ -1236,6 +1634,7 @@
                         </div>
                     </div>
                     <div style="display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap;">
+                        <div class="score-cell"><span class="score-label">Mood</span>${moodBadge}</div>
                         <div class="score-cell"><span class="score-label">PHQ-9</span>${phq9Badge}</div>
                         <div class="score-cell"><span class="score-label">GAD-7</span>${gad7Badge}</div>
                         <button class="btn btn-primary btn-sm" onclick="viewClientSymptoms(${c.id}, '${esc(c.name)}')">
@@ -1270,13 +1669,10 @@
             chart.innerHTML = chartRes.data.map(d => {
                 const height = (d.total_score / maxScore) * 120;
                 const date = new Date(d.created_at).toLocaleDateString('en', { month: 'short', day: 'numeric' });
-                return `<div class="chart-bar" style="height:${Math.max(height, 3)}px;">
-                    <div class="chart-bar-value">${d.total_score}</div>
-                    <div class="chart-bar-label">${date}</div>
-                </div>`;
+                return `<div class="chart-bar" style="height:${Math.max(height, 3)}px;"><div class="chart-bar-value">${d.total_score}</div><div class="chart-bar-label">${date}</div></div>`;
             }).join('');
         } else {
-            chart.innerHTML = '<div style="color:#a0aec0; padding:1rem; text-align:center;">No ' + currentDetailType + ' assessments yet.</div>';
+            chart.innerHTML = '<div style="color:var(--text-muted); padding:1rem; text-align:center;">No ' + currentDetailType + ' assessments yet.</div>';
         }
         const histRes = await apiCall(`symptoms_client_history?client_id=${currentDetailClientId}`, {}, 'GET');
         const hist = document.getElementById('detailHistory');
@@ -1289,14 +1685,7 @@
                 [...filtered].reverse().forEach(a => {
                     const date = new Date(a.created_at).toLocaleString();
                     const badge = `<span class="score-badge ${scoreClassFromSeverity(a.severity)}">${a.total_score} · ${esc(a.severity)}</span>`;
-                    hist.innerHTML += `
-                        <div class="appointment-item">
-                            <div>
-                                <strong>${esc(a.type)}</strong> &nbsp; ${badge}
-                                <div style="font-size:0.8rem; color:#4a5568; margin-top:0.3rem;">${date}</div>
-                                ${a.notes ? `<div style="font-size:0.85rem; color:#4a5568; margin-top:0.3rem; font-style:italic;">"${esc(a.notes)}"</div>` : ''}
-                            </div>
-                        </div>`;
+                    hist.innerHTML += `<div class="appointment-item"><div><strong>${esc(a.type)}</strong> &nbsp; ${badge}<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.3rem;">${date}</div>${a.notes ? `<div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem; font-style:italic;">"${esc(a.notes)}"</div>` : ''}</div></div>`;
                 });
             }
         } else {
@@ -1312,12 +1701,15 @@
         });
     });
 
+    // ═══════════════════════════════════════════════
+    // GROUPS
+    // ═══════════════════════════════════════════════
     async function loadGroups() {
         const res = await apiCall('groups_list', {}, 'GET');
         const list = document.getElementById('groupsList');
         list.innerHTML = '';
         if (!res.success || !res.groups.length) {
-            list.innerHTML = '<div class="appointment-item"><span style="color:#a0aec0;">No group sessions yet.</span></div>';
+            list.innerHTML = '<div class="appointment-item"><span style="color:var(--text-muted);">No group sessions yet.</span></div>';
             return;
         }
         res.groups.forEach(g => {
@@ -1377,6 +1769,9 @@
         if (r.success) { closeModal('groupModal'); loadGroups(); }
     });
 
+    // ═══════════════════════════════════════════════
+    // CRISIS
+    // ═══════════════════════════════════════════════
     window.openCrisisModal = async () => {
         const res = await apiCall('crisis_list', {}, 'GET');
         const list = document.getElementById('crisisList');
@@ -1461,6 +1856,9 @@
         if (r.success) { closeModal('crisisEditModal'); loadCrisisAdmin(); }
     });
 
+    // ═══════════════════════════════════════════════
+    // SOAP + VIDEO (unchanged)
+    // ═══════════════════════════════════════════════
     async function loadSoapNotes(apptId) {
         const res = await apiCall(`soap_get?appointment_id=${apptId}`, {}, 'GET');
         if (res.success) {
@@ -1474,7 +1872,7 @@
         ['soapSubjective','soapObjective','soapAssessment','soapPlan'].forEach(f => {
             const el = document.getElementById(f);
             el.readOnly = currentRole !== 'therapist';
-            el.style.background = currentRole !== 'therapist' ? '#f0f2f5' : 'white';
+            el.style.background = currentRole !== 'therapist' ? 'var(--bg-card-alt)' : 'var(--bg-input)';
         });
     }
     window.saveSoapNotes = async () => {
@@ -1567,6 +1965,9 @@
         });
     });
 
+    // ═══════════════════════════════════════════════
+    // THERAPIST DATA
+    // ═══════════════════════════════════════════════
     async function loadTherapistData() {
         const pend = await apiCall('get_pending_appointments', {}, 'GET');
         const list = document.getElementById('pendingRequestsList');
@@ -1624,6 +2025,9 @@
     window.denyAppointment = async (id) => { if (!confirm('Deny?')) return; const r = await apiCall('deny_appointment', { id }); showToast(r.message, r.success?'success':'error'); loadTherapistData(); };
     window.completeAppointment = async (id) => { if (!confirm('Complete?')) return; const r = await apiCall('complete_appointment', { id }); showToast(r.message, r.success?'success':'error'); loadTherapistData(); };
 
+    // ═══════════════════════════════════════════════
+    // ADMIN
+    // ═══════════════════════════════════════════════
     async function loadAdminData() {
         const res = await apiCall('admin_get_users', {}, 'GET');
         const list = document.getElementById('adminUserList');
@@ -1657,6 +2061,9 @@
     window.promoteUser = async (id) => { if (!confirm('Promote to Admin?')) return; const r = await apiCall('admin_promote_user', { user_id: id }); showToast(r.message, r.success?'success':'error'); loadAdminData(); };
     window.demoteUser = async (id) => { if (!confirm('Demote to Client?')) return; const r = await apiCall('admin_demote_user', { user_id: id }); showToast(r.message, r.success?'success':'error'); loadAdminData(); };
 
+    // ═══════════════════════════════════════════════
+    // RESOURCES
+    // ═══════════════════════════════════════════════
     async function loadResources() {
         const res = await apiCall('get_resources', {}, 'GET');
         const grid = document.getElementById('resourceGrid');
@@ -1682,6 +2089,9 @@
         if (r.success) { closeModal('addResourceModal'); e.target.reset(); loadResources(); }
     });
 
+    // ═══════════════════════════════════════════════
+    // PROFILE / PASSWORD / LOGOUT / BOOKING
+    // ═══════════════════════════════════════════════
     document.getElementById('profilePicture').addEventListener('change', async function() {
         const file = this.files[0];
         if (!file) return;
@@ -1787,6 +2197,9 @@
         if (room) openVideoSession(room);
     });
 
+    // ═══════════════════════════════════════════════
+    // NAVIGATION
+    // ═══════════════════════════════════════════════
     document.querySelectorAll('.nav-list li').forEach(li => {
         li.addEventListener('click', () => {
             document.querySelectorAll('.nav-list li').forEach(l => l.classList.remove('active'));
@@ -1806,11 +2219,13 @@
                 else if (currentRole === 'therapist') show('therapistDashboard');
                 else if (currentRole === 'admin') show('adminDashboard');
             }
+            else if (tab === 'mood') { show('moodSection'); loadMoodFullView(); }
             else if (tab === 'messages') {
                 show('messagesSection');
                 loadConversations();
                 if (dmActiveContactId) openConversation(dmActiveContactId, dmActiveContactName, dmActiveContactRole);
             }
+            else if (tab === 'homework') { show('homeworkSection'); loadHomework(); }
             else if (tab === 'plans') { show('plansSection'); loadPlans(); }
             else if (tab === 'symptoms') {
                 show('symptomsSection');
@@ -1850,6 +2265,9 @@
         });
     });
 
+    // ═══════════════════════════════════════════════
+    // MODALS
+    // ═══════════════════════════════════════════════
     window.closeModal = (id) => {
         document.getElementById(id).style.display = 'none';
         if (![...document.querySelectorAll('.modal')].some(m => m.style.display === 'block'))
@@ -1869,6 +2287,9 @@
         }
     });
 
+    // ═══════════════════════════════════════════════
+    // NOTIFICATIONS
+    // ═══════════════════════════════════════════════
     async function loadNotificationCount() {
         const res = await apiCall('notifications_count', {}, 'GET');
         const badge = document.getElementById('notifBadge');
@@ -1889,7 +2310,8 @@
             appointment_booked: 'fa-calendar-plus', appointment_confirmed: 'fa-calendar-check',
             appointment_denied: 'fa-calendar-times', appointment_cancelled: 'fa-calendar-times',
             appointment_completed: 'fa-flag-checkered', appointment_reminder: 'fa-clock',
-            new_message: 'fa-comment', rating_received: 'fa-star', therapist_registered: 'fa-user-md'
+            new_message: 'fa-comment', rating_received: 'fa-star', therapist_registered: 'fa-user-md',
+            homework_assigned: 'fa-tasks', homework_completed: 'fa-check-double'
         };
         res.notifications.forEach(n => {
             const icon = icons[n.type] || 'fa-bell';
@@ -1953,6 +2375,9 @@
         }, 30000);
     }
 
+    // ═══════════════════════════════════════════════
+    // DIRECT MESSAGES
+    // ═══════════════════════════════════════════════
     function formatBubbleTime(iso) {
         if (!iso) return '';
         const d = new Date(iso + 'Z');
@@ -2118,6 +2543,9 @@
     });
     startDmPolling();
 
+    // ═══════════════════════════════════════════════
+    // PWA + PUSH
+    // ═══════════════════════════════════════════════
     async function registerServiceWorker() {
         if (!('serviceWorker' in navigator)) return null;
         try {
