@@ -244,7 +244,6 @@
         .score-cell { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
         .score-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 0.2rem; }
 
-        /* MOOD CHECK-IN */
         .mood-card { background: linear-gradient(135deg, #e8f5f3, #d5ede8); border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.6); }
         html[data-theme="dark"] .mood-card { background: linear-gradient(135deg, #1e2a42, #253449); border-color: var(--border); }
         .mood-card h3 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
@@ -265,7 +264,6 @@
         .mood-dot .day { font-size: 0.55rem; color: var(--text-muted); margin-top: 0.25rem; }
         .mood-today-label { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
 
-        /* HOMEWORK */
         .homework-item { background: var(--bg-card-alt); border-radius: 1rem; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
         .homework-item.status-pending { border-left-color: #f39c12; }
         .homework-item.status-in_progress { border-left-color: #3498db; }
@@ -280,7 +278,6 @@
         .hw-status-badge.in_progress { background: #bee3f8; color: #2a4365; }
         .hw-status-badge.completed { background: #c6f6d5; color: #22543d; }
 
-        /* MESSAGES */
         .messages-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1.2rem; height: 70vh; min-height: 500px; max-height: 700px; }
         .conversation-list-panel { background: var(--bg-card); border-radius: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
         .conversation-list-panel h3 { padding: 1.2rem 1.4rem; font-size: 1.05rem; color: var(--text-primary); border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -322,13 +319,11 @@
         .chat-placeholder { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; height: 100%; color: var(--text-muted); text-align: center; padding: 2rem; }
         .chat-placeholder i { font-size: 3rem; opacity: 0.4; }
 
-        /* THEME TOGGLE */
         .theme-toggle { background: rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.15s; color: var(--accent-gold); font-size: 0.9rem; font-weight: 500; }
         .theme-toggle:hover { background: rgba(255,255,255,0.15); }
         .theme-toggle i { font-size: 1.1rem; }
         .theme-toggle span { margin-left: 0.6rem; margin-right: auto; color: var(--sidebar-text); }
 
-        /* HAMBURGER */
         .menu-toggle { display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1001; background: var(--sidebar-bg); color: var(--accent-gold); border: none; width: 44px; height: 44px; border-radius: 12px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); align-items: center; justify-content: center; }
         .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(2px); }
 
@@ -379,7 +374,7 @@
         <li data-tab="mood" id="moodNavItem"><i class="fas fa-smile"></i> Mood Check-in</li>
         <li data-tab="appointments"><i class="fas fa-calendar-alt"></i> Appointments</li>
         <li data-tab="messages"><i class="fas fa-comment-dots"></i> Messages <span id="messagesNavBadge" class="nav-badge" style="display:none;">0</span></li>
-        <li data-tab="homework"><i class="fas fa-tasks"></i> Homework <span id="homeworkNavBadge" class="nav-badge" style="display:none;">0</span></li>
+        <li data-tab="homework" id="homeworkNav"><i class="fas fa-tasks"></i> Homework <span id="homeworkNavBadge" class="nav-badge" style="display:none;">0</span></li>
         <li data-tab="plans"><i class="fas fa-clipboard-list"></i> Treatment Plans</li>
         <li data-tab="symptoms" id="symptomsNavItem"><i class="fas fa-chart-line"></i> Symptom Tracker</li>
         <li data-tab="groups"><i class="fas fa-users"></i> Group Sessions</li>
@@ -412,9 +407,7 @@
         <div class="stat-card"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="info"><span class="number" id="statCompleted">0</span><div class="label">Completed</div></div></div>
     </div>
 
-    <!-- CLIENT DASHBOARD -->
     <div id="clientDashboard">
-        <!-- Mood Check-in Card (only shows when today's check-in is missing) -->
         <div id="moodCheckinCard" style="display:none;"></div>
 
         <div class="appointment-section">
@@ -438,12 +431,10 @@
         </div>
     </div>
 
-    <!-- MOOD SECTION -->
     <div id="moodSection" style="display:none;">
         <div id="moodFullView"></div>
     </div>
 
-    <!-- HOMEWORK -->
     <div id="homeworkSection" style="display:none;">
         <div class="appointment-section">
             <div class="section-header">
@@ -476,7 +467,7 @@
                     <span class="tab" data-stype="GAD7">GAD-7 (Anxiety)</span>
                 </div>
                 <div id="symptomChartContainer" style="margin-bottom:1rem;">
-                    <div class="chart-bars" id="symptomChart"><div style="color:var(--text-muted);">No data yet. Take your first assessment to see your progress.</div></div>
+                    <div class="chart-bars" id="symptomChart"><div style="color:var(--text-muted);">No data yet.</div></div>
                 </div>
                 <h3 style="font-size:1rem; margin-bottom:0.5rem; color:var(--text-primary);">History</h3>
                 <div id="symptomsHistory"><div class="appointment-item">Loading...</div></div>
@@ -928,7 +919,6 @@
     let dmLastMessageId = 0, dmPollInterval = null, dmAllContacts = [];
     let currentMoodSelection = null;
 
-    // ─── THEME ───
     function initTheme() {
         const saved = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -1104,9 +1094,6 @@
         if (currentRole === 'therapist') loadTherapistData();
     };
 
-    // ═══════════════════════════════════════════════
-    // MOOD CHECK-IN
-    // ═══════════════════════════════════════════════
     const MOOD_EMOJIS = [
         { score: 5, emoji: '😄', label: 'Great' },
         { score: 4, emoji: '🙂', label: 'Good' },
@@ -1114,18 +1101,15 @@
         { score: 2, emoji: '😟', label: 'Low' },
         { score: 1, emoji: '😢', label: 'Bad' }
     ];
-
     function moodEmojiForScore(score) {
         const m = MOOD_EMOJIS.find(x => x.score === score);
         return m ? m.emoji : '😐';
     }
-
     async function loadMoodCheckinCard() {
         const card = document.getElementById('moodCheckinCard');
         if (currentRole !== 'client') { card.style.display = 'none'; return; }
         const res = await apiCall('mood_today', {}, 'GET');
         if (res.success && res.checkin) {
-            // Already checked in today — show a nice confirmation card
             const streakRes = await apiCall('mood_streak', {}, 'GET');
             const streak = streakRes.success ? streakRes.streak : 0;
             card.innerHTML = `
@@ -1147,7 +1131,6 @@
             card.style.display = 'block';
         }
     }
-
     function renderMoodPicker(card) {
         currentMoodSelection = null;
         card.innerHTML = `
@@ -1169,7 +1152,6 @@
                 </div>
             </div>`;
     }
-
     window.selectMood = function(score) {
         currentMoodSelection = score;
         document.querySelectorAll('.mood-emoji').forEach(el => {
@@ -1177,7 +1159,6 @@
         });
         document.getElementById('moodSaveBtn').disabled = false;
     };
-
     window.saveMoodCheckin = async function() {
         if (!currentMoodSelection) return;
         const note = document.getElementById('moodNoteInput').value.trim();
@@ -1192,7 +1173,6 @@
             setButtonLoading(btn, false);
         }
     };
-
     window.editTodayMood = async function() {
         const card = document.getElementById('moodCheckinCard');
         renderMoodPicker(card);
@@ -1202,19 +1182,14 @@
             document.getElementById('moodNoteInput').value = res.checkin.note || '';
         }
     };
-
     async function loadMoodFullView() {
         const container = document.getElementById('moodFullView');
         container.innerHTML = '<div class="appointment-section"><div class="appointment-item">Loading mood history...</div></div>';
-
         const todayRes = await apiCall('mood_today', {}, 'GET');
         const histRes = await apiCall('mood_history', {}, 'GET');
         const streakRes = await apiCall('mood_streak', {}, 'GET');
         const streak = streakRes.success ? streakRes.streak : 0;
-
         const history = histRes.success ? histRes.history : [];
-
-        // Build the past-14-days chart (fill missing days with 0)
         const days = [];
         const today = new Date();
         for (let i = 13; i >= 0; i--) {
@@ -1229,11 +1204,9 @@
                 note: found ? found.note : ''
             });
         }
-
         const avg = history.length
             ? Math.round((history.slice(0, 7).reduce((s, h) => s + h.mood_score, 0) / Math.min(history.length, 7)) * 10) / 10
             : 0;
-
         container.innerHTML = `
             <div class="appointment-section">
                 <div class="section-header">
@@ -1243,7 +1216,7 @@
                 ${todayRes.success && todayRes.checkin ? '' : `
                     <div class="mood-card" style="text-align:center;">
                         <p style="margin-bottom:1rem; color:var(--text-secondary);">You haven't checked in today yet.</p>
-                        <button class="btn btn-primary" onclick="show('clientDashboard'); loadMoodCheckinCard();">Check in now</button>
+                        <button class="btn btn-primary" onclick="document.querySelector('.nav-list li[data-tab=dashboard]').click();">Go to Dashboard</button>
                     </div>
                 `}
                 <div class="mood-chart-wrap">
@@ -1263,7 +1236,6 @@
                 </div>
                 ${avg > 0 ? `<div style="margin-top:1.5rem; text-align:center; color:var(--text-secondary); font-size:0.9rem;">7-day average: <strong style="font-size:1.3rem; color:var(--accent);">${avg.toFixed(1)}</strong> / 5</div>` : ''}
             </div>
-
             <div class="appointment-section">
                 <div class="section-header"><h2><i class="fas fa-history"></i> Recent Entries</h2></div>
                 <div class="appointment-list">
@@ -1283,9 +1255,6 @@
         `;
     }
 
-    // ═══════════════════════════════════════════════
-    // HOMEWORK
-    // ═══════════════════════════════════════════════
     async function loadHomework() {
         const res = await apiCall('homework_list', {}, 'GET');
         const list = document.getElementById('homeworkList');
@@ -1384,9 +1353,6 @@
         setButtonLoading(btn, false);
     });
 
-    // ═══════════════════════════════════════════════
-    // PLANS
-    // ═══════════════════════════════════════════════
     async function loadPlans() {
         const res = await apiCall('plans_list', {}, 'GET');
         const list = document.getElementById('plansList');
@@ -1493,9 +1459,6 @@
         setButtonLoading(btn, false);
     });
 
-    // ═══════════════════════════════════════════════
-    // SYMPTOMS (unchanged from previous)
-    // ═══════════════════════════════════════════════
     async function loadSymptomQuestions() {
         const res = await apiCall('symptoms_questions', {}, 'GET');
         if (res.success) symptomQuestions = { PHQ9: res.PHQ9, GAD7: res.GAD7 };
@@ -1701,9 +1664,6 @@
         });
     });
 
-    // ═══════════════════════════════════════════════
-    // GROUPS
-    // ═══════════════════════════════════════════════
     async function loadGroups() {
         const res = await apiCall('groups_list', {}, 'GET');
         const list = document.getElementById('groupsList');
@@ -1769,9 +1729,6 @@
         if (r.success) { closeModal('groupModal'); loadGroups(); }
     });
 
-    // ═══════════════════════════════════════════════
-    // CRISIS
-    // ═══════════════════════════════════════════════
     window.openCrisisModal = async () => {
         const res = await apiCall('crisis_list', {}, 'GET');
         const list = document.getElementById('crisisList');
@@ -1856,9 +1813,6 @@
         if (r.success) { closeModal('crisisEditModal'); loadCrisisAdmin(); }
     });
 
-    // ═══════════════════════════════════════════════
-    // SOAP + VIDEO (unchanged)
-    // ═══════════════════════════════════════════════
     async function loadSoapNotes(apptId) {
         const res = await apiCall(`soap_get?appointment_id=${apptId}`, {}, 'GET');
         if (res.success) {
@@ -1965,9 +1919,6 @@
         });
     });
 
-    // ═══════════════════════════════════════════════
-    // THERAPIST DATA
-    // ═══════════════════════════════════════════════
     async function loadTherapistData() {
         const pend = await apiCall('get_pending_appointments', {}, 'GET');
         const list = document.getElementById('pendingRequestsList');
@@ -2025,9 +1976,6 @@
     window.denyAppointment = async (id) => { if (!confirm('Deny?')) return; const r = await apiCall('deny_appointment', { id }); showToast(r.message, r.success?'success':'error'); loadTherapistData(); };
     window.completeAppointment = async (id) => { if (!confirm('Complete?')) return; const r = await apiCall('complete_appointment', { id }); showToast(r.message, r.success?'success':'error'); loadTherapistData(); };
 
-    // ═══════════════════════════════════════════════
-    // ADMIN
-    // ═══════════════════════════════════════════════
     async function loadAdminData() {
         const res = await apiCall('admin_get_users', {}, 'GET');
         const list = document.getElementById('adminUserList');
@@ -2061,9 +2009,6 @@
     window.promoteUser = async (id) => { if (!confirm('Promote to Admin?')) return; const r = await apiCall('admin_promote_user', { user_id: id }); showToast(r.message, r.success?'success':'error'); loadAdminData(); };
     window.demoteUser = async (id) => { if (!confirm('Demote to Client?')) return; const r = await apiCall('admin_demote_user', { user_id: id }); showToast(r.message, r.success?'success':'error'); loadAdminData(); };
 
-    // ═══════════════════════════════════════════════
-    // RESOURCES
-    // ═══════════════════════════════════════════════
     async function loadResources() {
         const res = await apiCall('get_resources', {}, 'GET');
         const grid = document.getElementById('resourceGrid');
@@ -2089,9 +2034,6 @@
         if (r.success) { closeModal('addResourceModal'); e.target.reset(); loadResources(); }
     });
 
-    // ═══════════════════════════════════════════════
-    // PROFILE / PASSWORD / LOGOUT / BOOKING
-    // ═══════════════════════════════════════════════
     document.getElementById('profilePicture').addEventListener('change', async function() {
         const file = this.files[0];
         if (!file) return;
@@ -2197,9 +2139,6 @@
         if (room) openVideoSession(room);
     });
 
-    // ═══════════════════════════════════════════════
-    // NAVIGATION
-    // ═══════════════════════════════════════════════
     document.querySelectorAll('.nav-list li').forEach(li => {
         li.addEventListener('click', () => {
             document.querySelectorAll('.nav-list li').forEach(l => l.classList.remove('active'));
@@ -2265,9 +2204,6 @@
         });
     });
 
-    // ═══════════════════════════════════════════════
-    // MODALS
-    // ═══════════════════════════════════════════════
     window.closeModal = (id) => {
         document.getElementById(id).style.display = 'none';
         if (![...document.querySelectorAll('.modal')].some(m => m.style.display === 'block'))
@@ -2287,9 +2223,6 @@
         }
     });
 
-    // ═══════════════════════════════════════════════
-    // NOTIFICATIONS
-    // ═══════════════════════════════════════════════
     async function loadNotificationCount() {
         const res = await apiCall('notifications_count', {}, 'GET');
         const badge = document.getElementById('notifBadge');
@@ -2375,9 +2308,6 @@
         }, 30000);
     }
 
-    // ═══════════════════════════════════════════════
-    // DIRECT MESSAGES
-    // ═══════════════════════════════════════════════
     function formatBubbleTime(iso) {
         if (!iso) return '';
         const d = new Date(iso + 'Z');
@@ -2543,9 +2473,6 @@
     });
     startDmPolling();
 
-    // ═══════════════════════════════════════════════
-    // PWA + PUSH
-    // ═══════════════════════════════════════════════
     async function registerServiceWorker() {
         if (!('serviceWorker' in navigator)) return null;
         try {
@@ -2584,9 +2511,6 @@
         }
     }
 
-    // ═══════════════════════════════════════════════
-    // MOBILE SIDEBAR
-    // ═══════════════════════════════════════════════
     window.toggleSidebar = function() {
         const sidebar = document.querySelector('.sidebar');
         const overlay = document.getElementById('sidebarOverlay');
@@ -2611,7 +2535,6 @@
         });
     });
 
-    // INIT
     (async () => {
         await loadSymptomQuestions();
         loadUserData();
