@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThinkTech Therapy – Professional Online Counselling</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMWEyYTNhIi8+PHBhdGggZD0iTTk2IDQ4Yy0xNiAwLTMwIDE0LTMwIDMwdjE2YzAgMTYgMTQgMzAgMzAgMzBzMzAtMTQgMzAtMzBWNzhjMC0xNi0xNC0zMC0zMC0zMHoiIGZpbGw9IiMyYTlkOGYiLz48cGF0aCBkPSJNOTYgMTI4Yy0yNCAwLTQ0IDE2LTQ4IDQwaDk2Yy00LTI0LTI0LTQwLTQ4LTQweiIgZmlsbD0iI2U5YzQ2YSIvPjwvc3ZnPg==">
     <meta name="theme-color" content="#2a9d8f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -56,7 +57,6 @@
         .cta h2 { font-size: 2.5rem; margin-bottom: 1rem; }
         .cta p { max-width: 600px; margin: 0 auto 2rem; opacity: 0.9; }
         footer { background: #0d1b2a; color: #a0b0c0; padding: 2rem 0; text-align: center; }
-
         .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 999; }
         .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 2rem; z-index: 1000; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
         .modal .close-modal { position: absolute; top: 12px; right: 18px; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #a0aec0; }
@@ -66,7 +66,6 @@
         .modal input:focus, .modal select:focus { outline: none; border-color: #2a9d8f; }
         .modal .btn { width: 100%; margin-top: 1.2rem; }
         .modal .btn-link { background: none; border: none; color: #2a9d8f; font-weight: 500; cursor: pointer; margin-top: 1rem; width: 100%; text-align: center; font-family: inherit; }
-
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1001; display: flex; flex-direction: column; gap: 0.6rem; }
         .toast { background: white; border-left: 5px solid #2a9d8f; padding: 0.8rem 1.2rem; border-radius: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; animation: slideIn 0.3s ease; }
         .toast.success { border-left-color: #2ecc71; }
@@ -117,9 +116,18 @@
     <div class="container">
         <h2>What Our Clients Say</h2>
         <div class="testimonial-grid">
-            <div class="testimonial-card"><p>"ThinkTech Therapy gave me the tools to manage my anxiety. The platform is easy to use and my therapist is wonderful."</p><div class="author">– Sarah M.</div></div>
-            <div class="testimonial-card"><p>"I've tried other services, but the quality of care here is unmatched. Highly recommend to anyone seeking support."</p><div class="author">– James K.</div></div>
-            <div class="testimonial-card"><p>"Secure, convenient, and professional. The video sessions feel just like in-person visits."</p><div class="author">– Emily R.</div></div>
+            <div class="testimonial-card">
+                <p>"ThinkTech Therapy gave me the tools to manage my anxiety. The platform is easy to use and my therapist is wonderful."</p>
+                <div class="author">– Kondwani Z.</div>
+            </div>
+            <div class="testimonial-card">
+                <p>"I've tried other services, but the quality of care here is unmatched. Highly recommend to anyone seeking support."</p>
+                <div class="author">– Sunshine C.</div>
+            </div>
+            <div class="testimonial-card">
+                <p>"Secure, convenient, and professional. The video sessions feel just like in-person visits."</p>
+                <div class="author">– Simeon M.</div>
+            </div>
         </div>
     </div>
 </section>
@@ -219,13 +227,11 @@
 (function() {
     "use strict";
 
-    // Redirect if already logged in
     fetch('/api/get_user_data', { credentials: 'same-origin' })
         .then(r => r.json())
         .then(data => { if (data.success) window.location.href = '/dashboard'; })
         .catch(() => {});
 
-    // PWA — register service worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/service-worker.js')
@@ -255,11 +261,7 @@
     }
 
     async function apiCall(endpoint, data = {}, method = 'POST') {
-        const options = {
-            method,
-            credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/json' }
-        };
+        const options = { method, credentials: 'same-origin', headers: { 'Content-Type': 'application/json' } };
         if (method !== 'GET') options.body = JSON.stringify(data);
         try {
             const res = await fetch('/api/' + endpoint, options);

@@ -10,18 +10,23 @@ const { initPush } = require('./push');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Uploads directory (uses persistent disk if configured)
 const uploadsDir = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
-// Trust proxy (Render uses a reverse proxy)
 app.set('trust proxy', 1);
 
-// Initialize services
-initEmail();
-initPush();
+console.log('🔧 Initializing services...');
+try {
+  initEmail();
+} catch (err) {
+  console.error('🔧 initEmail() failed:', err.message);
+}
+try {
+  initPush();
+} catch (err) {
+  console.error('🔧 initPush() failed:', err.message);
+}
 
-// Middleware
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -36,7 +41,6 @@ app.use(session({
   }
 }));
 
-// Static files with special headers for PWA
 const staticOptions = {
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('service-worker.js')) {
@@ -51,7 +55,6 @@ const staticOptions = {
 app.use(express.static(path.join(__dirname, 'public'), staticOptions));
 app.use('/uploads', express.static(uploadsDir));
 
-// API routes
 app.use('/api', require('./routes/auth'));
 app.use('/api', require('./routes/user'));
 app.use('/api', require('./routes/appointments'));
@@ -59,27 +62,22 @@ app.use('/api', require('./routes/chat'));
 app.use('/api', require('./routes/admin'));
 app.use('/api', require('./routes/clinical'));
 app.use('/api', require('./routes/notifications'));
+app.use('/api', require('./routes/messages'));
 
-// Protected dashboard
 app.get('/dashboard', (req, res) => {
   if (!req.session.user_id) return res.redirect('/');
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
-// Root
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ success: false, message: err.message || 'Server error' });
 });
 
-// ─────────────────────────────────────────────
-// Appointment reminder scheduler
-// ─────────────────────────────────────────────
 function startReminderScheduler() {
   const db = require('./database');
   const { sendEmail, templates } = require('./email');
