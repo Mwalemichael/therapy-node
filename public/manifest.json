@@ -9,21 +9,10 @@
   "background_color": "#1a2a3a",
   "theme_color": "#2a9d8f",
   "icons": [
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMWEyYTNhIi8+PHBhdGggZD0iTTk2IDQ4Yy0xNiAwLTMwIDE0LTMwIDMwdjE2YzAgMTYgMTQgMzAgMzAgMzBzMzAtMTQgMzAtMzBWNzhjMC0xNi0xNC0zMC0zMC0zMHoiIGZpbGw9IiMyYTlkOGYiLz48cGF0aCBkPSJNOTYgMTI4Yy0yNCAwLTQ0IDE2LTQ4IDQwaDk2Yy00LTI0LTI0LTQwLTQ4LTQweiIgZmlsbD0iI2U5YzQ2YSIvPjwvc3ZnPg==",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzFhMmEzYSIvPjxwYXRoIGQ9Ik0yNTYgMTI4Yy00MiAwLTgwIDM4LTgwIDgwdjQyYzAgNDIgMzggODAgODAgODBzODAtMzggODAtODB2LTQyYzAtNDItMzgtODAtODAtODB6IiBmaWxsPSIjMmE5ZDhmIi8+PHBhdGggZD0iTTI1NiAzNDBjLTY0IDAtMTE2IDQyLTEyOCAxMDZoMjU2Yy0xMi02NC02NC0xMDYtMTI4LTEwNnoiIGZpbGw9IiNlOWM0NmEiLz48L3N2Zz4=",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
-  "categories": ["health", "medical"],
-  "shortcuts": [
-    { "name": "Dashboard", "url": "/dashboard" }
-  ]
+  "categories": ["health", "medical"]
 }

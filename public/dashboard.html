@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard – ThinkTech Therapy</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMWEyYTNhIi8+PHBhdGggZD0iTTk2IDQ4Yy0xNiAwLTMwIDE0LTMwIDMwdjE2YzAgMTYgMTQgMzAgMzAgMzBzMzAtMTQgMzAtMzBWNzhjMC0xNi0xNC0zMC0zMC0zMHoiIGZpbGw9IiMyYTlkOGYiLz48cGF0aCBkPSJNOTYgMTI4Yy0yNCAwLTQ0IDE2LTQ4IDQwaDk2Yy00LTI0LTI0LTQwLTQ4LTQweiIgZmlsbD0iI2U5YzQ2YSIvPjwvc3ZnPg==">
+
+    <!-- Favicons (real PNG files) -->
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2a9d8f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ThinkTech">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMWEyYTNhIi8+PHBhdGggZD0iTTk2IDQ4Yy0xNiAwLTMwIDE0LTMwIDMwdjE2YzAgMTYgMTQgMzAgMzAgMzBzMzAtMTQgMzAtMzBWNzhjMC0xNi0xNC0zMC0zMC0zMHoiIGZpbGw9IiMyYTlkOGYiLz48cGF0aCBkPSJNOTYgMTI4Yy0yNCAwLTQ0IDE2LTQ4IDQwaDk2Yy00LTI0LTI0LTQwLTQ4LTQweiIgZmlsbD0iI2U5YzQ2YSIvPjwvc3ZnPg==">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -243,7 +249,6 @@
         .score-badge.severe { background: #fed7d7; color: #9b2c2c; }
         .score-cell { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
         .score-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 0.2rem; }
-
         .mood-card { background: linear-gradient(135deg, #e8f5f3, #d5ede8); border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.6); }
         html[data-theme="dark"] .mood-card { background: linear-gradient(135deg, #1e2a42, #253449); border-color: var(--border); }
         .mood-card h3 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
@@ -263,7 +268,6 @@
         .mood-dot .bar { width: 18px; border-radius: 60px 60px 4px 4px; background: var(--accent); min-height: 6px; transition: 0.15s; }
         .mood-dot .day { font-size: 0.55rem; color: var(--text-muted); margin-top: 0.25rem; }
         .mood-today-label { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
-
         .homework-item { background: var(--bg-card-alt); border-radius: 1rem; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
         .homework-item.status-pending { border-left-color: #f39c12; }
         .homework-item.status-in_progress { border-left-color: #3498db; }
@@ -277,7 +281,6 @@
         .hw-status-badge.pending { background: #fefcbf; color: #744210; }
         .hw-status-badge.in_progress { background: #bee3f8; color: #2a4365; }
         .hw-status-badge.completed { background: #c6f6d5; color: #22543d; }
-
         .messages-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1.2rem; height: 70vh; min-height: 500px; max-height: 700px; }
         .conversation-list-panel { background: var(--bg-card); border-radius: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
         .conversation-list-panel h3 { padding: 1.2rem 1.4rem; font-size: 1.05rem; color: var(--text-primary); border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -318,15 +321,12 @@
         .chat-composer button:disabled { opacity: 0.5; cursor: not-allowed; }
         .chat-placeholder { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; height: 100%; color: var(--text-muted); text-align: center; padding: 2rem; }
         .chat-placeholder i { font-size: 3rem; opacity: 0.4; }
-
         .theme-toggle { background: rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.15s; color: var(--accent-gold); font-size: 0.9rem; font-weight: 500; }
         .theme-toggle:hover { background: rgba(255,255,255,0.15); }
         .theme-toggle i { font-size: 1.1rem; }
         .theme-toggle span { margin-left: 0.6rem; margin-right: auto; color: var(--sidebar-text); }
-
         .menu-toggle { display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1001; background: var(--sidebar-bg); color: var(--accent-gold); border: none; width: 44px; height: 44px; border-radius: 12px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); align-items: center; justify-content: center; }
         .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(2px); }
-
         @media (max-width: 820px) {
             .sidebar { width: 200px; padding: 1rem; }
             .main-content { padding: 1rem; }
@@ -409,7 +409,6 @@
 
     <div id="clientDashboard">
         <div id="moodCheckinCard" style="display:none;"></div>
-
         <div class="appointment-section">
             <div class="section-header">
                 <h2><i class="fas fa-calendar-alt"></i> Your Sessions</h2>
@@ -431,9 +430,7 @@
         </div>
     </div>
 
-    <div id="moodSection" style="display:none;">
-        <div id="moodFullView"></div>
-    </div>
+    <div id="moodSection" style="display:none;"><div id="moodFullView"></div></div>
 
     <div id="homeworkSection" style="display:none;">
         <div class="appointment-section">
@@ -473,32 +470,25 @@
                 <div id="symptomsHistory"><div class="appointment-item">Loading...</div></div>
             </div>
         </div>
-
         <div id="therapistSymptomsView" style="display:none;">
             <div id="therapistClientList" class="appointment-section">
                 <div class="section-header">
                     <h2><i class="fas fa-users"></i> Client Assessments</h2>
                     <span style="font-size:0.85rem; color:var(--text-secondary);">Latest PHQ-9 & GAD-7 scores + Mood</span>
                 </div>
-                <div class="appointment-list" id="therapistSymptomsClients">
-                    <div class="appointment-item">Loading clients...</div>
-                </div>
+                <div class="appointment-list" id="therapistSymptomsClients"><div class="appointment-item">Loading clients...</div></div>
             </div>
             <div id="therapistClientDetail" style="display:none;">
                 <div class="appointment-section">
                     <div class="section-header">
                         <h2><i class="fas fa-user"></i> <span id="detailClientName">Client</span></h2>
-                        <button class="btn btn-secondary btn-sm" onclick="backToClientList()">
-                            <i class="fas fa-arrow-left"></i> Back to list
-                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="backToClientList()"><i class="fas fa-arrow-left"></i> Back to list</button>
                     </div>
                     <div class="therapist-tabs">
                         <span class="tab active" data-dtype="PHQ9">PHQ-9 (Depression)</span>
                         <span class="tab" data-dtype="GAD7">GAD-7 (Anxiety)</span>
                     </div>
-                    <div class="chart-bars" id="detailChart" style="margin-bottom:1rem;">
-                        <div style="color:var(--text-muted); padding:1rem;">No data yet.</div>
-                    </div>
+                    <div class="chart-bars" id="detailChart" style="margin-bottom:1rem;"><div style="color:var(--text-muted); padding:1rem;">No data yet.</div></div>
                     <h3 style="font-size:1rem; margin-bottom:0.5rem; color:var(--text-primary);">Assessment History</h3>
                     <div id="detailHistory"><div class="appointment-item">Loading...</div></div>
                 </div>
@@ -540,9 +530,7 @@
         <div class="messages-layout">
             <div class="conversation-list-panel">
                 <h3><i class="fas fa-comments" style="color:var(--accent);"></i> Conversations</h3>
-                <div class="conversation-list" id="conversationList">
-                    <div class="conv-empty">Loading conversations...</div>
-                </div>
+                <div class="conversation-list" id="conversationList"><div class="conv-empty">Loading conversations...</div></div>
             </div>
             <div class="chat-window" id="chatWindow">
                 <div class="chat-placeholder" id="chatPlaceholder">
@@ -559,11 +547,8 @@
                     </div>
                     <div class="chat-thread" id="chatThread"></div>
                     <div class="chat-composer">
-                        <textarea id="dmInput" placeholder="Type a message..." rows="1"
-                            onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendDirectMessage();}"></textarea>
-                        <button id="dmSendBtn" onclick="sendDirectMessage()" title="Send">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
+                        <textarea id="dmInput" placeholder="Type a message..." rows="1" onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendDirectMessage();}"></textarea>
+                        <button id="dmSendBtn" onclick="sendDirectMessage()" title="Send"><i class="fas fa-paper-plane"></i></button>
                     </div>
                 </div>
             </div>
@@ -792,9 +777,7 @@
 <div class="modal" id="assessmentModal" style="max-width: 700px;">
     <button class="close-modal" onclick="closeModal('assessmentModal')">&times;</button>
     <h3 id="assessmentTitle">PHQ-9 Assessment</h3>
-    <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
-        Over the last 2 weeks, how often have you been bothered by the following?
-    </p>
+    <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">Over the last 2 weeks, how often have you been bothered by the following?</p>
     <form id="assessmentForm">
         <input type="hidden" id="assessmentType" value="PHQ9">
         <div id="assessmentQuestions"></div>
@@ -831,9 +814,7 @@
 <div class="modal" id="crisisModal" style="max-width: 600px;">
     <button class="close-modal" onclick="closeModal('crisisModal')">&times;</button>
     <h3 style="color:#e74c3c;"><i class="fas fa-phone-alt"></i> Crisis Resources</h3>
-    <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
-        If you are in immediate danger, call <strong>911</strong> or go to your nearest emergency room.
-    </p>
+    <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">If you are in immediate danger, call <strong>911</strong> or go to your nearest emergency room.</p>
     <div id="crisisList"><div class="appointment-item">Loading...</div></div>
 </div>
 
@@ -883,9 +864,7 @@
                     <label>Recording URL</label>
                     <input type="url" id="soapRecordingUrl" placeholder="https://...">
                 </div>
-                <button class="btn btn-primary btn-sm" onclick="saveSoapNotes()" style="margin-top:0.5rem;">
-                    <i class="fas fa-save"></i> Save SOAP Notes
-                </button>
+                <button class="btn btn-primary btn-sm" onclick="saveSoapNotes()" style="margin-top:0.5rem;"><i class="fas fa-save"></i> Save SOAP Notes</button>
             </div>
         </div>
     </div>
@@ -896,9 +875,7 @@
         <h3><i class="fas fa-bell"></i> Notifications</h3>
         <button onclick="markAllNotificationsRead()">Mark all read</button>
     </div>
-    <div class="notif-list" id="notifList">
-        <div class="notif-empty">Loading…</div>
-    </div>
+    <div class="notif-list" id="notifList"><div class="notif-empty">Loading…</div></div>
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
@@ -911,10 +888,8 @@
     let currentSymptomType = 'PHQ9';
     let symptomQuestions = { PHQ9: [], GAD7: [] };
     let allPlans = [];
-    let notifPollInterval = null;
-    let notifPanelOpen = false;
-    let currentDetailClientId = null;
-    let currentDetailType = 'PHQ9';
+    let notifPollInterval = null, notifPanelOpen = false;
+    let currentDetailClientId = null, currentDetailType = 'PHQ9';
     let dmActiveContactId = null, dmActiveContactName = null, dmActiveContactRole = null;
     let dmLastMessageId = 0, dmPollInterval = null, dmAllContacts = [];
     let currentMoodSelection = null;
@@ -922,8 +897,7 @@
     function initTheme() {
         const saved = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        setTheme(theme);
+        setTheme(saved || (prefersDark ? 'dark' : 'light'));
     }
     function setTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
@@ -934,8 +908,7 @@
         if (label) label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
     }
     window.toggleTheme = function() {
-        const current = document.documentElement.getAttribute('data-theme') || 'light';
-        setTheme(current === 'dark' ? 'light' : 'dark');
+        setTheme((document.documentElement.getAttribute('data-theme') || 'light') === 'dark' ? 'light' : 'dark');
     };
     initTheme();
 
@@ -1027,12 +1000,8 @@
         appointments.forEach(a => {
             const statusClass = a.status || 'pending';
             let actions = '';
-            if (a.status === 'pending' || a.status === 'confirmed') {
-                actions += `<button class="btn btn-danger btn-sm" onclick="cancelAppointment(${a.id})">Cancel</button>`;
-            }
-            if (a.status === 'completed') {
-                actions += `<button class="btn btn-success btn-sm" onclick="openRatingModal(${a.id}, '${esc(a.therapist_name)}')"><i class="fas fa-star"></i> Rate</button>`;
-            }
+            if (a.status === 'pending' || a.status === 'confirmed') actions += `<button class="btn btn-danger btn-sm" onclick="cancelAppointment(${a.id})">Cancel</button>`;
+            if (a.status === 'completed') actions += `<button class="btn btn-success btn-sm" onclick="openRatingModal(${a.id}, '${esc(a.therapist_name)}')"><i class="fas fa-star"></i> Rate</button>`;
             list.innerHTML += `<div class="appointment-item">
                 <div class="appointment-info">
                     <div class="avatar-sm">${esc((a.therapist_name || '??').substring(0,2)).toUpperCase()}</div>
@@ -1165,13 +1134,8 @@
         const btn = document.getElementById('moodSaveBtn');
         setButtonLoading(btn, true, 'Saving...');
         const res = await apiCall('mood_checkin', { mood_score: currentMoodSelection, note });
-        if (res.success) {
-            showToast('Mood saved! Keep up the streak 🎉', 'success');
-            await loadMoodCheckinCard();
-        } else {
-            showToast(res.message || 'Failed to save', 'error');
-            setButtonLoading(btn, false);
-        }
+        if (res.success) { showToast('Mood saved! Keep up the streak 🎉', 'success'); await loadMoodCheckinCard(); }
+        else { showToast(res.message || 'Failed to save', 'error'); setButtonLoading(btn, false); }
     };
     window.editTodayMood = async function() {
         const card = document.getElementById('moodCheckinCard');
@@ -1197,16 +1161,9 @@
             d.setDate(today.getDate() - i);
             const key = d.toISOString().split('T')[0];
             const found = history.find(h => h.date === key);
-            days.push({
-                date: key,
-                label: d.toLocaleDateString([], { weekday: 'short' }).substring(0, 2),
-                score: found ? found.mood_score : 0,
-                note: found ? found.note : ''
-            });
+            days.push({ date: key, label: d.toLocaleDateString([], { weekday: 'short' }).substring(0, 2), score: found ? found.mood_score : 0, note: found ? found.note : '' });
         }
-        const avg = history.length
-            ? Math.round((history.slice(0, 7).reduce((s, h) => s + h.mood_score, 0) / Math.min(history.length, 7)) * 10) / 10
-            : 0;
+        const avg = history.length ? Math.round((history.slice(0, 7).reduce((s, h) => s + h.mood_score, 0) / Math.min(history.length, 7)) * 10) / 10 : 0;
         container.innerHTML = `
             <div class="appointment-section">
                 <div class="section-header">
@@ -1224,9 +1181,7 @@
                     <div class="mood-dots">
                         ${days.map(d => {
                             const pct = d.score > 0 ? (d.score / 5) * 100 : 0;
-                            const bg = d.score === 0 ? 'var(--border)' :
-                                       d.score >= 4 ? '#2ecc71' :
-                                       d.score === 3 ? '#f39c12' : '#e74c3c';
+                            const bg = d.score === 0 ? 'var(--border)' : d.score >= 4 ? '#2ecc71' : d.score === 3 ? '#f39c12' : '#e74c3c';
                             return `<div class="mood-dot" title="${d.date}${d.note ? ' — ' + d.note : ''}">
                                 <div class="bar" style="height:${pct}%; background:${bg};"></div>
                                 <div class="day">${d.label}</div>
@@ -1251,8 +1206,7 @@
                                 </div>
                             </div>`).join('')}
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
     async function loadHomework() {
@@ -1270,9 +1224,7 @@
             const other = currentRole === 'client' ? h.therapist_name : h.client_name;
             let actions = '';
             if (currentRole === 'client') {
-                actions = `<button class="btn btn-primary btn-sm" onclick="openHwUpdate(${h.id}, '${esc(h.status)}', '${esc(h.client_notes || '')}')">
-                    <i class="fas fa-edit"></i> Update
-                </button>`;
+                actions = `<button class="btn btn-primary btn-sm" onclick="openHwUpdate(${h.id}, '${esc(h.status)}', '${esc(h.client_notes || '')}')"><i class="fas fa-edit"></i> Update</button>`;
             } else if (currentRole === 'therapist') {
                 actions = `<button class="btn btn-danger btn-sm" onclick="deleteHomework(${h.id})">Delete</button>`;
             }
@@ -1359,8 +1311,7 @@
         list.innerHTML = '';
         if (!res.success || !res.plans.length) {
             list.innerHTML = '<div class="appointment-item"><span style="color:var(--text-muted);">No treatment plans yet.</span></div>';
-            allPlans = [];
-            return;
+            allPlans = []; return;
         }
         allPlans = res.plans;
         res.plans.forEach(p => {
@@ -1381,17 +1332,13 @@
                             </select>
                             <button class="btn btn-danger btn-sm" onclick="deleteGoal(${g.id})"><i class="fas fa-trash"></i></button>
                         ` : ''}
-                    </div>
-                `).join('');
+                    </div>`).join('');
             } else {
                 goalsHtml = '<div style="font-size:0.85rem; color:var(--text-muted); padding:0.5rem;">No goals yet.</div>';
             }
             list.innerHTML += `
                 <div class="plan-card ${p.status}">
-                    <div class="plan-header">
-                        <h3>${esc(p.title)}</h3>
-                        <span class="plan-status ${p.status}">${p.status}</span>
-                    </div>
+                    <div class="plan-header"><h3>${esc(p.title)}</h3><span class="plan-status ${p.status}">${p.status}</span></div>
                     <div class="plan-meta">
                         ${currentRole !== 'admin' ? `<strong>${currentRole === 'client' ? 'Therapist' : 'Client'}:</strong> ${esc(other)} · ` : `<strong>Client:</strong> ${esc(p.client_name)} · <strong>Therapist:</strong> ${esc(p.therapist_name)} · `}
                         <strong>Start:</strong> ${esc(p.start_date)}${p.target_date ? ` · <strong>Target:</strong> ${esc(p.target_date)}` : ''}
@@ -1577,16 +1524,10 @@
             return;
         }
         res.clients.forEach(c => {
-            const phq9Badge = c.phq9
-                ? `<span class="score-badge ${scoreClassFromSeverity(c.phq9.severity)}">${c.phq9.total_score} · ${esc(c.phq9.severity)}</span>`
-                : `<span class="score-badge none">No data</span>`;
-            const gad7Badge = c.gad7
-                ? `<span class="score-badge ${scoreClassFromSeverity(c.gad7.severity)}">${c.gad7.total_score} · ${esc(c.gad7.severity)}</span>`
-                : `<span class="score-badge none">No data</span>`;
+            const phq9Badge = c.phq9 ? `<span class="score-badge ${scoreClassFromSeverity(c.phq9.severity)}">${c.phq9.total_score} · ${esc(c.phq9.severity)}</span>` : `<span class="score-badge none">No data</span>`;
+            const gad7Badge = c.gad7 ? `<span class="score-badge ${scoreClassFromSeverity(c.gad7.severity)}">${c.gad7.total_score} · ${esc(c.gad7.severity)}</span>` : `<span class="score-badge none">No data</span>`;
             const m = moods[c.id];
-            const moodBadge = m && m.last
-                ? `<span class="score-badge ${m.last.mood_score >= 4 ? 'minimal' : m.last.mood_score === 3 ? 'mild' : 'severe'}">${moodEmojiForScore(m.last.mood_score)} ${m.avg_7d ? m.avg_7d : m.last.mood_score}/5</span>`
-                : `<span class="score-badge none">No data</span>`;
+            const moodBadge = m && m.last ? `<span class="score-badge ${m.last.mood_score >= 4 ? 'minimal' : m.last.mood_score === 3 ? 'mild' : 'severe'}">${moodEmojiForScore(m.last.mood_score)} ${m.avg_7d ? m.avg_7d : m.last.mood_score}/5</span>` : `<span class="score-badge none">No data</span>`;
             list.innerHTML += `
                 <div class="appointment-item">
                     <div class="appointment-info">
@@ -1600,9 +1541,7 @@
                         <div class="score-cell"><span class="score-label">Mood</span>${moodBadge}</div>
                         <div class="score-cell"><span class="score-label">PHQ-9</span>${phq9Badge}</div>
                         <div class="score-cell"><span class="score-label">GAD-7</span>${gad7Badge}</div>
-                        <button class="btn btn-primary btn-sm" onclick="viewClientSymptoms(${c.id}, '${esc(c.name)}')">
-                            <i class="fas fa-chart-line"></i> View
-                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="viewClientSymptoms(${c.id}, '${esc(c.name)}')"><i class="fas fa-chart-line"></i> View</button>
                     </div>
                 </div>`;
         });
@@ -1613,9 +1552,7 @@
         document.getElementById('detailClientName').textContent = clientName;
         document.getElementById('therapistClientList').style.display = 'none';
         document.getElementById('therapistClientDetail').style.display = 'block';
-        document.querySelectorAll('#therapistClientDetail .therapist-tabs .tab').forEach(t => {
-            t.classList.toggle('active', t.dataset.dtype === 'PHQ9');
-        });
+        document.querySelectorAll('#therapistClientDetail .therapist-tabs .tab').forEach(t => { t.classList.toggle('active', t.dataset.dtype === 'PHQ9'); });
         await loadClientDetail();
     };
     window.backToClientList = function() {
@@ -1642,18 +1579,15 @@
         hist.innerHTML = '';
         if (histRes.success && histRes.assessments.length) {
             const filtered = histRes.assessments.filter(a => a.type === currentDetailType);
-            if (!filtered.length) {
-                hist.innerHTML = '<div class="appointment-item">No assessments of this type yet.</div>';
-            } else {
+            if (!filtered.length) { hist.innerHTML = '<div class="appointment-item">No assessments of this type yet.</div>'; }
+            else {
                 [...filtered].reverse().forEach(a => {
                     const date = new Date(a.created_at).toLocaleString();
                     const badge = `<span class="score-badge ${scoreClassFromSeverity(a.severity)}">${a.total_score} · ${esc(a.severity)}</span>`;
                     hist.innerHTML += `<div class="appointment-item"><div><strong>${esc(a.type)}</strong> &nbsp; ${badge}<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.3rem;">${date}</div>${a.notes ? `<div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem; font-style:italic;">"${esc(a.notes)}"</div>` : ''}</div></div>`;
                 });
             }
-        } else {
-            hist.innerHTML = '<div class="appointment-item">No assessments yet.</div>';
-        }
+        } else { hist.innerHTML = '<div class="appointment-item">No assessments yet.</div>'; }
     }
     document.querySelectorAll('#therapistClientDetail .therapist-tabs .tab').forEach(tab => {
         tab.addEventListener('click', async () => {
@@ -1675,19 +1609,11 @@
         res.groups.forEach(g => {
             let actions = '';
             if (currentRole === 'client') {
-                if (g.is_joined) {
-                    actions = `<button class="btn btn-primary btn-sm" onclick="openGroupSession('${g.room_name}', '${esc(g.title)}')">Join Video</button>
-                               <button class="btn btn-danger btn-sm" onclick="leaveGroup(${g.id})">Leave</button>`;
-                } else if (g.participant_count < g.max_participants && g.status === 'scheduled') {
-                    actions = `<button class="btn btn-success btn-sm" onclick="joinGroup(${g.id})">Join Group</button>`;
-                } else if (g.participant_count >= g.max_participants) {
-                    actions = `<span style="color:#e74c3c; font-size:0.85rem;">Full</span>`;
-                }
+                if (g.is_joined) actions = `<button class="btn btn-primary btn-sm" onclick="openGroupSession('${g.room_name}', '${esc(g.title)}')">Join Video</button><button class="btn btn-danger btn-sm" onclick="leaveGroup(${g.id})">Leave</button>`;
+                else if (g.participant_count < g.max_participants && g.status === 'scheduled') actions = `<button class="btn btn-success btn-sm" onclick="joinGroup(${g.id})">Join Group</button>`;
+                else if (g.participant_count >= g.max_participants) actions = `<span style="color:#e74c3c; font-size:0.85rem;">Full</span>`;
             } else if (currentRole === 'therapist' || currentRole === 'admin') {
-                if (g.status === 'scheduled') {
-                    actions = `<button class="btn btn-primary btn-sm" onclick="openGroupSession('${g.room_name}', '${esc(g.title)}')">Start</button>
-                               <button class="btn btn-danger btn-sm" onclick="cancelGroup(${g.id})">Cancel</button>`;
-                }
+                if (g.status === 'scheduled') actions = `<button class="btn btn-primary btn-sm" onclick="openGroupSession('${g.room_name}', '${esc(g.title)}')">Start</button><button class="btn btn-danger btn-sm" onclick="cancelGroup(${g.id})">Cancel</button>`;
             }
             list.innerHTML += `<div class="appointment-item">
                 <div class="appointment-info">
@@ -1742,9 +1668,7 @@
                     ${r.url ? `<a href="${esc(r.url)}" target="_blank">Visit website →</a>` : ''}
                 </div>`;
             });
-        } else {
-            list.innerHTML = '<div class="appointment-item">No resources available.</div>';
-        }
+        } else { list.innerHTML = '<div class="appointment-item">No resources available.</div>'; }
         document.getElementById('crisisModal').style.display = 'block';
         document.getElementById('modalOverlay').style.display = 'block';
     };
@@ -1752,10 +1676,7 @@
         const res = await apiCall('crisis_all', {}, 'GET');
         const list = document.getElementById('crisisAdminList');
         list.innerHTML = '';
-        if (!res.success || !res.resources.length) {
-            list.innerHTML = '<div class="appointment-item">No resources.</div>';
-            return;
-        }
+        if (!res.success || !res.resources.length) { list.innerHTML = '<div class="appointment-item">No resources.</div>'; return; }
         res.resources.forEach(r => {
             list.innerHTML += `<div class="appointment-item">
                 <div class="appointment-info">
@@ -1859,12 +1780,7 @@
             if (jitsiApi) { jitsiApi.dispose(); jitsiApi = null; }
             document.getElementById('videoSessionModal').style.display = 'block';
             document.getElementById('modalOverlay').style.display = 'block';
-            jitsiApi = new JitsiMeetExternalAPI('meet.jit.si', {
-                roomName: room, width: '100%', height: '100%',
-                parentNode: document.getElementById('jitsiContainer'),
-                userInfo: { displayName: document.getElementById('userName').textContent },
-                configOverwrite: { prejoinConfig: { enabled: false } }
-            });
+            jitsiApi = new JitsiMeetExternalAPI('meet.jit.si', { roomName: room, width: '100%', height: '100%', parentNode: document.getElementById('jitsiContainer'), userInfo: { displayName: document.getElementById('userName').textContent }, configOverwrite: { prejoinConfig: { enabled: false } } });
             jitsiApi.addListener('readyToClose', closeVideoSession);
             initSessionFeatures(currentAppointmentId);
         });
@@ -1876,8 +1792,7 @@
         lastChatId = 0;
         document.getElementById('chatMessages').innerHTML = '';
         document.getElementById('videoSessionModal').style.display = 'none';
-        if (![...document.querySelectorAll('.modal')].some(m => m.style.display === 'block'))
-            document.getElementById('modalOverlay').style.display = 'none';
+        if (![...document.querySelectorAll('.modal')].some(m => m.style.display === 'block')) document.getElementById('modalOverlay').style.display = 'none';
     }
     window.closeVideoSession = closeVideoSession;
     function initSessionFeatures(apptId) {
@@ -1895,9 +1810,7 @@
             const box = document.getElementById('chatMessages');
             res.messages.forEach(m => {
                 const isOwn = m.sender_id == currentUserId;
-                box.innerHTML += `<div style="margin-bottom:6px;text-align:${isOwn?'right':'left'};">
-                    <span style="display:inline-block;background:${isOwn?'#2a9d8f':'#edf2f7'};color:${isOwn?'white':'#1a2a3a'};padding:5px 12px;border-radius:18px;max-width:80%;">
-                    <strong>${esc(m.sender_name)}:</strong> ${esc(m.message)}</span></div>`;
+                box.innerHTML += `<div style="margin-bottom:6px;text-align:${isOwn?'right':'left'};"><span style="display:inline-block;background:${isOwn?'#2a9d8f':'#edf2f7'};color:${isOwn?'white':'#1a2a3a'};padding:5px 12px;border-radius:18px;max-width:80%;"><strong>${esc(m.sender_name)}:</strong> ${esc(m.message)}</span></div>`;
                 if (m.id > lastChatId) lastChatId = m.id;
             });
             box.scrollTop = box.scrollHeight;
@@ -1925,50 +1838,23 @@
         list.innerHTML = '';
         if (pend.success && pend.requests.length) {
             pend.requests.forEach(r => {
-                list.innerHTML += `<div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="avatar-sm">${esc((r.client_name || '??').substring(0,2)).toUpperCase()}</div>
-                        <div class="details"><div class="title">${esc(r.client_name)}</div>
-                        <div class="meta"><i class="far fa-clock"></i> ${esc(r.date)} at ${esc(r.time)}</div></div>
-                    </div>
-                    <div class="appointment-actions">
-                        <button class="btn btn-success btn-sm" onclick="confirmAppointment(${r.id})">Confirm</button>
-                        <button class="btn btn-danger btn-sm" onclick="denyAppointment(${r.id})">Deny</button>
-                    </div></div>`;
+                list.innerHTML += `<div class="appointment-item"><div class="appointment-info"><div class="avatar-sm">${esc((r.client_name || '??').substring(0,2)).toUpperCase()}</div><div class="details"><div class="title">${esc(r.client_name)}</div><div class="meta"><i class="far fa-clock"></i> ${esc(r.date)} at ${esc(r.time)}</div></div></div><div class="appointment-actions"><button class="btn btn-success btn-sm" onclick="confirmAppointment(${r.id})">Confirm</button><button class="btn btn-danger btn-sm" onclick="denyAppointment(${r.id})">Deny</button></div></div>`;
             });
         } else list.innerHTML = '<div class="appointment-item">No pending requests.</div>';
-
         const conf = await apiCall('get_appointments?status=confirmed', {}, 'GET');
         const clist = document.getElementById('therapistConfirmedList');
         clist.innerHTML = '';
         if (conf.success && conf.appointments.length) {
             conf.appointments.forEach(a => {
-                clist.innerHTML += `<div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="avatar-sm">${esc((a.client_name || '??').substring(0,2)).toUpperCase()}</div>
-                        <div class="details"><div class="title">${esc(a.client_name)}</div>
-                        <div class="meta"><i class="far fa-clock"></i> ${esc(a.date)} at ${esc(a.time)}</div></div>
-                    </div>
-                    <div class="appointment-actions">
-                        <button class="btn btn-primary btn-sm" onclick="openVideoSession('therapy-${a.id}')">Join</button>
-                        <button class="btn btn-success btn-sm" onclick="completeAppointment(${a.id})">Complete</button>
-                        <button class="btn btn-danger btn-sm" onclick="cancelAppointment(${a.id})">Cancel</button>
-                    </div></div>`;
+                clist.innerHTML += `<div class="appointment-item"><div class="appointment-info"><div class="avatar-sm">${esc((a.client_name || '??').substring(0,2)).toUpperCase()}</div><div class="details"><div class="title">${esc(a.client_name)}</div><div class="meta"><i class="far fa-clock"></i> ${esc(a.date)} at ${esc(a.time)}</div></div></div><div class="appointment-actions"><button class="btn btn-primary btn-sm" onclick="openVideoSession('therapy-${a.id}')">Join</button><button class="btn btn-success btn-sm" onclick="completeAppointment(${a.id})">Complete</button><button class="btn btn-danger btn-sm" onclick="cancelAppointment(${a.id})">Cancel</button></div></div>`;
             });
         } else clist.innerHTML = '<div class="appointment-item">No confirmed appointments.</div>';
-
         const past = await apiCall('get_appointments?status=completed', {}, 'GET');
         const plist = document.getElementById('therapistPastList');
         plist.innerHTML = '';
         if (past.success && past.appointments.length) {
             past.appointments.forEach(a => {
-                plist.innerHTML += `<div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="avatar-sm">${esc((a.client_name || '??').substring(0,2)).toUpperCase()}</div>
-                        <div class="details"><div class="title">${esc(a.client_name)}</div>
-                        <div class="meta"><i class="far fa-clock"></i> ${esc(a.date)} at ${esc(a.time)}</div></div>
-                    </div>
-                    <span class="appointment-status completed">Completed</span></div>`;
+                plist.innerHTML += `<div class="appointment-item"><div class="appointment-info"><div class="avatar-sm">${esc((a.client_name || '??').substring(0,2)).toUpperCase()}</div><div class="details"><div class="title">${esc(a.client_name)}</div><div class="meta"><i class="far fa-clock"></i> ${esc(a.date)} at ${esc(a.time)}</div></div></div><span class="appointment-status completed">Completed</span></div>`;
             });
         } else plist.innerHTML = '<div class="appointment-item">No past sessions.</div>';
     }
@@ -1987,13 +1873,7 @@
                 if (u.role !== 'admin' && u.id !== currentUserId) actions += `<button class="btn btn-warning btn-sm" onclick="promoteUser(${u.id})"><i class="fas fa-user-shield"></i> Promote</button>`;
                 if (u.role === 'admin' && u.id !== currentUserId) actions += `<button class="btn btn-secondary btn-sm" onclick="demoteUser(${u.id})"><i class="fas fa-user"></i> Demote</button>`;
                 if (u.id !== currentUserId) actions += `<button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">Delete</button>`;
-                list.innerHTML += `<div class="appointment-item">
-                    <div class="appointment-info">
-                        <div class="avatar-sm">${esc((u.first_name[0]+u.last_name[0])).toUpperCase()}</div>
-                        <div class="details"><div class="title">${esc(u.first_name)} ${esc(u.last_name)}</div>
-                        <div class="meta">${esc(u.email)} | <strong>${esc(u.role)}</strong> ${u.is_verified ? '✅' : '❌'}</div></div>
-                    </div>
-                    <div class="appointment-actions">${actions}</div></div>`;
+                list.innerHTML += `<div class="appointment-item"><div class="appointment-info"><div class="avatar-sm">${esc((u.first_name[0]+u.last_name[0])).toUpperCase()}</div><div class="details"><div class="title">${esc(u.first_name)} ${esc(u.last_name)}</div><div class="meta">${esc(u.email)} | <strong>${esc(u.role)}</strong> ${u.is_verified ? '✅' : '❌'}</div></div></div><div class="appointment-actions">${actions}</div></div>`;
             });
         }
         const rep = await apiCall('admin_get_reports', {}, 'GET');
@@ -2015,13 +1895,7 @@
         grid.innerHTML = '';
         if (res.success && res.resources.length) {
             res.resources.forEach(r => {
-                grid.innerHTML += `<div class="resource-card">
-                    <span class="type-badge ${r.type}">${r.type.toUpperCase()}</span>
-                    <h4>${esc(r.title)}</h4>
-                    <p>${esc(r.description || '')}</p>
-                    <a href="${esc(r.url)}" target="_blank" class="resource-link">View →</a>
-                    ${currentRole === 'admin' ? `<button class="btn btn-danger btn-sm" onclick="deleteResource(${r.id})" style="margin-top:0.5rem;">Delete</button>` : ''}
-                </div>`;
+                grid.innerHTML += `<div class="resource-card"><span class="type-badge ${r.type}">${r.type.toUpperCase()}</span><h4>${esc(r.title)}</h4><p>${esc(r.description || '')}</p><a href="${esc(r.url)}" target="_blank" class="resource-link">View →</a>${currentRole === 'admin' ? `<button class="btn btn-danger btn-sm" onclick="deleteResource(${r.id})" style="margin-top:0.5rem;">Delete</button>` : ''}</div>`;
             });
         } else grid.innerHTML = '<div class="resource-card">No resources yet.</div>';
     }
@@ -2159,11 +2033,7 @@
                 else if (currentRole === 'admin') show('adminDashboard');
             }
             else if (tab === 'mood') { show('moodSection'); loadMoodFullView(); }
-            else if (tab === 'messages') {
-                show('messagesSection');
-                loadConversations();
-                if (dmActiveContactId) openConversation(dmActiveContactId, dmActiveContactName, dmActiveContactRole);
-            }
+            else if (tab === 'messages') { show('messagesSection'); loadConversations(); if (dmActiveContactId) openConversation(dmActiveContactId, dmActiveContactName, dmActiveContactRole); }
             else if (tab === 'homework') { show('homeworkSection'); loadHomework(); }
             else if (tab === 'plans') { show('plansSection'); loadPlans(); }
             else if (tab === 'symptoms') {
@@ -2206,15 +2076,11 @@
 
     window.closeModal = (id) => {
         document.getElementById(id).style.display = 'none';
-        if (![...document.querySelectorAll('.modal')].some(m => m.style.display === 'block'))
-            document.getElementById('modalOverlay').style.display = 'none';
+        if (![...document.querySelectorAll('.modal')].some(m => m.style.display === 'block')) document.getElementById('modalOverlay').style.display = 'none';
     };
     document.getElementById('modalOverlay').addEventListener('click', () => {
         if (document.getElementById('videoSessionModal').style.display === 'block') closeVideoSession();
-        else {
-            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-            document.getElementById('modalOverlay').style.display = 'none';
-        }
+        else { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); document.getElementById('modalOverlay').style.display = 'none'; }
     });
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -2226,38 +2092,18 @@
     async function loadNotificationCount() {
         const res = await apiCall('notifications_count', {}, 'GET');
         const badge = document.getElementById('notifBadge');
-        if (res.success && res.count > 0) {
-            badge.textContent = res.count > 99 ? '99+' : res.count;
-            badge.style.display = 'inline-block';
-        } else badge.style.display = 'none';
+        if (res.success && res.count > 0) { badge.textContent = res.count > 99 ? '99+' : res.count; badge.style.display = 'inline-block'; }
+        else badge.style.display = 'none';
     }
     async function loadNotifications() {
         const res = await apiCall('notifications_list', {}, 'GET');
         const list = document.getElementById('notifList');
         list.innerHTML = '';
-        if (!res.success || !res.notifications.length) {
-            list.innerHTML = '<div class="notif-empty"><i class="fas fa-bell-slash"></i><br>No notifications yet</div>';
-            return;
-        }
-        const icons = {
-            appointment_booked: 'fa-calendar-plus', appointment_confirmed: 'fa-calendar-check',
-            appointment_denied: 'fa-calendar-times', appointment_cancelled: 'fa-calendar-times',
-            appointment_completed: 'fa-flag-checkered', appointment_reminder: 'fa-clock',
-            new_message: 'fa-comment', rating_received: 'fa-star', therapist_registered: 'fa-user-md',
-            homework_assigned: 'fa-tasks', homework_completed: 'fa-check-double'
-        };
+        if (!res.success || !res.notifications.length) { list.innerHTML = '<div class="notif-empty"><i class="fas fa-bell-slash"></i><br>No notifications yet</div>'; return; }
+        const icons = { appointment_booked: 'fa-calendar-plus', appointment_confirmed: 'fa-calendar-check', appointment_denied: 'fa-calendar-times', appointment_cancelled: 'fa-calendar-times', appointment_completed: 'fa-flag-checkered', appointment_reminder: 'fa-clock', new_message: 'fa-comment', rating_received: 'fa-star', therapist_registered: 'fa-user-md', homework_assigned: 'fa-tasks', homework_completed: 'fa-check-double' };
         res.notifications.forEach(n => {
             const icon = icons[n.type] || 'fa-bell';
-            list.innerHTML += `
-                <div class="notif-item ${n.is_read ? '' : 'unread'}" onclick="openNotification(${n.id}, '${esc(n.link || '')}')">
-                    <div class="notif-icon"><i class="fas ${icon}"></i></div>
-                    <div class="notif-body">
-                        <div class="notif-title">${esc(n.title)}</div>
-                        <div class="notif-message">${esc(n.message)}</div>
-                        <div class="notif-time">${relativeTime(n.created_at)}</div>
-                    </div>
-                    <button class="notif-delete" onclick="event.stopPropagation(); deleteNotification(${n.id})"><i class="fas fa-times"></i></button>
-                </div>`;
+            list.innerHTML += `<div class="notif-item ${n.is_read ? '' : 'unread'}" onclick="openNotification(${n.id}, '${esc(n.link || '')}')"><div class="notif-icon"><i class="fas ${icon}"></i></div><div class="notif-body"><div class="notif-title">${esc(n.title)}</div><div class="notif-message">${esc(n.message)}</div><div class="notif-time">${relativeTime(n.created_at)}</div></div><button class="notif-delete" onclick="event.stopPropagation(); deleteNotification(${n.id})"><i class="fas fa-times"></i></button></div>`;
         });
     }
     function relativeTime(iso) {
@@ -2286,26 +2132,17 @@
         loadNotifications(); loadNotificationCount();
         showToast('All marked as read', 'success');
     };
-    window.deleteNotification = async function(id) {
-        await apiCall('notifications_delete', { id });
-        loadNotifications(); loadNotificationCount();
-    };
+    window.deleteNotification = async function(id) { await apiCall('notifications_delete', { id }); loadNotifications(); loadNotificationCount(); };
     document.addEventListener('click', (e) => {
         const panel = document.getElementById('notifPanel');
         const bell = document.getElementById('notifBell');
         if (!panel || !bell) return;
-        if (notifPanelOpen && !panel.contains(e.target) && !bell.contains(e.target)) {
-            panel.classList.remove('show');
-            notifPanelOpen = false;
-        }
+        if (notifPanelOpen && !panel.contains(e.target) && !bell.contains(e.target)) { panel.classList.remove('show'); notifPanelOpen = false; }
     });
     function startNotificationsPolling() {
         loadNotificationCount();
         if (notifPollInterval) clearInterval(notifPollInterval);
-        notifPollInterval = setInterval(() => {
-            loadNotificationCount();
-            if (notifPanelOpen) loadNotifications();
-        }, 30000);
+        notifPollInterval = setInterval(() => { loadNotificationCount(); if (notifPanelOpen) loadNotifications(); }, 30000);
     }
 
     function formatBubbleTime(iso) {
@@ -2322,38 +2159,17 @@
     async function loadConversations() {
         const list = document.getElementById('conversationList');
         const res = await apiCall('dm_conversations', {}, 'GET');
-        if (!res.success) {
-            list.innerHTML = '<div class="conv-empty">Could not load conversations.</div>';
-            return;
-        }
+        if (!res.success) { list.innerHTML = '<div class="conv-empty">Could not load conversations.</div>'; return; }
         dmAllContacts = res.contacts;
-        if (!res.contacts.length) {
-            list.innerHTML = '<div class="conv-empty"><i class="fas fa-user-slash"></i><br>No contacts yet.<br><small>You can chat with users after an appointment is booked.</small></div>';
-            return;
-        }
+        if (!res.contacts.length) { list.innerHTML = '<div class="conv-empty"><i class="fas fa-user-slash"></i><br>No contacts yet.<br><small>You can chat with users after an appointment is booked.</small></div>'; return; }
         list.innerHTML = res.contacts.map(c => {
             const initials = c.name.substring(0, 2).toUpperCase();
-            const avatar = c.profile_picture
-                ? `<img src="/uploads/${c.profile_picture}" alt="">`
-                : initials;
-            const preview = c.last_message
-                ? `${c.last_from_me ? 'You: ' : ''}${esc(c.last_message.substring(0, 40))}${c.last_message.length > 40 ? '…' : ''}`
-                : '<em>No messages yet</em>';
+            const avatar = c.profile_picture ? `<img src="/uploads/${c.profile_picture}" alt="">` : initials;
+            const preview = c.last_message ? `${c.last_from_me ? 'You: ' : ''}${esc(c.last_message.substring(0, 40))}${c.last_message.length > 40 ? '…' : ''}` : '<em>No messages yet</em>';
             const time = c.last_at ? formatBubbleTime(c.last_at).split(' ').pop() : '';
             const unreadBadge = c.unread > 0 ? `<span class="conv-unread">${c.unread > 99 ? '99+' : c.unread}</span>` : '';
             const activeClass = dmActiveContactId === c.id ? 'active' : '';
-            return `
-                <div class="conversation-item ${activeClass}" onclick="openConversation(${c.id}, '${esc(c.name)}', '${c.role}')">
-                    <div class="conv-avatar">${avatar}</div>
-                    <div class="conv-body">
-                        <div class="conv-name">
-                            <span>${esc(c.name)}</span>
-                            <span class="conv-time">${time}</span>
-                        </div>
-                        <div class="conv-preview">${preview}</div>
-                    </div>
-                    ${unreadBadge}
-                </div>`;
+            return `<div class="conversation-item ${activeClass}" onclick="openConversation(${c.id}, '${esc(c.name)}', '${c.role}')"><div class="conv-avatar">${avatar}</div><div class="conv-body"><div class="conv-name"><span>${esc(c.name)}</span><span class="conv-time">${time}</span></div><div class="conv-preview">${preview}</div></div>${unreadBadge}</div>`;
         }).join('');
         const totalUnread = res.contacts.reduce((sum, c) => sum + (c.unread || 0), 0);
         updateMessagesNavBadge(totalUnread);
@@ -2361,12 +2177,8 @@
     function updateMessagesNavBadge(count) {
         const badge = document.getElementById('messagesNavBadge');
         if (!badge) return;
-        if (count > 0) {
-            badge.textContent = count > 99 ? '99+' : count;
-            badge.style.display = 'inline-block';
-        } else {
-            badge.style.display = 'none';
-        }
+        if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = 'inline-block'; }
+        else badge.style.display = 'none';
     }
     window.openConversation = async function(contactId, contactName, contactRole) {
         dmActiveContactId = contactId;
@@ -2384,12 +2196,8 @@
         thread.innerHTML = '<div class="chat-loading"><i class="fas fa-spinner fa-spin"></i> Loading messages...</div>';
         const res = await apiCall(`dm_thread?with_user_id=${contactId}&last_id=0`, {}, 'GET');
         thread.innerHTML = '';
-        if (!res.success || !res.messages.length) {
-            thread.innerHTML = '<div class="chat-thread-empty">No messages yet. Say hi! 👋</div>';
-        } else {
-            res.messages.forEach(m => appendBubble(m));
-            if (res.messages.length) dmLastMessageId = res.messages[res.messages.length - 1].id;
-        }
+        if (!res.success || !res.messages.length) { thread.innerHTML = '<div class="chat-thread-empty">No messages yet. Say hi! 👋</div>'; }
+        else { res.messages.forEach(m => appendBubble(m)); if (res.messages.length) dmLastMessageId = res.messages[res.messages.length - 1].id; }
         scrollThreadToBottom();
         await apiCall('dm_mark_read', { with_user_id: contactId });
         updateMessagesNavBadge(0);
@@ -2402,55 +2210,32 @@
         const row = document.createElement('div');
         row.className = `chat-bubble-row ${mine ? 'mine' : 'theirs'}`;
         row.dataset.msgId = m.id;
-        row.innerHTML = `
-            <div class="chat-bubble ${mine ? 'mine' : 'theirs'}">
-                <div>${esc(m.message)}</div>
-                <span class="bubble-time">${formatBubbleTime(m.created_at)}</span>
-            </div>`;
+        row.innerHTML = `<div class="chat-bubble ${mine ? 'mine' : 'theirs'}"><div>${esc(m.message)}</div><span class="bubble-time">${formatBubbleTime(m.created_at)}</span></div>`;
         thread.appendChild(row);
     }
-    function scrollThreadToBottom() {
-        const thread = document.getElementById('chatThread');
-        if (thread) thread.scrollTop = thread.scrollHeight;
-    }
+    function scrollThreadToBottom() { const t = document.getElementById('chatThread'); if (t) t.scrollTop = t.scrollHeight; }
     window.sendDirectMessage = async function() {
         const input = document.getElementById('dmInput');
         const btn = document.getElementById('dmSendBtn');
         const text = input.value.trim();
         if (!text || !dmActiveContactId) return;
-        input.value = '';
-        input.style.height = '44px';
-        btn.disabled = true;
+        input.value = ''; input.style.height = '44px'; btn.disabled = true;
         const res = await apiCall('dm_send', { recipient_id: dmActiveContactId, message: text });
         if (res.success) {
-            const newMsg = {
-                id: res.message_id,
-                sender_id: currentUserId,
-                message: text,
-                created_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
-            };
+            const newMsg = { id: res.message_id, sender_id: currentUserId, message: text, created_at: new Date().toISOString().replace('T', ' ').substring(0, 19) };
             const empty = document.querySelector('#chatThread .chat-thread-empty');
             if (empty) empty.remove();
             appendBubble(newMsg);
             if (res.message_id > dmLastMessageId) dmLastMessageId = res.message_id;
-            scrollThreadToBottom();
-            loadConversations();
-        } else {
-            showToast(res.message || 'Failed to send', 'error');
-            input.value = text;
-        }
-        btn.disabled = false;
-        input.focus();
+            scrollThreadToBottom(); loadConversations();
+        } else { showToast(res.message || 'Failed to send', 'error'); input.value = text; }
+        btn.disabled = false; input.focus();
     };
     async function pollNewMessages() {
         if (!dmActiveContactId) return;
         const res = await apiCall(`dm_thread?with_user_id=${dmActiveContactId}&last_id=${dmLastMessageId}`, {}, 'GET');
         if (res.success && res.messages.length) {
-            res.messages.forEach(m => {
-                if (m.sender_id === currentUserId && m.id <= dmLastMessageId) return;
-                appendBubble(m);
-                if (m.id > dmLastMessageId) dmLastMessageId = m.id;
-            });
+            res.messages.forEach(m => { if (m.sender_id === currentUserId && m.id <= dmLastMessageId) return; appendBubble(m); if (m.id > dmLastMessageId) dmLastMessageId = m.id; });
             scrollThreadToBottom();
             await apiCall('dm_mark_read', { with_user_id: dmActiveContactId });
         }
@@ -2458,31 +2243,17 @@
     function startDmPolling() {
         if (dmPollInterval) clearInterval(dmPollInterval);
         dmPollInterval = setInterval(async () => {
-            if (document.getElementById('messagesSection').style.display !== 'none') {
-                await pollNewMessages();
-                await loadConversations();
-            } else {
-                const r = await apiCall('dm_unread_total', {}, 'GET');
-                if (r.success) updateMessagesNavBadge(r.count);
-            }
+            if (document.getElementById('messagesSection').style.display !== 'none') { await pollNewMessages(); await loadConversations(); }
+            else { const r = await apiCall('dm_unread_total', {}, 'GET'); if (r.success) updateMessagesNavBadge(r.count); }
         }, 5000);
     }
-    document.getElementById('dmInput')?.addEventListener('input', function() {
-        this.style.height = '44px';
-        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-    });
+    document.getElementById('dmInput')?.addEventListener('input', function() { this.style.height = '44px'; this.style.height = Math.min(this.scrollHeight, 120) + 'px'; });
     startDmPolling();
 
     async function registerServiceWorker() {
         if (!('serviceWorker' in navigator)) return null;
-        try {
-            const reg = await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
-            console.log('✅ Service worker registered');
-            return reg;
-        } catch (err) {
-            console.warn('SW registration failed:', err);
-            return null;
-        }
+        try { const reg = await navigator.serviceWorker.register('/service-worker.js', { scope: '/' }); console.log('✅ Service worker registered'); return reg; }
+        catch (err) { console.warn('SW registration failed:', err); return null; }
     }
     async function subscribeToPush() {
         if (!('serviceWorker' in navigator) || !('PushManager' in window)) return false;
@@ -2498,30 +2269,19 @@
                 const rawData = atob(base64);
                 return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
             };
-            const subscription = await reg.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(res.publicKey)
-            });
+            const subscription = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(res.publicKey) });
             const sub = subscription.toJSON();
             const result = await apiCall('push_subscribe', { endpoint: sub.endpoint, keys: sub.keys });
             return result.success;
-        } catch (err) {
-            console.error('Push subscribe error:', err);
-            return false;
-        }
+        } catch (err) { console.error('Push subscribe error:', err); return false; }
     }
 
     window.toggleSidebar = function() {
         const sidebar = document.querySelector('.sidebar');
         const overlay = document.getElementById('sidebarOverlay');
         if (!sidebar) return;
-        if (sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('show');
-        } else {
-            sidebar.classList.add('open');
-            overlay.classList.add('show');
-        }
+        if (sidebar.classList.contains('open')) { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+        else { sidebar.classList.add('open'); overlay.classList.add('show'); }
     };
     window.closeSidebar = function() {
         const sidebar = document.querySelector('.sidebar');
@@ -2530,9 +2290,7 @@
         if (overlay) overlay.classList.remove('show');
     };
     document.querySelectorAll('.nav-list li').forEach(li => {
-        li.addEventListener('click', () => {
-            if (window.innerWidth <= 600) closeSidebar();
-        });
+        li.addEventListener('click', () => { if (window.innerWidth <= 600) closeSidebar(); });
     });
 
     (async () => {
@@ -2543,9 +2301,7 @@
         if (Notification.permission === 'granted') {
             subscribeToPush().then(ok => { if (ok) console.log('✅ Push subscribed'); });
         } else if (Notification.permission === 'default') {
-            document.getElementById('notifBell').addEventListener('click', async () => {
-                await subscribeToPush();
-            }, { once: true });
+            document.getElementById('notifBell').addEventListener('click', async () => { await subscribeToPush(); }, { once: true });
         }
     })();
 })();
