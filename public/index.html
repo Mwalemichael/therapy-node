@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThinkTech Therapy – Professional Online Counselling</title>
 
-    <!-- Favicons (real PNG files) -->
     <link rel="icon" type="image/svg+xml" href="/icon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
 
-    <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2a9d8f">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -84,6 +82,46 @@
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 0.5rem; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Specialization pills */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .spec-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.9rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 60px;
+            background: #f7fafc;
+            cursor: pointer;
+            transition: 0.15s;
+            user-select: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1a2a3a;
+        }
+        .spec-pill:hover {
+            border-color: #2a9d8f;
+            background: #eef7f6;
+        }
+        .spec-pill input {
+            display: none;
+        }
+        .spec-pill input:checked + span {
+            color: #2a9d8f;
+        }
+        .spec-pill:has(input:checked) {
+            border-color: #2a9d8f;
+            background: #d5ede8;
+            color: #1a4b6d;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) { .hero h1 { font-size: 2rem; } }
     </style>
 </head>
@@ -197,18 +235,18 @@
             <input type="text" name="therapist_code" id="regTherapistCode" placeholder="Enter your therapist code">
         </div>
         <div id="regSpecializationsGroup" style="display:none;">
-            <label for="regSpecializations">Specializations (hold Ctrl for multiple)</label>
-            <select name="specializations" id="regSpecializations" multiple style="height:80px;">
-                <option value="Anxiety">Anxiety</option>
-                <option value="Depression">Depression</option>
-                <option value="Trauma">Trauma</option>
-                <option value="Grief">Grief</option>
-                <option value="Relationships">Relationships</option>
-                <option value="Stress Management">Stress Management</option>
-                <option value="Addiction">Addiction</option>
-                <option value="PTSD">PTSD</option>
-                <option value="ADHD">ADHD</option>
-            </select>
+            <label>Specializations (tap to select one or more)</label>
+            <div class="spec-grid" id="regSpecializations">
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="Anxiety"><span>Anxiety</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="Depression"><span>Depression</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="Trauma"><span>Trauma</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="Grief"><span>Grief</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="Relationships"><span>Relationships</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="Stress Management"><span>Stress Management</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="Addiction"><span>Addiction</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="PTSD"><span>PTSD</span></label>
+                <label class="spec-pill"><input type="checkbox" name="specializations" value="ADHD"><span>ADHD</span></label>
+            </div>
         </div>
         <button type="submit" class="btn btn-primary" id="registerSubmitBtn">Register</button>
         <button type="button" class="btn-link" onclick="showLogin()">Already have an account? Login</button>
@@ -310,8 +348,8 @@
         const btn = document.getElementById('registerSubmitBtn');
         setButtonLoading(btn, true, 'Registering...');
         const data = Object.fromEntries(new FormData(e.target).entries());
-        const specs = document.getElementById('regSpecializations');
-        data.specializations = specs ? Array.from(specs.selectedOptions).map(o => o.value) : [];
+        const specCheckboxes = document.querySelectorAll('input[name="specializations"]:checked');
+        data.specializations = Array.from(specCheckboxes).map(cb => cb.value);
         const res = await apiCall('register', data);
         if (res.success) {
             showToast(res.message, 'success');
