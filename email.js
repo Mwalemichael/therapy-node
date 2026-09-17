@@ -1,55 +1,21 @@
-// email.js — Nodemailer service
-const nodemailer = require('nodemailer');
+// email.js — Resend HTTPS email service (works on all hosts including Render free tier)
+const { Resend } = require('resend');
 
-let transporter = null;
+let resend = null;
 let emailEnabled = false;
 
 function initEmail() {
   console.log('[email.js] initEmail() called');
+  const apiKey = process.env.RESEND_API_KEY;
 
-  const host = process.env.SMTP_HOST;
-  const port = parseInt(process.env.SMTP_PORT || '587');
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-
-  if (!host || !user || !pass) {
-    console.log('⚠️  Email not configured — emails will be logged to console only');
-    console.log('[email.js] Missing:', {
-      host: !host ? 'SMTP_HOST' : null,
-      user: !user ? 'SMTP_USER' : null,
-      pass: !pass ? 'SMTP_PASS' : null
-    });
+  if (!apiKey) {
+    console.log('⚠️  Email not configured — RESEND_API_KEY missing');
     return;
   }
 
-  console.log('[email.js] Creating SMTP transporter to ' + host + ':' + port);
-  transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: { user, pass },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000
-  });
-
-  // Enable immediately — don't block on verify(). Some hosts block SMTP verify.
+  resend = new Resend(apiKey);
   emailEnabled = true;
-  console.log('✅ Email service enabled (verify skipped)');
-
-  // Run verify in the background, purely for logging. Hard timeout at 12s.
-  const timer = setTimeout(() => {
-    console.warn('⚠️  [email.js] SMTP verify timed out after 12s — verify is likely blocked, but sends may still work.');
-  }, 12000);
-
-  transporter.verify((err) => {
-    clearTimeout(timer);
-    if (err) {
-      console.warn('⚠️  [email.js] SMTP verify failed (sends may still work):', err.message);
-    } else {
-      console.log('✅ [email.js] SMTP verify passed');
-    }
-  });
+  console.log('✅ Email service ready (Resend HTTPS)');
 }
 
 async function sendEmail({ to, subject, html, text }) {
@@ -58,12 +24,20 @@ async function sendEmail({ to, subject, html, text }) {
     return { success: true, skipped: true };
   }
   try {
-    const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to, subject, html, text: text || html.replace(/<[^>]*>/g, '')
+    const from = process.env.SMTP_FROM || 'ThinkTech <onboarding@resend.dev>';
+    const { data, error } = await resend.emails.send({
+      from,
+      to,
+      subject,
+      html,
+      text: text || html.replace(/<[^>]*>/g, '')
     });
+    if (error) {
+      console.error(`❌ Email failed to ${to}:`, error.message || JSON.stringify(error));
+      return { success: false, error: error.message || String(error) };
+    }
     console.log(`✅ Email sent to ${to}: ${subject}`);
-    return { success: true, messageId: info.messageId };
+    return { success: true, messageId: data && data.id };
   } catch (err) {
     console.error(`❌ Email failed to ${to}:`, err.message);
     return { success: false, error: err.message };
