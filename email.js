@@ -5,6 +5,8 @@ let transporter = null;
 let emailEnabled = false;
 
 function initEmail() {
+  console.log('[email.js] initEmail() called');
+
   const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT || '587');
   const user = process.env.SMTP_USER;
@@ -12,9 +14,15 @@ function initEmail() {
 
   if (!host || !user || !pass) {
     console.log('⚠️  Email not configured — emails will be logged to console only');
+    console.log('[email.js] Missing:', {
+      host: !host ? 'SMTP_HOST' : null,
+      user: !user ? 'SMTP_USER' : null,
+      pass: !pass ? 'SMTP_PASS' : null
+    });
     return;
   }
 
+  console.log('[email.js] Creating SMTP transporter to', host + ':' + port);
   transporter = nodemailer.createTransport({
     host,
     port,
@@ -22,8 +30,12 @@ function initEmail() {
     auth: { user, pass }
   });
 
+  console.log('[email.js] Verifying SMTP connection...');
   transporter.verify((err) => {
-    if (err) return console.error('❌ Email verification failed:', err.message);
+    if (err) {
+      console.error('❌ Email verification failed:', err.message);
+      return;
+    }
     emailEnabled = true;
     console.log('✅ Email service ready');
   });
@@ -84,45 +96,32 @@ const templates = {
       <a href="${APP_URL}" class="button">Sign in</a>
     `)
   }),
-
   appointmentBookedTherapist: (therapistName, clientName, date, time) => ({
     subject: `New appointment request from ${clientName}`,
     html: wrap('New appointment request', `
       <p>Hi ${esc(therapistName)},</p>
       <p><strong>${esc(clientName)}</strong> has requested an appointment:</p>
-      <p style="background:#f0f2f5;padding:1rem;border-radius:8px;">
-        <strong>Date:</strong> ${esc(date)}<br>
-        <strong>Time:</strong> ${esc(time)}
-      </p>
+      <p style="background:#f0f2f5;padding:1rem;border-radius:8px;"><strong>Date:</strong> ${esc(date)}<br><strong>Time:</strong> ${esc(time)}</p>
       <a href="${APP_URL}/dashboard" class="button">Review</a>
     `)
   }),
-
   appointmentBookedClient: (clientName, therapistName, date, time) => ({
     subject: 'Your appointment request was sent',
     html: wrap('Request sent', `
       <p>Hi ${esc(clientName)},</p>
       <p>Your request to <strong>${esc(therapistName)}</strong>:</p>
-      <p style="background:#f0f2f5;padding:1rem;border-radius:8px;">
-        <strong>Date:</strong> ${esc(date)}<br>
-        <strong>Time:</strong> ${esc(time)}
-      </p>
+      <p style="background:#f0f2f5;padding:1rem;border-radius:8px;"><strong>Date:</strong> ${esc(date)}<br><strong>Time:</strong> ${esc(time)}</p>
     `)
   }),
-
   appointmentConfirmed: (name, therapistName, date, time) => ({
     subject: 'Your appointment is confirmed',
     html: wrap('Appointment confirmed', `
       <p>Hi ${esc(name)},</p>
       <p>Your appointment with <strong>${esc(therapistName)}</strong> is confirmed:</p>
-      <p style="background:#c6f6d5;padding:1rem;border-radius:8px;">
-        <strong>Date:</strong> ${esc(date)}<br>
-        <strong>Time:</strong> ${esc(time)}
-      </p>
+      <p style="background:#c6f6d5;padding:1rem;border-radius:8px;"><strong>Date:</strong> ${esc(date)}<br><strong>Time:</strong> ${esc(time)}</p>
       <a href="${APP_URL}/dashboard" class="button">Go to dashboard</a>
     `)
   }),
-
   appointmentDenied: (name, therapistName, date, time) => ({
     subject: 'Appointment update',
     html: wrap('Appointment not confirmed', `
@@ -131,7 +130,6 @@ const templates = {
       <a href="${APP_URL}/dashboard" class="button">Book another time</a>
     `)
   }),
-
   appointmentCancelled: (name, otherName, date, time) => ({
     subject: 'Appointment cancelled',
     html: wrap('Appointment cancelled', `
@@ -139,20 +137,15 @@ const templates = {
       <p>Your appointment with <strong>${esc(otherName)}</strong> on ${esc(date)} at ${esc(time)} has been cancelled.</p>
     `)
   }),
-
   appointmentReminder: (name, otherName, date, time, link) => ({
     subject: `Reminder: session tomorrow at ${time}`,
     html: wrap('Session reminder', `
       <p>Hi ${esc(name)},</p>
       <p>You have a session with <strong>${esc(otherName)}</strong> coming up:</p>
-      <p style="background:#eef2ff;padding:1rem;border-radius:8px;">
-        <strong>Date:</strong> ${esc(date)}<br>
-        <strong>Time:</strong> ${esc(time)}
-      </p>
+      <p style="background:#eef2ff;padding:1rem;border-radius:8px;"><strong>Date:</strong> ${esc(date)}<br><strong>Time:</strong> ${esc(time)}</p>
       <a href="${link}" class="button">Join session</a>
     `)
   }),
-
   newMessage: (name, senderName, preview) => ({
     subject: `New message from ${senderName}`,
     html: wrap('New message', `
@@ -162,7 +155,6 @@ const templates = {
       <a href="${APP_URL}/dashboard" class="button">Reply</a>
     `)
   }),
-
   passwordReset: (name, resetLink) => ({
     subject: 'Reset your password',
     html: wrap('Reset your password', `
@@ -172,7 +164,6 @@ const templates = {
       <p style="color:#718096;font-size:0.9rem;">Expires in 1 hour.</p>
     `)
   }),
-
   ratingReceived: (therapistName, clientName, rating, review) => ({
     subject: `New ${rating}-star rating`,
     html: wrap('New rating', `

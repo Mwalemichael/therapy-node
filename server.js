@@ -15,18 +15,40 @@ if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
 app.set('trust proxy', 1);
 
+// ═══════════════════════════════════════════════
+// DIAGNOSTIC INIT
+// ═══════════════════════════════════════════════
+console.log('═══════════════════════════════════════');
 console.log('🔧 Initializing services...');
+console.log('🔧 NODE_ENV       =', process.env.NODE_ENV || '(not set)');
+console.log('🔧 SMTP_HOST      =', process.env.SMTP_HOST ? '✓ SET' : '✗ NOT SET');
+console.log('🔧 SMTP_PORT      =', process.env.SMTP_PORT ? '✓ SET (' + process.env.SMTP_PORT + ')' : '✗ NOT SET');
+console.log('🔧 SMTP_USER      =', process.env.SMTP_USER ? '✓ SET (' + process.env.SMTP_USER + ')' : '✗ NOT SET');
+console.log('🔧 SMTP_PASS      =', process.env.SMTP_PASS ? '✓ SET (' + process.env.SMTP_PASS.length + ' chars)' : '✗ NOT SET');
+console.log('🔧 SMTP_FROM      =', process.env.SMTP_FROM || '(not set)');
+console.log('🔧 APP_URL        =', process.env.APP_URL || '(not set)');
+console.log('═══════════════════════════════════════');
+
 try {
+  console.log('🔧 → Calling initEmail()...');
   initEmail();
+  console.log('🔧 → initEmail() returned');
 } catch (err) {
-  console.error('🔧 initEmail() failed:', err.message);
-}
-try {
-  initPush();
-} catch (err) {
-  console.error('🔧 initPush() failed:', err.message);
+  console.error('🔧 ✗ initEmail() threw:', err.message);
+  console.error(err.stack);
 }
 
+try {
+  console.log('🔧 → Calling initPush()...');
+  initPush();
+  console.log('🔧 → initPush() returned');
+} catch (err) {
+  console.error('🔧 ✗ initPush() threw:', err.message);
+}
+
+console.log('═══════════════════════════════════════');
+
+// Middleware
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -41,6 +63,7 @@ app.use(session({
   }
 }));
 
+// Static files
 const staticOptions = {
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('service-worker.js')) {
@@ -55,6 +78,7 @@ const staticOptions = {
 app.use(express.static(path.join(__dirname, 'public'), staticOptions));
 app.use('/uploads', express.static(uploadsDir));
 
+// API routes
 app.use('/api', require('./routes/auth'));
 app.use('/api', require('./routes/user'));
 app.use('/api', require('./routes/appointments'));
@@ -64,20 +88,24 @@ app.use('/api', require('./routes/clinical'));
 app.use('/api', require('./routes/notifications'));
 app.use('/api', require('./routes/messages'));
 
+// Protected dashboard
 app.get('/dashboard', (req, res) => {
   if (!req.session.user_id) return res.redirect('/');
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
+// Root
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ success: false, message: err.message || 'Server error' });
 });
 
+// Reminder scheduler
 function startReminderScheduler() {
   const db = require('./database');
   const { sendEmail, templates } = require('./email');
@@ -96,7 +124,6 @@ function startReminderScheduler() {
           AND a.reminder_sent = 0
           AND datetime(a.date || ' ' || a.time) BETWEEN datetime('now') AND datetime('now', '+24 hours')
       `).all();
-
       for (const appt of rows) {
         const link = `${process.env.APP_URL || 'http://localhost:3000'}/dashboard`;
         createNotification(appt.client_id, 'appointment_reminder', 'Session reminder',
@@ -109,7 +136,6 @@ function startReminderScheduler() {
       console.error('Reminder error:', err.message);
     }
   }
-
   setTimeout(checkReminders, 30000);
   setInterval(checkReminders, 15 * 60 * 1000);
 }
